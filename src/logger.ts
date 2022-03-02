@@ -1,8 +1,8 @@
 import {
-  getLogger,
   handlers,
   LogLevels,
-  setup,
+  // getLogger,
+  // setup,
 } from "https://deno.land/std@0.127.0/log/mod.ts";
 
 // export type { LevelName } from "https://deno.land/std@0.127.0/log/levels.ts";
@@ -40,7 +40,7 @@ function formatDate(date: Date | string): string {
   return format(date, "yyyy-MM-dd HH:mm");
 }
 
-function formatLogLevel(str: string, length = 10): string {
+function padEnd(str: string, length = 7): string {
   // let response = "";
   // for (let index = 0; index < length; index++) {
   //   response += str[index] ?? " ";
@@ -81,7 +81,7 @@ const emailFormatter = ({
     formatDate(
       datetime,
     )
-  }</i> <b>${formatLogLevel(levelName)}</b>`;
+  }</i> <b>${padEnd(levelName)}</b>`;
 
   text += '<div class="args">';
   args.forEach((arg, i) => {
@@ -105,20 +105,22 @@ class EmailHandler extends handlers.BaseHandler {
   }
 }
 
-function colorize(level: number) {
+function colorize(level: number, arg: unknown): string {
   switch (level) {
     case LogLevels.DEBUG:
-      return (arg: unknown) => colors.dim(stringify(arg));
+      return colors.dim(stringify(arg));
     case LogLevels.INFO:
-      return (arg: unknown) => colors.green(stringify(arg));
+      return colors.green(stringify(arg));
     case LogLevels.WARNING:
-      return (arg: unknown) => colors.rgb24(stringify(arg), 0xffcc00);
+      return colors.rgb24(stringify(arg), 0xffcc00);
     case LogLevels.ERROR:
-      return (arg: unknown) => colors.red(stringify(arg));
+      return colors.red(stringify(arg));
     case LogLevels.CRITICAL:
-      return (arg: unknown) => colors.bgBlack(colors.red(stringify(arg)));
+      return colors.bgBlack(colors.red(stringify(arg)));
+    default:
+      return arg as string;
   }
-  return (a: unknown) => a;
+  // return (a: unknown) => a;
 }
 
 class Logger extends _Logger {
@@ -138,18 +140,21 @@ class Logger extends _Logger {
   warn = super.warning;
 }
 
+
 class ConsoleHandler extends handlers.BaseHandler {
   format(logRecord: LogRecord): string {
     const [firstArg, ...args] = [...logRecord.args];
-    const msg = `${
+
+    let headers = `${
       colors.dim(
         formatDate(logRecord.datetime),
       )
-    } ${(formatLogLevel(`[${logRecord.levelName}]`))} ${
-      colors.bold(stringify(firstArg))
-    }`;
+    } `;
 
-    const headers = colorize(logRecord.level)(msg);
+    headers += `${(padEnd(`${logRecord.levelName}`))}`;
+    headers += logRecord.msg ? ` ${(padEnd(`[${logRecord.msg}]`))}` : "";
+    headers += ` ${(stringify(firstArg))} `;
+    headers = colorize(logRecord.level,headers) as string;
 
     const newArgs = args
       ?.map((v) => stringifyConsole(v));
@@ -178,7 +183,7 @@ const fileFormatter = ({
   msg,
 }: LogRecord) => {
   let text = `${formatDate(datetime)} ${
-    formatLogLevel(
+    padEnd(
       levelName,
     )
   } ${msg}`;
@@ -266,6 +271,7 @@ export const create = (
   { scope = "default", transports = ["console"], level = "DEBUG" }:
     LoggerOptions,
 ): LoggerType => {
+
   const _handlers = transports.map((t) => handlersDefault[t]);
   const _logger = new Logger(scope, level, { handlers: _handlers });
   if (scope === "default") {
@@ -280,6 +286,7 @@ export const create = (
     warning: (...args: unknown[]) => _logger.warning(scope, ...args),
     error: (...args: unknown[]) => _logger.error(scope, ...args),
     critical: (...args: unknown[]) => _logger.critical(scope, ...args),
+
   };
 };
 

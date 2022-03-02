@@ -1,5 +1,5 @@
-import logger from "./mod.ts";
-import { assertEquals, assertStringIncludes, spy, stub } from "./dev_deps.ts";
+import logger from "../mod.ts";
+import { assertEquals, assertStringIncludes, spy, stub } from "../dev_deps.ts";
 
 const data = [
   new Error("upss"),
@@ -43,7 +43,7 @@ Deno.test({
     assertEquals(log.calls.length, 1);
     assertStringIncludes(
       log.calls[0].args[0],
-      "\x1b[22m [INFO]     \x1b[1mhola!\x1b[22m\x1b[39m ",
+      "INFO    hola!",
     );
     log.restore();
   },
