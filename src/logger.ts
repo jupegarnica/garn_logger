@@ -140,7 +140,6 @@ class Logger extends _Logger {
   warn = super.warning;
 }
 
-
 class ConsoleHandler extends handlers.BaseHandler {
   format(logRecord: LogRecord): string {
     const [firstArg, ...args] = [...logRecord.args];
@@ -154,7 +153,7 @@ class ConsoleHandler extends handlers.BaseHandler {
     headers += `${(padEnd(`${logRecord.levelName}`))}`;
     headers += logRecord.msg ? ` ${(padEnd(`[${logRecord.msg}]`))}` : "";
     headers += ` ${(stringify(firstArg))} `;
-    headers = colorize(logRecord.level,headers) as string;
+    headers = colorize(logRecord.level, headers) as string;
 
     const newArgs = args
       ?.map((v) => stringifyConsole(v));
@@ -271,7 +270,6 @@ export const create = (
   { scope = "default", transports = ["console"], level = "DEBUG" }:
     LoggerOptions,
 ): LoggerType => {
-
   const _handlers = transports.map((t) => handlersDefault[t]);
   const _logger = new Logger(scope, level, { handlers: _handlers });
   if (scope === "default") {
@@ -286,7 +284,6 @@ export const create = (
     warning: (...args: unknown[]) => _logger.warning(scope, ...args),
     error: (...args: unknown[]) => _logger.error(scope, ...args),
     critical: (...args: unknown[]) => _logger.critical(scope, ...args),
-
   };
 };
 
