@@ -13,9 +13,8 @@ Deno.test({
     assertEquals(debug.calls.length, 3, "should call debug 3 times");
     debug.restore();
 
-
     const log = stub(globalThis.console, "log");
-    logger.log('log level');
+    logger.log("log level");
     assertEquals(log.calls.length, 1);
     log.restore();
 
@@ -23,7 +22,6 @@ Deno.test({
     logger.info(1);
     assertEquals(info.calls.length, 1);
     info.restore();
-
 
     const warn = stub(globalThis.console, "warn");
     logger.warn(1);
@@ -37,13 +35,8 @@ Deno.test({
     logger.fatal(1);
     assertEquals(error.calls.length, 3);
     error.restore();
-
-
   },
 });
-
-
-
 
 // const data = [
 //   new Error("upss"),
