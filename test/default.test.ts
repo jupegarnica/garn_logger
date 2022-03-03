@@ -35,7 +35,7 @@ const data = [
 ];
 Deno.test({
   name: "[default] should log to console",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const log = stub(globalThis.console, "log");
@@ -57,26 +57,6 @@ Deno.test({
     const log = stub(globalThis.console, "log");
     const returned = logger.log(...data);
     assertEquals(returned, data);
-    log.restore();
-  },
-});
-
-Deno.test({
-  name: "[default] should log everything to console",
-  ignore: false,
-  only: false,
-  fn: () => {
-    const log = stub(globalThis.console, "log");
-
-    logger.debug(1);
-    logger.log(1);
-    logger.info(1);
-    logger.warning(1);
-    logger.warn(1);
-    logger.error(1);
-    logger.critical(1);
-    assertEquals(log.calls.length, 7);
-
     log.restore();
   },
 });

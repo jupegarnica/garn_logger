@@ -24,7 +24,11 @@
   "deno.lint": true,
   "deno.unstable": true,
   "deno.suggest.imports.hosts": {
-    "https://deno.land/": true
+    "https://deno.land/": true,
+    "https://deno.land/x/": true,
+    "https://deno.land/std/": true,
+    "https://cdn.skypack.dev/":true,
+    "https://esm.sh/react/":true,
   },
   "deno.config": "./deno.jsonc"
 }

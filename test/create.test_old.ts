@@ -3,7 +3,7 @@ import { assertEquals, assertStringIncludes, spy, stub } from "../dev_deps.ts";
 
 Deno.test({
   name: "[create] should create a logger with debug level by default",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const scoped = create({ scope: "test" });
@@ -21,7 +21,7 @@ Deno.test({
 
 Deno.test({
   name: "[create] should create a logger with level assigned",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const scoped = create({ scope: "test", level: "CRITICAL" });
@@ -39,7 +39,7 @@ Deno.test({
 
 Deno.test({
   name: "[create] should not interfere with other scopes",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const scoped = create({ scope: "test", level: "CRITICAL" });
