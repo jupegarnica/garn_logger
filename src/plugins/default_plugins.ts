@@ -37,9 +37,8 @@ export function filterLowerLevels(
 ): Plugin {
   level = level.toLowerCase();
   return (log: LogRecord): LogRecord => {
-    log.muted =
-      log.levelNumber <
-        levelsNameToNumbers[level];
+    log.muted = log.levelNumber <
+      levelsNameToNumbers[level];
     return log;
   };
 }
