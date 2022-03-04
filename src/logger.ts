@@ -1,39 +1,60 @@
 import {
   applyLevel,
-  filterBaseOnLevel,
+  filterLowerLevels,
   returnArgs,
   transportToConsole,
 } from "./plugins/default_plugins.ts";
-import type { AnyMethod, LoggerOptions, LogRecord, Plugin } from "./types.ts";
+import type {
+  AnyMethod,
+  LoggerOptions,
+  LogRecord,
+  Plugin,
+} from "./types.ts";
 
-class Logger {
-  [key: string]: (...args: unknown[]) => unknown[]
+class Logger<ReturnedType> {
+  [key: string]: (
+    ...args: unknown[]
+  ) => ReturnedType
+  #scope: string;
+  #extra: unknown;
   #methods: AnyMethod = {};
-  #plugins: Plugin[] = [];
+  #plugins: Plugin[] = [
+    applyLevel,
+    returnArgs,
+  ];
+
   #handle(methodName: string) {
-    if (!this.#methods[methodName]) {
-      this.#methods[methodName] = (...args: unknown[]) => {
-        const logRecord: LogRecord = {
-          methodName,
-          args,
-          timestamp: Date.now(),
-          levelNumber: 0,
-        };
-        return this.#pipeToPlugins(logRecord);
+    this.#methods[methodName] ??= (
+      ...args: unknown[]
+    ) => {
+      const logRecord: LogRecord = {
+        methodName,
+        args,
+        timestamp: Date.now(),
+        levelNumber: 0,
+        scope: this.#scope,
+        extra: this.#extra,
       };
-    }
+      return this.#pipeToPlugins(logRecord);
+    };
     return this.#methods[methodName];
   }
 
   #pipeToPlugins(logRecord: LogRecord) {
-    const output = this.#plugins.reduce((acc: any, plugin: Plugin) => {
-      return plugin(acc);
-    }, logRecord);
+    const output = this.#plugins.reduce(
+      (acc: LogRecord, plugin: Plugin) =>
+        plugin(acc),
+      logRecord,
+    );
     return output.returned;
   }
-
-  constructor({ plugins = defaultPlugins }: LoggerOptions = {}) {
-    this.#plugins = plugins;
+  constructor(
+    { plugins = [], scope = "", extra }:
+      LoggerOptions = {},
+  ) {
+    this.#plugins.push(...plugins);
+    this.#scope = scope;
+    this.#extra = extra;
     return new Proxy(this, {
       get(target, name: string) {
         return target.#handle(name);
@@ -42,12 +63,12 @@ class Logger {
   }
 }
 
-export const defaultPlugins: Plugin[] = [
-  applyLevel,
-  filterBaseOnLevel("debug"),
-  transportToConsole,
-  returnArgs,
-];
+const logger = new Logger({
+  plugins: [
+    filterLowerLevels("debug"),
+    transportToConsole(globalThis.console),
+  ],
+});
 
-const logger = new Logger();
+export { Logger };
 export default logger;

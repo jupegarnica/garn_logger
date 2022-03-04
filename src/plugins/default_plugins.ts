@@ -1,4 +1,8 @@
-import type { LevelsNumber, LogRecord, Plugin } from "../types.ts";
+import type {
+  LevelsNumber,
+  LogRecord,
+  Plugin,
+} from "../types.ts";
 
 const levelsNameToNumbers: LevelsNumber = {
   debug: 0,
@@ -10,7 +14,9 @@ const levelsNameToNumbers: LevelsNumber = {
   critical: 40,
   fatal: 40,
 };
-const levelsNumbersToMethod: { [level: number]: string } = {
+const levelsNumbersToMethod: {
+  [level: number]: string;
+} = {
   0: "debug",
   10: "info",
   20: "warn",
@@ -18,33 +24,59 @@ const levelsNumbersToMethod: { [level: number]: string } = {
   40: "error",
 };
 
-export function applyLevel(log: LogRecord): LogRecord {
-  log.levelNumber = levelsNameToNumbers[log.methodName] ?? 0;
+export function applyLevel(
+  log: LogRecord,
+): LogRecord {
+  log.levelNumber =
+    levelsNameToNumbers[log.methodName] ?? 0;
   return log;
 }
 
-export function filterBaseOnLevel(level: string): Plugin {
+export function filterLowerLevels(
+  level: string,
+): Plugin {
   level = level.toLowerCase();
   return (log: LogRecord): LogRecord => {
-    log.muted = log.levelNumber < levelsNameToNumbers[level];
+    log.muted =
+      log.levelNumber <
+        levelsNameToNumbers[level];
     return log;
   };
 }
 
-export function transportToConsole(log: LogRecord): LogRecord {
-  if (!log.muted) {
-    // @ts-ignore
-    const fn = console[log.methodName] ??
+export function transportToConsole(
+  _console: Console,
+): Plugin & { _console: Console } {
+  function log(logRecord: LogRecord): LogRecord {
+    if (!logRecord.muted) {
       // @ts-ignore
-      console[levelsNumbersToMethod[log.levelNumber]];
+      const fn = _console[logRecord.methodName] ??
+        // @ts-ignore
+        _console[
+          logRecord.methodName.toLowerCase()
+        ] ??
+        // @ts-ignore
+        _console[
+          levelsNumbersToMethod[
+            logRecord.levelNumber
+          ]
+        ];
 
-    const args = log.msg ? [log.msg] : log.args;
-    fn(...args);
+      const args = logRecord.msg
+        ? [logRecord.msg]
+        : logRecord.args;
+      fn(...args);
+    }
+    return logRecord;
   }
+  // append console instance just for stub during tests
+  log._console = _console;
   return log;
 }
 
-export function returnArgs(log: LogRecord): LogRecord {
+export function returnArgs(
+  log: LogRecord,
+): LogRecord {
   log.returned = log.args;
   return log;
 }
