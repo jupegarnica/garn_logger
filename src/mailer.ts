@@ -6,7 +6,8 @@ const config = {
     return Deno.env.get("SMTP_HOST") || "";
   },
   get port() {
-    return Number(Deno.env.get("SMTP_PORT")) || 1025;
+    return Number(Deno.env.get("SMTP_PORT")) ||
+      1025;
   },
   get username() {
     return Deno.env.get("SMTP_USERNAME") || "";
@@ -63,7 +64,12 @@ function layout(content: string) {
     </html>`;
 }
 export function addLogToQueue(
-  { from = config.from, to = config.to, subject = "", content = "" }: Partial<
+  {
+    from = config.from,
+    to = config.to,
+    subject = "",
+    content = "",
+  }: Partial<
     Email
   >,
 ): void {
@@ -75,7 +81,9 @@ export function addLogToQueue(
   });
 }
 
-export async function flushQueue(): Promise<void> {
+export async function flushQueue(): Promise<
+  void
+> {
   try {
     try {
       await client.connectTLS({
@@ -104,7 +112,12 @@ export async function flushQueue(): Promise<void> {
       subject = email.subject;
     }
     if (content) {
-      await sendEmail({ to, from, subject, content });
+      await sendEmail({
+        to,
+        from,
+        subject,
+        content,
+      });
     }
     queue.length = 0;
     await client.close();
@@ -113,12 +126,16 @@ export async function flushQueue(): Promise<void> {
   }
 }
 
-export async function sendEmail({ from, to, subject, content }: Email) {
+export async function sendEmail(
+  { from, to, subject, content }: Email,
+) {
   await client.send({
     from,
     to,
     subject,
     content: layout(content),
   });
-  logger.debug(`Email with subject ${subject} sent to ${to}`);
+  logger.debug(
+    `Email with subject ${subject} sent to ${to}`,
+  );
 }

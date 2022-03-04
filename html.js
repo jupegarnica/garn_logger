@@ -9,5 +9,7 @@ import { marked } from "https://cdn.skypack.dev/marked";
 
 // Show the parsed data
 console.log(
-  marked("# Hello \n This is **markdown** printed in the `terminal`"),
+  marked(
+    "# Hello \n This is **markdown** printed in the `terminal`",
+  ),
 );

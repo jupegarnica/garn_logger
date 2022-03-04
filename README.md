@@ -9,10 +9,11 @@ my deno template
 
 ## Setup
 
-Need to install [Velociraptor](https://velociraptor.run/).
+Need to install
+[Velociraptor](https://velociraptor.run/).
 
-Confirm there is `~/.deno/bin` in `$PATH` to use the scripts installed by
-`deno install`.
+Confirm there is `~/.deno/bin` in `$PATH` to use
+the scripts installed by `deno install`.
 
 ```
 $ # install velociraptor
@@ -21,4 +22,5 @@ $ # install hook
 $ vr
 ```
 
-The scripts are defined in [velociraptor.yml](velociraptor.yml).
+The scripts are defined in
+[velociraptor.yml](velociraptor.yml).
