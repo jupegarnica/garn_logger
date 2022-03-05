@@ -117,7 +117,9 @@ function stringify(val: unknown, {
   showProxy = false,
   iterableLimit = Infinity,
 } = {}): string {
-  if (compact && typeof val === "string") return val;
+  if (!compact && typeof val === "string") {
+    return val;
+  }
   return Deno.inspect(val, {
     trailingComma,
     colors,
