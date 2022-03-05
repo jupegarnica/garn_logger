@@ -1,34 +1,34 @@
-import type {
-  LogRecord,
-  Plugin,
-} from "../types.ts";
+import type { LoggerState, LogRecord, Plugin } from "../types.ts";
 
-import {
-  levelsNameToNumbers,
-  levelsNumbersToMethod,
-} from "../constants.ts";
+import { levelsNameToNumbers, levelsNumbersToMethod } from "../constants.ts";
 
-export function applyLevel(
+export function applyLevelNumber(
   log: LogRecord,
 ): LogRecord {
-  log.levelNumber =
-    levelsNameToNumbers[log.methodName] ?? 0;
+  log.levelNumber = levelsNameToNumbers[log.methodName] ?? 0;
   return log;
 }
 
-export function filterLowerLevels(
-  level: string,
-): Plugin {
-  level = level.toLowerCase();
-  return (log: LogRecord): LogRecord => {
-    log.muted = log.levelNumber <
-      levelsNameToNumbers[level];
+export const applyFilter = (
+  levelName: string,
+) => {
+  const filterLevel = levelsNameToNumbers[levelName] ??
+    levelsNameToNumbers[
+      levelName.toLowerCase()
+    ] ??
+    0;
+  return function muteLogRecord(
+    log: LogRecord,
+    state: LoggerState,
+  ): LogRecord {
+    state.filterLevel = filterLevel;
+    log.muted = log.levelNumber < state.filterLevel;
     return log;
   };
-}
+};
 
 export function transportToConsole(
-  _console: Console,
+  _console: Console = globalThis.console,
 ): Plugin & { _console: Console } {
   function log(logRecord: LogRecord): LogRecord {
     if (!logRecord.muted) {
@@ -45,9 +45,7 @@ export function transportToConsole(
           ]
         ];
 
-      const args = logRecord.msg
-        ? [logRecord.msg]
-        : logRecord.args;
+      const args = logRecord.msg ? [logRecord.msg] : logRecord.args;
       fn(...args);
     }
     return logRecord;

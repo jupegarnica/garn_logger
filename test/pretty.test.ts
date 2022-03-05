@@ -1,26 +1,16 @@
-import {
-  createLogger,
-  LogRecord,
-  pretty,
-} from "../mod.ts";
-import {
-  assertEquals,
-  assertMatch,
-  stub,
-} from "../dev_deps.ts";
+import { createLogger, LogRecord, pretty } from "../mod.ts";
+import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
 function returnMsg(log: LogRecord): LogRecord {
   log.returned = log.msg || "";
   return log;
 }
 
-const fulltimeRegex =
-  /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;
+const fulltimeRegex = /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;
 const timeRegex = /\d\d:\d\d:\d\d/;
 
 Deno.test({
-  name:
-    "[pretty] should have correct default options",
+  name: "[pretty] should have correct default options",
   ignore: false,
   only: false,
   fn: () => {
@@ -65,8 +55,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[pretty] should only use colors if enabled",
+  name: "[pretty] should only use colors if enabled",
   ignore: false,
   only: false,
   fn: () => {
@@ -91,8 +80,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[pretty] should not use color if not tty",
+  name: "[pretty] should not use color if not tty",
   ignore: false,
   only: false,
   fn: () => {
@@ -128,8 +116,7 @@ Deno.test({
 
 Deno.test({
   // https://no-color.org/
-  name:
-    "[pretty] should not use color if variable NO_COLOR is set",
+  name: "[pretty] should not use color if variable NO_COLOR is set",
   ignore: false,
   only: false,
   fn: () => {

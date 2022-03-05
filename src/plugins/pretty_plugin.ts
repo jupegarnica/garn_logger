@@ -1,14 +1,10 @@
 import { colors, format } from "../../deps.ts";
-import type {
-  LogRecord,
-  Plugin,
-} from "../types.ts";
+import type { LogRecord, Plugin } from "../types.ts";
 
 type Colorize = (str: string) => string;
 
 const nop = () => (_: string): string => _;
-const red = (txt: string) =>
-  colors.rgb24(txt, 0xff0000);
+const red = (txt: string) => colors.rgb24(txt, 0xff0000);
 
 const colorsByLevel: {
   [level: number]: Colorize;
@@ -38,12 +34,8 @@ export function pretty(
   useColor = useColor &&
     Deno.isatty(Deno.stdout.rid) &&
     Deno.env.get("NO_COLOR") === undefined;
-  const colorTimestamp = useColor
-    ? colors.dim
-    : nop();
-  const colorByLevel = useColor
-    ? getColorByLevel
-    : nop;
+  const colorTimestamp = useColor ? colors.dim : nop();
+  const colorByLevel = useColor ? getColorByLevel : nop;
   const bold = useColor ? colors.bold : nop();
   return function handle(
     logRecord: LogRecord,

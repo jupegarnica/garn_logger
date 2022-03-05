@@ -18,10 +18,7 @@ import {
   LogRecord,
 } from "https://deno.land/std@0.127.0/log/logger.ts";
 
-import {
-  addLogToQueue,
-  flushQueue,
-} from "./mailer.ts";
+import { addLogToQueue, flushQueue } from "./mailer.ts";
 
 export type LevelName =
   | "NOTSET"
@@ -82,18 +79,15 @@ const emailFormatter = ({
   levelName,
   args,
 }: LogRecord) => {
-  let text =
-    `<div class="record ${levelName}"> <i>${
-      formatDate(
-        datetime,
-      )
-    }</i> <b>${padEnd(levelName)}</b>`;
+  let text = `<div class="record ${levelName}"> <i>${
+    formatDate(
+      datetime,
+    )
+  }</i> <b>${padEnd(levelName)}</b>`;
 
   text += '<div class="args">';
   args.forEach((arg, i) => {
-    text += `<div class="arg${i}">${
-      stringify(arg)
-    }</div>`;
+    text += `<div class="arg${i}">${stringify(arg)}</div>`;
   });
   text += "</div>";
 
@@ -158,8 +152,7 @@ class Logger extends _Logger {
   warn = super.warning;
 }
 
-class ConsoleHandler
-  extends handlers.BaseHandler {
+class ConsoleHandler extends handlers.BaseHandler {
   format(logRecord: LogRecord): string {
     const [firstArg, ...args] = [
       ...logRecord.args,
@@ -171,11 +164,8 @@ class ConsoleHandler
       )
     } `;
 
-    headers +=
-      `${(padEnd(`${logRecord.levelName}`))}`;
-    headers += logRecord.msg
-      ? ` ${(padEnd(`[${logRecord.msg}]`))}`
-      : "";
+    headers += `${(padEnd(`${logRecord.levelName}`))}`;
+    headers += logRecord.msg ? ` ${(padEnd(`[${logRecord.msg}]`))}` : "";
     headers += ` ${(stringify(firstArg))} `;
     headers = colorize(
       logRecord.level,
@@ -227,8 +217,7 @@ class FileHandler extends handlers.FileHandler {
 }
 
 const fileHandler = new FileHandler("WARNING", {
-  filename:
-    `${LOGS_DIR}/${formatLogFileName()}.log`,
+  filename: `${LOGS_DIR}/${formatLogFileName()}.log`,
   mode: "a", // 'a', 'w', 'x'
   formatter: fileFormatter,
 });
@@ -246,8 +235,7 @@ const handlersDefault = {
     {
       maxBytes: 1024 * 10,
       maxBackupCount: 10,
-      filename:
-        `${LOGS_DIR}/${formatLogFileName()}.log`,
+      filename: `${LOGS_DIR}/${formatLogFileName()}.log`,
       mode: "a",
       formatter: fileFormatter,
     },
@@ -313,9 +301,7 @@ export const create = (
     level = "DEBUG",
   }: LoggerOptions,
 ): LoggerType => {
-  const _handlers = transports.map((t) =>
-    handlersDefault[t]
-  );
+  const _handlers = transports.map((t) => handlersDefault[t]);
   const _logger = new Logger(scope, level, {
     handlers: _handlers,
   });
@@ -324,20 +310,13 @@ export const create = (
   }
 
   return {
-    debug: (...args: unknown[]) =>
-      _logger.debug(scope, ...args),
-    log: (...args: unknown[]) =>
-      _logger.info(scope, ...args),
-    info: (...args: unknown[]) =>
-      _logger.info(scope, ...args),
-    warn: (...args: unknown[]) =>
-      _logger.warning(scope, ...args),
-    warning: (...args: unknown[]) =>
-      _logger.warning(scope, ...args),
-    error: (...args: unknown[]) =>
-      _logger.error(scope, ...args),
-    critical: (...args: unknown[]) =>
-      _logger.critical(scope, ...args),
+    debug: (...args: unknown[]) => _logger.debug(scope, ...args),
+    log: (...args: unknown[]) => _logger.info(scope, ...args),
+    info: (...args: unknown[]) => _logger.info(scope, ...args),
+    warn: (...args: unknown[]) => _logger.warning(scope, ...args),
+    warning: (...args: unknown[]) => _logger.warning(scope, ...args),
+    error: (...args: unknown[]) => _logger.error(scope, ...args),
+    critical: (...args: unknown[]) => _logger.critical(scope, ...args),
   };
 };
 

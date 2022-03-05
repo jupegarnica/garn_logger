@@ -1,8 +1,4 @@
-import {
-  createLogger,
-  pretty,
-  transportToConsole,
-} from "../mod.ts";
+import { createLogger, pretty, transportToConsole } from "../mod.ts";
 
 export const colorConsole = createLogger()
   .use(

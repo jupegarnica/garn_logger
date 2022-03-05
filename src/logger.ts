@@ -1,15 +1,10 @@
 import {
-  applyLevel,
+  applyLevelNumber,
   returnArgs,
   transportToConsole,
 } from "./plugins/default_plugins.ts";
 
-import type {
-  AnyMethod,
-  LoggerState,
-  LogRecord,
-  Plugin,
-} from "./types.ts";
+import type { AnyMethod, LoggerState, LogRecord, Plugin } from "./types.ts";
 
 // import { levelsNameToNumbers } from "./constants.ts";
 
@@ -18,18 +13,12 @@ class Logger implements AnyMethod {
   [key: string]: (...args: any[]) => any
   #methods: AnyMethod = {};
   #plugins: Plugin[] = [
-    applyLevel,
+    applyLevelNumber,
     returnArgs,
   ];
   #state: { [key: string]: any } = {
     filterLevel: 0,
   };
-
-  // filter(level: string): Logger {
-  //   this.#state.filterLeverLowerThan =
-  //     levelsNameToNumbers[level] ?? 0;
-  //   return this;
-  // }
 
   use(...plugins: Plugin[]): Logger {
     this.#plugins.push(...plugins);
@@ -64,8 +53,9 @@ class Logger implements AnyMethod {
     state: LoggerState,
   ) {
     const output = this.#plugins.reduce(
-      (acc: LogRecord, plugin: Plugin) =>
-        plugin(acc, state),
+      (acc: LogRecord, plugin: Plugin) => {
+        return plugin(acc, state);
+      },
       logRecord,
     );
     return output.returned;
@@ -88,8 +78,6 @@ const logger = createLogger();
 logger.use(
   transportToConsole(globalThis.console),
 );
-
-logger.yellow("hello");
 
 export default logger;
 

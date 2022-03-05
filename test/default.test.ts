@@ -1,6 +1,6 @@
 import {
+  applyFilter,
   createLogger,
-  filterLowerLevels,
 } from "../mod.ts";
 import type { LogRecord } from "../src/types.ts";
 import {
@@ -52,31 +52,6 @@ Deno.test({
   },
 });
 
-// Deno.test({
-//   name: "[default] should mute lower levels",
-//   ignore: false,
-//   only: false,
-//   fn: () => {
-//     const filter = "info";
-//     const logger = createLogger();
-//     logger.use(
-//       filterLowerLevels(filter),
-//       function assertIsMuted(log) {
-//         if (log.msg !== filter) {
-//           assertEquals(log.muted, true);
-//         } else {
-//           assertEquals(log.muted, undefined);
-//         }
-//         return log;
-//       },
-//     )
-//     logger.error("error");
-//     logger.info("info");
-//     logger.log("log");
-//     logger.debug("debug");
-//   },
-// });
-
 Deno.test({
   name:
     "[default] should apply defaults to LogRecord",
@@ -100,7 +75,6 @@ Deno.test({
           "hello",
           "world",
         ]);
-        // assertEquals(record.scope, "");
         assertEquals(record.msg, undefined);
         assertEquals(record.muted, undefined);
         return record;
@@ -130,22 +104,62 @@ Deno.test({
   },
 });
 
+Deno.test({
+  name:
+    "[default] should apply filter state and mute logRecord",
+  ignore: false,
+  // only: true,
+  fn: () => {
+    const logger = createLogger();
+    logger.use(
+      applyFilter("error"),
+      function assertFilter(record, state) {
+        assertEquals(state.filterLevel, 30);
+        return record;
+      },
+      function assertMute(record) {
+        const { methodName, muted } = record;
+        if (methodName === "debug") {
+          assertEquals(
+            muted,
+            true,
+          );
+        } else {
+          assertEquals(
+            muted,
+            false,
+          );
+        }
+
+        return record;
+      },
+    );
+    logger.debug("debug");
+    logger.error("error");
+  },
+});
+
 // Deno.test({
-//   name: "[default] should change filter conf",
+//   name: "[default] should mute lower levels",
 //   ignore: false,
 //   only: false,
 //   fn: () => {
-//     const logger = createLogger()
-//       .use(
-//         function (record) {
-//           assertEquals(record.args[0], "warn");
-//           return record;
-//         },
-//       );
-//     // logger.filter(
-//     //   "WARN",
-//     // );
+//     const filter = "info";
+//     const logger = createLogger();
+//     logger.use(
+//       filterLowerLevels(filter),
+//       function assertIsMuted(log) {
+//         if (log.msg !== filter) {
+//           assertEquals(log.muted, true);
+//         } else {
+//           assertEquals(log.muted, undefined);
+//         }
+//         return log;
+//       },
+//     )
+//     logger.error("error");
+//     logger.info("info");
+//     logger.log("log");
 //     logger.debug("debug");
-//     logger.warn("warn");
 //   },
 // });

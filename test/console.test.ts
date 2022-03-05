@@ -1,7 +1,4 @@
-import {
-  createLogger,
-  transportToConsole,
-} from "../mod.ts";
+import { createLogger, transportToConsole } from "../mod.ts";
 import {
   assertEquals,
   // assertStringIncludes,
@@ -21,8 +18,7 @@ const consoleMethods = Object.keys(console)
     typeof console[method] === "function"
   );
 Deno.test({
-  name:
-    "[console] should proxy every method to console",
+  name: "[console] should proxy every method to console",
   ignore: false,
   only: false,
   fn: async ({ step }) => {
@@ -49,8 +45,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[console] should convert every method to a console equivalent method",
+  name: "[console] should convert every method to a console equivalent method",
   ignore: false,
   only: false,
   fn: () => {
@@ -105,8 +100,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[console] should override native console",
+  name: "[console] should override native console",
   ignore: false,
   only: false,
   fn: () => {
@@ -161,8 +155,7 @@ const data = [
 ];
 
 Deno.test({
-  name:
-    "[console] should work with all types of data, even with circular references",
+  name: "[console] should work with all types of data, even with circular references",
   ignore: false,
   only: false,
   fn: () => {
