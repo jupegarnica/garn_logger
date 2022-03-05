@@ -1,12 +1,6 @@
-import {
-  applyFilter,
-  createLogger,
-} from "../mod.ts";
+import { applyFilter, createLogger } from "../mod.ts";
 import type { LogRecord } from "../src/types.ts";
-import {
-  assertEquals,
-  spy,
-} from "../dev_deps.ts";
+import { assertEquals, spy } from "../dev_deps.ts";
 
 Deno.test({
   name: "[default] should return args",
@@ -34,8 +28,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[default] plugins must get LogRecord and state",
+  name: "[default] plugins must get LogRecord and state",
   ignore: false,
   only: false,
   fn: () => {
@@ -53,8 +46,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[default] should apply defaults to LogRecord",
+  name: "[default] should apply defaults to LogRecord",
   ignore: false,
   only: false,
   fn: () => {
@@ -85,8 +77,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[default] should apply keep state between plugins",
+  name: "[default] should apply keep state between plugins",
   ignore: false,
   only: false,
   fn: () => {
@@ -105,8 +96,7 @@ Deno.test({
 });
 
 Deno.test({
-  name:
-    "[default] should apply filter state and mute logRecord",
+  name: "[default] should apply filter state and mute logRecord",
   ignore: false,
   // only: true,
   fn: () => {
