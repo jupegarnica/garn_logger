@@ -1,29 +1,22 @@
-export type AnyMethod = {
-  [key: string]: (...args: unknown[]) => unknown;
-};
-
-export type LevelsNumber = {
-  [key: string]: number;
-};
+export type LoggerState = { [key: string]: any };
 
 export type LogRecord = {
   methodName: string;
   args: unknown[];
   timestamp: number;
   levelNumber: number;
-  scope: string;
+  scope?: string;
   msg?: string;
   muted?: boolean;
   returned?: any;
-  [key: string | symbol]: unknown;
 };
 
 export type Plugin = (
   log: LogRecord,
+  state: LoggerState,
 ) => LogRecord;
 
-export type LoggerOptions = {
-  plugins?: Plugin[];
-  scope?: string;
-  extra?: unknown;
-};
+export interface AnyMethod {
+  // deno-lint-ignore no-explicit-any
+  [key: string]: (...args: any[]) => any;
+}

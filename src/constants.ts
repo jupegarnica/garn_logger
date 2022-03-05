@@ -1,6 +1,5 @@
-import type { LevelsNumber } from "./types.ts";
 
-export const levelsNameToNumbers: LevelsNumber = {
+export const levelsNameToNumbers: {[key:string]: number} = {
   debug: 0,
   log: 0,
   info: 10,

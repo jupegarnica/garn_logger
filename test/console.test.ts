@@ -1,20 +1,19 @@
 import {
-  Logger,
+  createLogger,
   transportToConsole,
 } from "../mod.ts";
 import {
   assertEquals,
-  assertStringIncludes,
-  spy,
+  // assertStringIncludes,
+  // spy,
   stub,
 } from "../dev_deps.ts";
 
 const consolePlugin = transportToConsole(
   globalThis.console,
 );
-const logger = new Logger({
-  plugins: [consolePlugin],
-});
+const logger = createLogger();
+logger.use(consolePlugin);
 
 const consoleMethods = Object.keys(console)
   .filter((method: string) =>
@@ -143,7 +142,7 @@ const deep: any = {
 
 deep.circular = deep;
 const data = [
-  new Error("upss"),
+  new Error("ups"),
   "string",
   123,
   true,

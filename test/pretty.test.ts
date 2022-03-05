@@ -1,5 +1,5 @@
 import {
-  Logger,
+  createLogger,
   LogRecord,
   pretty,
 } from "../mod.ts";
@@ -25,17 +25,15 @@ Deno.test({
   only: false,
   fn: () => {
     const prettyPlugin = pretty({});
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "test",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+
     const msg = prettify.debug("hello", 123);
     assertMatch(
       msg,
       fulltimeRegex,
     );
     assertMatch(msg, /DEBUG/);
-    assertMatch(msg, /\[test\]/);
     assertMatch(msg, /"hello"/);
     assertMatch(msg, /123/);
   },
@@ -43,15 +41,14 @@ Deno.test({
 
 // TODO: MAKE IT WORK WHEN COLORED
 Deno.test({
-  name: "[pretty] should padend correctly",
+  name: "[pretty] should padEnd correctly",
   ignore: true,
   only: false,
   fn: () => {
     const prettyPlugin = pretty({});
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "test",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+
     console.log("\n\n----\n");
     const log = prettify.log("--");
     console.log(log.length, log);
@@ -76,10 +73,9 @@ Deno.test({
     const prettyPlugin = pretty({
       useColor: false,
     });
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "scoped",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+
     const msg = prettify.log(
       { a: 1 },
       "message",
@@ -89,7 +85,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG [scoped] { a: 1 } "message" 123`,
+      ` LOG { a: 1 } "message" 123`,
     );
   },
 });
@@ -112,10 +108,9 @@ Deno.test({
     const prettyPlugin = pretty({
       useColor: true,
     });
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "scoped",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+
     const msg = prettify.log(
       { a: 1 },
       "message",
@@ -125,7 +120,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG [scoped] { a: 1 } "message" 123`,
+      ` LOG { a: 1 } "message" 123`,
     );
     stubbed.restore();
   },
@@ -151,10 +146,8 @@ Deno.test({
     const prettyPlugin = pretty({
       useColor: true,
     });
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "scoped",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
     const msg = prettify.log(
       { a: 1 },
       "message",
@@ -164,7 +157,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG [scoped] { a: 1 } "message" 123`,
+      ` LOG { a: 1 } "message" 123`,
     );
     stubbed.restore();
     Deno.env.delete("NO_COLOR");
@@ -185,10 +178,9 @@ Deno.test({
       depth: 1,
       iterableLimit: 1,
     });
-    const prettify = new Logger<string>({
-      plugins: [prettyPlugin, returnMsg],
-      scope: "scoped",
-    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+
     const msg = prettify.log(
       {
         a: {

@@ -1,12 +1,13 @@
 import {
-  Logger,
+  createLogger,
   pretty,
   transportToConsole,
 } from "../mod.ts";
 
-export const colorConsole = new Logger({
-  plugins: [
+export const colorConsole = createLogger()
+  .use(
     pretty({}),
+  )
+  .use(
     transportToConsole(globalThis.console),
-  ],
-});
+  );
