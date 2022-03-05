@@ -1,28 +1,12 @@
 import type {
-  LevelsNumber,
   LogRecord,
   Plugin,
 } from "../types.ts";
 
-const levelsNameToNumbers: LevelsNumber = {
-  debug: 0,
-  info: 10,
-  table: 10,
-  warn: 20,
-  warning: 20,
-  error: 30,
-  critical: 40,
-  fatal: 40,
-};
-const levelsNumbersToMethod: {
-  [level: number]: string;
-} = {
-  0: "debug",
-  10: "info",
-  20: "warn",
-  30: "error",
-  40: "error",
-};
+import {
+  levelsNameToNumbers,
+  levelsNumbersToMethod,
+} from "../constants.ts";
 
 export function applyLevel(
   log: LogRecord,
