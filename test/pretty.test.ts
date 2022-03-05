@@ -203,7 +203,7 @@ Deno.test({
     const rest = msg.replace(timeRegex, "");
     assertEquals(
       rest,
-      ` {\n  a: [Object],\n}\n[\n  1,\n  ... 9 more items,\n]\n"message"\n123`,
+      ` {\n  a: [Object],\n}\n[\n  1,\n  ... 9 more items,\n]\nmessage\n123`,
     );
   },
 });

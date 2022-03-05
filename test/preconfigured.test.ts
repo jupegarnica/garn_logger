@@ -2,7 +2,7 @@ import { colorConsole } from "../src/preconfigured.ts";
 
 Deno.test({
   name: "[default] test contrast",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const logs = [
