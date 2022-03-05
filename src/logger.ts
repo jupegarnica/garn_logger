@@ -6,9 +6,9 @@ import {
 
 import type {
   AnyMethod,
+  LoggerState,
   LogRecord,
   Plugin,
-  LoggerState
 } from "./types.ts";
 
 // import { levelsNameToNumbers } from "./constants.ts";
@@ -50,13 +50,19 @@ class Logger implements AnyMethod {
         timestamp: Date.now(),
         levelNumber: 0,
       };
-      return this.#pipeToPlugins(logRecord, this.#state);
+      return this.#pipeToPlugins(
+        logRecord,
+        this.#state,
+      );
     };
 
     return this.#methods[methodName].bind(this);
   }
 
-  #pipeToPlugins(logRecord: LogRecord, state: LoggerState) {
+  #pipeToPlugins(
+    logRecord: LogRecord,
+    state: LoggerState,
+  ) {
     const output = this.#plugins.reduce(
       (acc: LogRecord, plugin: Plugin) =>
         plugin(acc, state),

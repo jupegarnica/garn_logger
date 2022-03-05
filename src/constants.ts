@@ -1,5 +1,6 @@
-
-export const levelsNameToNumbers: {[key:string]: number} = {
+export const levelsNameToNumbers: {
+  [key: string]: number;
+} = {
   debug: 0,
   log: 0,
   info: 10,
