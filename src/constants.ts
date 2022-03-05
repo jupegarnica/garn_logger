@@ -1,7 +1,4 @@
-import type {
-  LevelsNumber,
-} from "./types.ts";
-
+import type { LevelsNumber } from "./types.ts";
 
 export const levelsNameToNumbers: LevelsNumber = {
   debug: 0,
@@ -14,7 +11,6 @@ export const levelsNameToNumbers: LevelsNumber = {
   critical: 40,
   fatal: 40,
 };
-
 
 export const levelsNumbersToMethod: {
   [level: number]: string;
