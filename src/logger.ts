@@ -1,27 +1,36 @@
 import {
-  applyLevelNumber,
   returnArgs,
   transportToConsole,
 } from "./plugins/default_plugins.ts";
 
-import type { AnyMethod, LoggerState, LogRecord, Plugin } from "./types.ts";
+import { compose } from "./middleware.ts";
 
-// import { levelsNameToNumbers } from "./constants.ts";
+import type {
+  AnyMethod,
+  LoggerState,
+  LogRecord,
+  Middleware,
+  MiddlewareContext,
+  NextMiddleware,
+} from "./types.ts";
+
+import { levelsNameToNumbers } from "./constants.ts";
 
 class Logger implements AnyMethod {
   // deno-lint-ignore no-explicit-any
   [key: string]: (...args: any[]) => any
   #methods: AnyMethod = {};
-  #plugins: Plugin[] = [
-    applyLevelNumber,
-    returnArgs,
-  ];
-  #state: { [key: string]: any } = {
+  #plugins: Middleware[] = [];
+  #state: LoggerState = {
     filterLevel: 0,
   };
+  #composedMiddleware: Middleware = (ctx: MiddlewareContext, next?: NextMiddleware) => {
+    next?.();
+  };
 
-  use(...plugins: Plugin[]): Logger {
+  use(...plugins: Middleware[]): Logger {
     this.#plugins.push(...plugins);
+    this.#composedMiddleware = compose(this.#plugins);
     return this;
   }
 
@@ -33,34 +42,26 @@ class Logger implements AnyMethod {
     this.#methods[methodName] ??= (
       ...args: unknown[]
     ) => {
+      const levelNumber = levelsNameToNumbers[methodName] ?? 0;
       const logRecord: LogRecord = {
         methodName,
         args,
         timestamp: Date.now(),
-        levelNumber: 0,
+        levelNumber,
+        muted: levelNumber < this.#state.filterLevel,
       };
-      return this.#pipeToPlugins(
-        logRecord,
-        this.#state,
-      );
+      const ctx = { logRecord, state: this.#state };
+      this.#composedMiddleware(ctx, () => {});
+
+      return ctx.logRecord.returned;
     };
 
     return this.#methods[methodName].bind(this);
   }
 
-  #pipeToPlugins(
-    logRecord: LogRecord,
-    state: LoggerState,
-  ) {
-    const output = this.#plugins.reduce(
-      (acc: LogRecord, plugin: Plugin) => {
-        return plugin(acc, state);
-      },
-      logRecord,
-    );
-    return output.returned;
-  }
   constructor() {
+    this.use(returnArgs);
+
     return new Proxy(this, {
       get(target, name: string) {
         return target.#handle(name);

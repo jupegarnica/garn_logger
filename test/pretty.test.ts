@@ -1,9 +1,10 @@
 import { createLogger, LogRecord, pretty } from "../mod.ts";
+import type {Middleware, MiddlewareContext, NextMiddleware} from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
-function returnMsg(log: LogRecord): LogRecord {
-  log.returned = log.msg || "";
-  return log;
+function returnMsg({ logRecord }: MiddlewareContext, next: NextMiddleware): void {
+  logRecord.returned = logRecord.msg || "";
+  next();
 }
 
 const fulltimeRegex = /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;

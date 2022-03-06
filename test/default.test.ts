@@ -1,5 +1,5 @@
 import { applyFilter, createLogger } from "../mod.ts";
-import type { LogRecord } from "../src/types.ts";
+import type { NextMiddleware } from "../src/types.ts";
 import { assertEquals, spy } from "../dev_deps.ts";
 
 Deno.test({
@@ -7,9 +7,9 @@ Deno.test({
   ignore: false,
   only: false,
   fn: () => {
-    const console = createLogger();
+    const logger = createLogger();
     const data = [1, 2, 3];
-    const returned = console.log(...data);
+    const returned = logger.log(...data);
     assertEquals(returned, data);
   },
 });
@@ -19,7 +19,9 @@ Deno.test({
   ignore: false,
   only: false,
   fn: () => {
-    const plugin = spy((_: LogRecord) => _);
+    const plugin = spy((_, next: NextMiddleware) => {
+      next();
+    });
     const logger = createLogger();
     logger.use(plugin, plugin);
     logger.log("test");
@@ -32,14 +34,14 @@ Deno.test({
   ignore: false,
   only: false,
   fn: () => {
-    const plugin = spy((_: LogRecord) => _);
+    const plugin = spy(() => {});
     const logger = createLogger();
     logger.use(plugin);
     logger.log("test");
-    assertEquals(plugin.calls[0].args[0].args, [
+    assertEquals(plugin.calls[0].args[0].logRecord.args, [
       "test",
     ]);
-    assertEquals(plugin.calls[0].args[1], {
+    assertEquals(plugin.calls[0].args[0].state, {
       filterLevel: 0,
     });
   },
@@ -52,24 +54,23 @@ Deno.test({
   fn: () => {
     const logger = createLogger();
     logger.use(
-      function (record) {
+      function ({ logRecord }) {
         assertEquals(
-          typeof record.timestamp,
+          typeof logRecord.timestamp,
           "number",
         );
-        assertEquals(record.methodName, "say");
-        assertEquals(record.levelNumber, 0);
-        assertEquals(record.args, [
+        assertEquals(logRecord.methodName, "say");
+        assertEquals(logRecord.levelNumber, 0);
+        assertEquals(logRecord.args, [
           "hello",
           "world",
         ]);
-        assertEquals(record.returned, [
+        assertEquals(logRecord.returned, [
           "hello",
           "world",
         ]);
-        assertEquals(record.msg, undefined);
-        assertEquals(record.muted, undefined);
-        return record;
+        assertEquals(logRecord.muted, false);
+        assertEquals(logRecord.msg, undefined);
       },
     );
     logger.say("hello", "world");
@@ -83,13 +84,13 @@ Deno.test({
   fn: () => {
     const logger = createLogger();
 
-    logger.use(function (record, state) {
+    logger.use(function ({ state }, next) {
       state.filterLevel = 40;
-      return record;
+      next();
     });
-    logger.use(function (record, state) {
+    logger.use(function ({ state }, next) {
       assertEquals(state.filterLevel, 40);
-      return record;
+      next();
     });
     logger.say("hello", "world");
   },
@@ -103,12 +104,12 @@ Deno.test({
     const logger = createLogger();
     logger.use(
       applyFilter("error"),
-      function assertFilter(record, state) {
+      function assertFilter({ state }, next) {
         assertEquals(state.filterLevel, 30);
-        return record;
+        next();
       },
-      function assertMute(record) {
-        const { methodName, muted } = record;
+      function assertMute({ logRecord }) {
+        const { methodName, muted } = logRecord;
         if (methodName === "debug") {
           assertEquals(
             muted,
@@ -120,8 +121,6 @@ Deno.test({
             false,
           );
         }
-
-        return record;
       },
     );
     logger.debug("debug");

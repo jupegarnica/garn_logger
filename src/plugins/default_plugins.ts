@@ -1,13 +1,10 @@
-import type { LoggerState, LogRecord, Plugin } from "../types.ts";
+import type {
+  Middleware,
+  MiddlewareContext,
+  NextMiddleware,
+} from "../types.ts";
 
 import { levelsNameToNumbers, levelsNumbersToMethod } from "../constants.ts";
-
-export function applyLevelNumber(
-  log: LogRecord,
-): LogRecord {
-  log.levelNumber = levelsNameToNumbers[log.methodName] ?? 0;
-  return log;
-}
 
 export const applyFilter = (
   levelName: string,
@@ -18,19 +15,20 @@ export const applyFilter = (
     ] ??
     0;
   return function muteLogRecord(
-    log: LogRecord,
-    state: LoggerState,
-  ): LogRecord {
+    { logRecord, state }: MiddlewareContext,
+    next: NextMiddleware,
+  ) {
     state.filterLevel = filterLevel;
-    log.muted = log.levelNumber < state.filterLevel;
-    return log;
+    logRecord.muted = logRecord.levelNumber < state.filterLevel;
+    next();
   };
 };
 
 export function transportToConsole(
   _console: Console = globalThis.console,
-): Plugin & { _console: Console } {
-  function log(logRecord: LogRecord): LogRecord {
+): Middleware & { _console: Console } {
+  function log({ logRecord }: MiddlewareContext, next: NextMiddleware): void {
+    next();
     if (!logRecord.muted) {
       // @ts-ignore
       const fn = _console[logRecord.methodName] ??
@@ -48,7 +46,6 @@ export function transportToConsole(
       const args = logRecord.msg ? [logRecord.msg] : logRecord.args;
       fn(...args);
     }
-    return logRecord;
   }
   // append console instance just for stub during tests
   log._console = _console;
@@ -56,8 +53,9 @@ export function transportToConsole(
 }
 
 export function returnArgs(
-  log: LogRecord,
-): LogRecord {
-  log.returned = log.args;
-  return log;
+  { logRecord }: MiddlewareContext,
+  next: NextMiddleware,
+): void {
+  logRecord.returned = logRecord.args;
+  next();
 }

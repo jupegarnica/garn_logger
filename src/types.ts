@@ -11,12 +11,19 @@ export type LogRecord = {
   returned?: any;
 };
 
-export type Plugin = (
-  log: LogRecord,
-  state: LoggerState,
-) => LogRecord;
-
 export interface AnyMethod {
   // deno-lint-ignore no-explicit-any
   [key: string]: (...args: any[]) => any;
 }
+
+export type NextMiddleware = () => void;
+
+export type MiddlewareContext = {
+  logRecord: LogRecord;
+  state: LoggerState;
+};
+
+export type Middleware = (
+  ctx: MiddlewareContext,
+  next: NextMiddleware,
+) => void;

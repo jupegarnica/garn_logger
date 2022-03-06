@@ -1,5 +1,5 @@
 import { colors, format } from "../../deps.ts";
-import type { LogRecord, Plugin } from "../types.ts";
+import type { Middleware, MiddlewareContext, NextMiddleware } from "../types.ts";
 
 type Colorize = (str: string) => string;
 
@@ -29,7 +29,7 @@ export function pretty(
     depth = Infinity,
     iterableLimit = 99,
   } = {},
-): Plugin {
+): Middleware {
   // https://no-color.org/
   useColor = useColor &&
     Deno.isatty(Deno.stdout.rid) &&
@@ -38,8 +38,9 @@ export function pretty(
   const colorByLevel = useColor ? getColorByLevel : nop;
   const bold = useColor ? colors.bold : nop();
   return function handle(
-    logRecord: LogRecord,
-  ): LogRecord {
+    { logRecord }: MiddlewareContext,
+    next: NextMiddleware,
+  ) {
     let msg = "";
     const color = colorByLevel(
       logRecord.levelNumber,
@@ -66,19 +67,19 @@ export function pretty(
 
     const separator = multiline ? "\n" : " ";
     msg += " " +
-      logRecord.args
-        .map((arg) =>
-          stringify(arg, {
-            colors: useColor,
-            compact: !multiline,
-            depth,
-            iterableLimit,
-          })
-        )
+      // deno-lint-ignore no-explicit-any
+      logRecord.args.map((arg: any) =>
+        stringify(arg, {
+          colors: useColor,
+          compact: !multiline,
+          depth,
+          iterableLimit,
+        })
+      )
         .join(separator);
 
     logRecord.msg = msg;
-    return logRecord;
+    next();
   };
 }
 
