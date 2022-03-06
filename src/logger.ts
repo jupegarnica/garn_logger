@@ -1,5 +1,3 @@
-
-
 import type {
   AnyMethod,
   LoggerState,
@@ -12,7 +10,7 @@ import type {
 import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";
 
-class Logger  {
+class Logger {
   // deno-lint-ignore no-explicit-any
   [key: string]: (...args: any[]) => any
   #methods: AnyMethod = {};

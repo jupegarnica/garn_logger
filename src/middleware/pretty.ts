@@ -32,7 +32,7 @@ export function pretty(
 ): Middleware {
   // https://no-color.org/
   useColor = useColor &&
-    typeof Deno !== 'undefined' &&
+    typeof Deno !== "undefined" &&
     Deno.isatty(Deno.stdout.rid) &&
     Deno.env.get("NO_COLOR") === undefined;
 
