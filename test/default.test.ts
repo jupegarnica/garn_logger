@@ -78,7 +78,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "[default] should apply keep state between plugins",
+  name: "[default] should apply and keep state between plugins",
   ignore: false,
   only: false,
   fn: () => {
