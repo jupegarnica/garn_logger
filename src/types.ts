@@ -10,7 +10,6 @@ export type LogRecord = {
   msg?: string;
 };
 
-
 export type MiddlewareNext = () => void;
 
 export type MiddlewareContext = {

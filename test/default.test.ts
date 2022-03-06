@@ -1,4 +1,4 @@
-import {  createLogger } from "../mod.ts";
+import { createLogger } from "../mod.ts";
 import type { MiddlewareNext } from "../src/types.ts";
 import { assertEquals, spy } from "../dev_deps.ts";
 
@@ -102,7 +102,7 @@ Deno.test({
   // only: true,
   fn: () => {
     const logger = createLogger();
-    logger.setFilter("error")
+    logger.setFilter("error");
     logger.use(
       function assertFilter({ state }, next) {
         assertEquals(state.filterLevel, 30);

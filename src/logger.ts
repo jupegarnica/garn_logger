@@ -9,7 +9,7 @@ import type {
 import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";
 
-type AnyMethodName = Exclude<string, 'use'>;
+type AnyMethodName = Exclude<string, "use">;
 
 type Methods = { [key: AnyMethodName]: (...args: any[]) => any };
 

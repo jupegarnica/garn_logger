@@ -1,7 +1,6 @@
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 
-import {  levelsNumbersToMethod } from "../constants.ts";
-
+import { levelsNumbersToMethod } from "../constants.ts";
 
 export function transportToConsole(
   _console: Console = globalThis.console,
