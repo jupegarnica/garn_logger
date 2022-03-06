@@ -33,7 +33,7 @@ export function pretty(
   // https://no-color.org/
   useColor = useColor &&
     typeof Deno !== "undefined" &&
-    Deno.isatty(Deno.stdout.rid) &&
+    Deno.isatty?.(Deno.stdout?.rid) &&
     Deno.env.get("NO_COLOR") === undefined;
 
   const colorTimestamp = useColor ? colors.dim : nop();
