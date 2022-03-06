@@ -5,10 +5,10 @@ export type LogRecord = {
   args: unknown[];
   timestamp: number;
   levelNumber: number;
+  willReturn: any;
   scope?: string;
   msg?: string;
   muted?: boolean;
-  returned?: any;
 };
 
 export interface AnyMethod {

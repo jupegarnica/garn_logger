@@ -65,7 +65,7 @@ Deno.test({
           "hello",
           "world",
         ]);
-        assertEquals(logRecord.returned, [
+        assertEquals(logRecord.willReturn, [
           "hello",
           "world",
         ]);

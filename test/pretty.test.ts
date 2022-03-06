@@ -3,7 +3,7 @@ import type { Middleware, MiddlewareContext, NextMiddleware } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
 function returnMsg({ logRecord }: MiddlewareContext, next: NextMiddleware): void {
-  logRecord.returned = logRecord.msg || "";
+  logRecord.willReturn = logRecord.msg || "";
   next();
 }
 

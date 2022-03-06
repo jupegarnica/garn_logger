@@ -17,7 +17,7 @@ class Logger implements AnyMethod {
   // deno-lint-ignore no-explicit-any
   [key: string]: (...args: any[]) => any
   #methods: AnyMethod = {};
-  #plugins: Middleware[] = [];
+  #middleware: Middleware[] = [];
   #state: LoggerState = {
     filterLevel: 0,
   };
@@ -26,8 +26,8 @@ class Logger implements AnyMethod {
   };
 
   use(...plugins: Middleware[]): Logger {
-    this.#plugins.push(...plugins);
-    this.#composedMiddleware = compose(this.#plugins);
+    this.#middleware.push(...plugins);
+    this.#composedMiddleware = compose(this.#middleware);
     return this;
   }
 
@@ -45,20 +45,19 @@ class Logger implements AnyMethod {
         args,
         timestamp: Date.now(),
         levelNumber,
+        willReturn: args,
         muted: levelNumber < this.#state.filterLevel,
       };
       const ctx = { logRecord, state: this.#state };
       this.#composedMiddleware(ctx, () => {});
 
-      return ctx.logRecord.returned;
+      return ctx.logRecord.willReturn;
     };
 
     return this.#methods[methodName].bind(this);
   }
 
   constructor() {
-    this.use(returnArgs);
-
     return new Proxy(this, {
       get(target, name: string) {
         return target.#handle(name);

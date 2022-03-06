@@ -52,6 +52,6 @@ export function returnArgs(
   { logRecord }: MiddlewareContext,
   next: NextMiddleware,
 ): void {
-  logRecord.returned = logRecord.args;
+  logRecord.willReturn = logRecord.args;
   next();
 }
