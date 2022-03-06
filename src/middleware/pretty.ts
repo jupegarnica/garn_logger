@@ -27,7 +27,7 @@ export function pretty(
     showScope = true,
     multiline = false,
     depth = Infinity,
-    iterableLimit = 99,
+    iterableLimit = 5,
   } = {},
 ): Middleware {
   // https://no-color.org/
@@ -115,6 +115,9 @@ function stringify(val: unknown, {
   if (!compact && typeof val === "string") {
     return val;
   }
+  // if (val instanceof Error) {
+  //   return `${val.name}: ${val.message} ${ Deno.inspect(val.stack)}`;
+  // }
   return Deno.inspect(val, {
     trailingComma,
     colors,

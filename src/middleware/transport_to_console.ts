@@ -21,8 +21,12 @@ export function transportToConsole(
           ]
         ];
 
+      const isTable = logRecord.methodName === "table";
       const args = logRecord.msg ? [logRecord.msg] : logRecord.args;
       fn(...args);
+      if (isTable) {
+        fn(...logRecord.args);
+      }
     }
   }
   // append console instance just for stub during tests
