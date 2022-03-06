@@ -1,7 +1,4 @@
-import {
-  returnArgs,
-  transportToConsole,
-} from "./plugins/default_plugins.ts";
+import { returnArgs, transportToConsole } from "./plugins/default_plugins.ts";
 
 import { compose } from "./middleware.ts";
 

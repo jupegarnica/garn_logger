@@ -1,8 +1,4 @@
-import type {
-  Middleware,
-  MiddlewareContext,
-  NextMiddleware,
-} from "../types.ts";
+import type { Middleware, MiddlewareContext, NextMiddleware } from "../types.ts";
 
 import { levelsNameToNumbers, levelsNumbersToMethod } from "../constants.ts";
 
