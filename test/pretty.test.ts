@@ -1,8 +1,8 @@
 import { createLogger, LogRecord, pretty } from "../mod.ts";
-import type { Middleware, MiddlewareContext, NextMiddleware } from "../mod.ts";
+import type { Middleware, MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
-function returnMsg({ logRecord }: MiddlewareContext, next: NextMiddleware): void {
+function returnMsg({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
   logRecord.willReturn = logRecord.msg || "";
   next();
 }

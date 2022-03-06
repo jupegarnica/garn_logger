@@ -16,7 +16,7 @@ export interface AnyMethod {
   [key: string]: (...args: any[]) => any;
 }
 
-export type NextMiddleware = () => void;
+export type MiddlewareNext = () => void;
 
 export type MiddlewareContext = {
   logRecord: LogRecord;
@@ -25,5 +25,5 @@ export type MiddlewareContext = {
 
 export type Middleware = (
   ctx: MiddlewareContext,
-  next: NextMiddleware,
+  next: MiddlewareNext,
 ) => void;

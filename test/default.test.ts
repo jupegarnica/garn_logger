@@ -1,5 +1,5 @@
 import { applyFilter, createLogger } from "../mod.ts";
-import type { NextMiddleware } from "../src/types.ts";
+import type { MiddlewareNext } from "../src/types.ts";
 import { assertEquals, spy } from "../dev_deps.ts";
 
 Deno.test({
@@ -19,7 +19,7 @@ Deno.test({
   ignore: false,
   only: false,
   fn: () => {
-    const plugin = spy((_, next: NextMiddleware) => {
+    const plugin = spy((_, next: MiddlewareNext) => {
       next();
     });
     const logger = createLogger();

@@ -4,7 +4,7 @@ import type {
   LogRecord,
   Middleware,
   MiddlewareContext,
-  NextMiddleware,
+  MiddlewareNext,
 } from "./types.ts";
 
 import { levelsNameToNumbers } from "./constants.ts";
@@ -18,7 +18,7 @@ class Logger {
   #state: LoggerState = {
     filterLevel: 0,
   };
-  #composedMiddleware: Middleware = (ctx: MiddlewareContext, next?: NextMiddleware) => {
+  #composedMiddleware: Middleware = (ctx: MiddlewareContext, next?: MiddlewareNext) => {
     next?.();
   };
 

@@ -1,4 +1,4 @@
-import type { Middleware, MiddlewareContext, NextMiddleware } from "./types.ts";
+import type { Middleware, MiddlewareContext, MiddlewareNext } from "./types.ts";
 
 export function compose(
   middleware: Middleware[],

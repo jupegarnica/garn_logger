@@ -1,5 +1,5 @@
 import { colors, format } from "../../deps.ts";
-import type { Middleware, MiddlewareContext, NextMiddleware } from "../types.ts";
+import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 
 type Colorize = (str: string) => string;
 
@@ -41,7 +41,7 @@ export function pretty(
   const bold = useColor ? colors.bold : nop();
   return function handle(
     { logRecord }: MiddlewareContext,
-    next: NextMiddleware,
+    next: MiddlewareNext,
   ) {
     let msg = "";
     const color = colorByLevel(

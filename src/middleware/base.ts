@@ -1,4 +1,4 @@
-import type { Middleware, MiddlewareContext, NextMiddleware } from "../types.ts";
+import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 
 import { levelsNameToNumbers, levelsNumbersToMethod } from "../constants.ts";
 
@@ -12,7 +12,7 @@ export const applyFilter = (
     0;
   return function muteLogRecord(
     { logRecord, state }: MiddlewareContext,
-    next: NextMiddleware,
+    next: MiddlewareNext,
   ) {
     state.filterLevel = filterLevel;
     logRecord.muted = logRecord.levelNumber < state.filterLevel;
@@ -23,7 +23,7 @@ export const applyFilter = (
 export function transportToConsole(
   _console: Console = globalThis.console,
 ): Middleware & { _console: Console } {
-  function log({ logRecord }: MiddlewareContext, next: NextMiddleware): void {
+  function log({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (!logRecord.muted) {
       // @ts-ignore
