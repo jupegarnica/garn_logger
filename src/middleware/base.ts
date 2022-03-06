@@ -47,11 +47,3 @@ export function transportToConsole(
   log._console = _console;
   return log;
 }
-
-export function returnArgs(
-  { logRecord }: MiddlewareContext,
-  next: NextMiddleware,
-): void {
-  logRecord.willReturn = logRecord.args;
-  next();
-}

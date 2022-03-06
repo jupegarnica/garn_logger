@@ -32,8 +32,10 @@ export function pretty(
 ): Middleware {
   // https://no-color.org/
   useColor = useColor &&
+    typeof Deno !== 'undefined' &&
     Deno.isatty(Deno.stdout.rid) &&
     Deno.env.get("NO_COLOR") === undefined;
+
   const colorTimestamp = useColor ? colors.dim : nop();
   const colorByLevel = useColor ? getColorByLevel : nop;
   const bold = useColor ? colors.bold : nop();

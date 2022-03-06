@@ -1,6 +1,4 @@
-import { returnArgs, transportToConsole } from "./plugins/default_plugins.ts";
 
-import { compose } from "./middleware.ts";
 
 import type {
   AnyMethod,
@@ -12,8 +10,9 @@ import type {
 } from "./types.ts";
 
 import { levelsNameToNumbers } from "./constants.ts";
+import { compose } from "./middleware.ts";
 
-class Logger implements AnyMethod {
+class Logger  {
   // deno-lint-ignore no-explicit-any
   [key: string]: (...args: any[]) => any
   #methods: AnyMethod = {};
@@ -70,12 +69,5 @@ export function createLogger() {
   const logger = new Logger();
   return logger;
 }
-
-const logger = createLogger();
-logger.use(
-  transportToConsole(globalThis.console),
-);
-
-export default logger;
 
 export { Logger };
