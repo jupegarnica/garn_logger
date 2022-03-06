@@ -1,24 +1,7 @@
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 
-import { levelsNameToNumbers, levelsNumbersToMethod } from "../constants.ts";
+import {  levelsNumbersToMethod } from "../constants.ts";
 
-export const applyFilter = (
-  levelName: string,
-) => {
-  const filterLevel = levelsNameToNumbers[levelName] ??
-    levelsNameToNumbers[
-      levelName.toLowerCase()
-    ] ??
-    0;
-  return function muteLogRecord(
-    { logRecord, state }: MiddlewareContext,
-    next: MiddlewareNext,
-  ) {
-    state.filterLevel = filterLevel;
-    logRecord.muted = logRecord.levelNumber < state.filterLevel;
-    next();
-  };
-};
 
 export function transportToConsole(
   _console: Console = globalThis.console,

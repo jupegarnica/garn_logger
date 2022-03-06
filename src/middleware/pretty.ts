@@ -40,7 +40,7 @@ export function pretty(
   const colorByLevel = useColor ? getColorByLevel : nop;
   const bold = useColor ? colors.bold : nop();
   return function handle(
-    { logRecord }: MiddlewareContext,
+    { logRecord, state }: MiddlewareContext,
     next: MiddlewareNext,
   ) {
     let msg = "";
@@ -63,8 +63,8 @@ export function pretty(
           ),
         );
     }
-    if (showScope && logRecord.scope) {
-      msg += ` ${color(`[${logRecord.scope}]`)}`;
+    if (showScope && state.scope) {
+      msg += ` ${color(`[${state.scope}]`)}`;
     }
 
     const separator = multiline ? "\n" : " ";

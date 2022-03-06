@@ -1,4 +1,4 @@
-import { applyFilter, createLogger } from "../mod.ts";
+import {  createLogger } from "../mod.ts";
 import type { MiddlewareNext } from "../src/types.ts";
 import { assertEquals, spy } from "../dev_deps.ts";
 
@@ -97,13 +97,13 @@ Deno.test({
 });
 
 Deno.test({
-  name: "[default] should apply filter state and mute logRecord",
+  name: "[default] setFilter should apply filter state and mute logRecord",
   ignore: false,
   // only: true,
   fn: () => {
     const logger = createLogger();
+    logger.setFilter("error")
     logger.use(
-      applyFilter("error"),
       function assertFilter({ state }, next) {
         assertEquals(state.filterLevel, 30);
         next();

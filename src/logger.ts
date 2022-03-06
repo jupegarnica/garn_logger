@@ -1,5 +1,4 @@
 import type {
-  AnyMethod,
   LoggerState,
   LogRecord,
   Middleware,
@@ -10,17 +9,23 @@ import type {
 import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";
 
+type AnyMethodName = Exclude<string, 'use'>;
+
+type Methods = { [key: AnyMethodName]: (...args: any[]) => any };
+
 class Logger {
   // deno-lint-ignore no-explicit-any
-  [key: string]: (...args: any[]) => any
-  #methods: AnyMethod = {};
+  [key: AnyMethodName]: (...args: any[]) => any
+  #methods: Methods = {};
   #middleware: Middleware[] = [];
   #state: LoggerState = {
     filterLevel: 0,
   };
-  #composedMiddleware: Middleware = (ctx: MiddlewareContext, next?: MiddlewareNext) => {
-    next?.();
-  };
+  #composedMiddleware: Middleware = (_, next) => next();
+
+  setFilter(levelName: string) {
+    this.#state.filterLevel = levelsNameToNumbers[levelName] ?? 0;
+  }
 
   use(...plugins: Middleware[]): Logger {
     this.#middleware.push(...plugins);

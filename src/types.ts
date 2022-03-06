@@ -6,15 +6,10 @@ export type LogRecord = {
   timestamp: number;
   levelNumber: number;
   willReturn: any;
-  scope?: string;
+  muted: boolean;
   msg?: string;
-  muted?: boolean;
 };
 
-export interface AnyMethod {
-  // deno-lint-ignore no-explicit-any
-  [key: string]: (...args: any[]) => any;
-}
 
 export type MiddlewareNext = () => void;
 
