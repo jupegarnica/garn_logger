@@ -2,9 +2,13 @@ import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts"
 
 import { levelsNumbersToMethod } from "../constants.ts";
 
+import { compose } from "../middleware.ts";
+import { formatToAnsiColors } from "./format_to_ansi_colors.ts";
+
+
 export function transportToConsole(
   _console: Console = globalThis.console,
-): Middleware & { _console: Console } {
+): Middleware{
   function log({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (!logRecord.muted) {
@@ -21,14 +25,28 @@ export function transportToConsole(
           ]
         ];
 
-      const args = logRecord.msg ? [logRecord.msg] : logRecord.args;
-      fn(...args);
-      if (logRecord.msg && logRecord.methodName === "table") {
+      const mustUseArgs = [
+        "table",
+        "dir",
+        "dirxml",
+        "time",
+        "timeEnd",
+        "group",
+        "groupEnd",
+        "assert",
+        "count",
+        "trace",
+      ];
+      if (mustUseArgs.includes(logRecord.methodName)) {
         fn(...logRecord.args);
+      } else {
+        const args = logRecord.ansiText ? [logRecord.ansiText] : logRecord.args;
+        fn(...args);
       }
     }
   }
   // append console instance just for stub during tests
-  log._console = _console;
-  return log;
+  // log._console = _console;
+
+  return compose([formatToAnsiColors(), log]);
 }

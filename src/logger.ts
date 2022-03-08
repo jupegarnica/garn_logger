@@ -1,5 +1,6 @@
 import type {
   LoggerState,
+  LogLevels,
   LogRecord,
   Middleware,
   MiddlewareContext,
@@ -23,12 +24,12 @@ class Logger {
   };
   #composedMiddleware: Middleware = (_, next) => next();
 
-  setFilter(levelName: string) {
-    this.#state.filterLevel = levelsNameToNumbers[levelName] ?? 0;
+  setFilter(levelName: LogLevels) {
+    this.#state.filterLevel = levelsNameToNumbers(levelName.toLowerCase());
   }
 
   use(...plugins: Middleware[]): Logger {
-    this.#middleware.push(...plugins);
+    this.#middleware.push(...plugins.flat(1));
     this.#composedMiddleware = compose(this.#middleware);
     return this;
   }

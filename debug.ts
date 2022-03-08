@@ -1,68 +1,16 @@
-import logger, { pretty } from "./mod.ts";
+import logger, { formatToAnsiColors } from "./mod.ts";
+import { transportToEmail } from "./src/middleware/transport_to_email.ts";
 
-logger.use(pretty({ multiline: false }));
-
-// const dataOfAllTypes = [
-//   {
-//     name: "string",
-//     value: "stringstringstring",
-//   },
-//   {
-//     name: "number",
-//     value: 42,
-//   },
-//   {
-//     name: "boolean",
-//     value: true,
-//   },
-//   {
-//     name: "null",
-//     value: null,
-//   },
-//   {
-//     name: "undefined",
-//     value: undefined,
-//   },
-//   {
-//     name: "NaN",
-//     value: NaN,
-//   },
-//   {
-//     name: "Infinity",
-//     value: Infinity,
-//   },
-//   {
-//     name: "function",
-//     value: () => {},
-//   },
-//   {
-//     name: "object",
-//     value: {},
-//   },
-//   {
-//     name: "array",
-//     value: [],
-//   },
-//   {
-//     name: "date",
-//     value: new Date(),
-//   },
-//   {
-//     name: "regexp",
-//     value: /^regexp$/,
-//   },
-// {
-//     name: "symbol",
-//     value: Symbol("symbol"),
-//   },
-//   {
-//     name: "bigint",
-//     value: BigInt(42),
-//   },
-
-// ];
-
-// const data = dataOfAllTypes.map((item) => item.value)
+logger.use(
+  transportToEmail({
+    from: "juan@garn.dev",
+    to: "juan@garn.dev",
+    hostname: "localhost",
+    logLevel: "debug",
+    port: "1025",
+    debounceTime: 100,
+  }),
+);
 
 const tableData = [
   { a: 1, b: 2, c: 3 },
@@ -70,23 +18,37 @@ const tableData = [
   { a: 100, b: 200, c: 300 },
 ];
 
-// logger[200]("hello 200");
-// logger.group('hola');
-logger.table(tableData);
-// logger.groupCollapsed('groupCollapsed');
-// console.log(tableData);
+const anyTypeOfData = [
+  "string",
+  {
+    a: 1,
+    b: 2,
+  },
+  [1, "2", 3n, 0.003],
+  new Set([1, 2, 3]),
+  new Map(),
+  new Error("ups"),
+];
 
-// logger.groupEnd();
-// logger.table(tableData);
+const methods = [
+  "assert",
+  // "table",
+  "debug",
+  "log",
+  "info",
+  "200",
+  "400",
+  "500",
+  "info",
+  "success",
+  "warn",
+  "warning",
+  "catch",
+  "error",
+  "critical",
+  "fatal",
+];
 
-// logger.log(...data);
-
-// logger.info(...data);
-
-// logger.warn(...data);
-
-// logger.error(...data);
-
-// logger.debug(...data);
-
-// logger.trace(...data);
+for (const method of methods) {
+  logger[method](false,"Hello World", [new Date(), Math.random()]);
+}

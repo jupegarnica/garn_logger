@@ -1,25 +1,19 @@
 import { colors, format } from "../../deps.ts";
+import { levelsNameToColors } from "../constants.ts";
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 
 type Colorize = (str: string) => string;
 
 const nop = () => (_: string): string => _;
-const red = (txt: string) => colors.rgb24(txt, 0xff0000);
 
-const colorsByLevel: {
-  [level: number]: Colorize;
-} = {
-  0: colors.dim,
-  10: colors.blue,
-  20: (txt) => colors.rgb24(txt, 0xffcc00),
-  30: red,
-  40: (txt) => colors.underline(red(txt)),
-};
+const textToHex = (str: string): number => parseInt(str.replace(/^#/, ""), 16);
 
-const getColorByLevel = (
-  level: number,
-): Colorize => colorsByLevel[level];
-export function pretty(
+const getColorByMethod = (
+  method: string,
+): Colorize => (txt) => colors.rgb24(txt, textToHex(levelsNameToColors(method)));
+
+
+export function formatToAnsiColors(
   {
     timestampFormat = "yyyy-MM-dd HH:mm:ss",
     useColor = true,
@@ -37,18 +31,18 @@ export function pretty(
     Deno.env.get("NO_COLOR") === undefined;
 
   const colorTimestamp = useColor ? colors.dim : nop();
-  const colorByLevel = useColor ? getColorByLevel : nop;
+  const colorByMethod = useColor ? getColorByMethod : nop;
   const bold = useColor ? colors.bold : nop();
   return function handle(
     { logRecord, state }: MiddlewareContext,
     next: MiddlewareNext,
   ) {
-    let msg = "";
-    const color = colorByLevel(
-      logRecord.levelNumber,
+    let ansiText = "";
+    const color = colorByMethod(
+      logRecord.methodName.toLowerCase(),
     );
     if (timestampFormat) {
-      msg += colorTimestamp(
+      ansiText += colorTimestamp(
         formatDate(
           logRecord.timestamp,
           timestampFormat,
@@ -56,7 +50,7 @@ export function pretty(
       );
     }
     if (showMethod) {
-      msg += " " +
+      ansiText += " " +
         color(
           bold(
             logRecord.methodName.toUpperCase(),
@@ -64,11 +58,11 @@ export function pretty(
         );
     }
     if (showScope && state.scope) {
-      msg += ` ${color(`[${state.scope}]`)}`;
+      ansiText += ` ${color(`[${state.scope}]`)}`;
     }
 
     const separator = multiline ? "\n" : " ";
-    msg += " " +
+    ansiText += " " +
       // deno-lint-ignore no-explicit-any
       logRecord.args.map((arg: any) =>
         stringify(arg, {
@@ -80,7 +74,7 @@ export function pretty(
       )
         .join(separator);
 
-    logRecord.msg = msg;
+    logRecord.ansiText = ansiText;
     next();
   };
 }

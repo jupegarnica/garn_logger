@@ -1,4 +1,4 @@
-import { createLogger, LogRecord, pretty } from "../mod.ts";
+import { createLogger, LogRecord, formatToAnsiColors } from "../mod.ts";
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
@@ -11,11 +11,11 @@ const fulltimeRegex = /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;
 const timeRegex = /\d\d:\d\d:\d\d/;
 
 Deno.test({
-  name: "[pretty] should have correct default options",
+  name: "[formatToAnsiColors] should have correct default options",
   ignore: false,
   only: false,
   fn: () => {
-    const prettyPlugin = pretty({});
+    const prettyPlugin = formatToAnsiColors({});
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);
 
@@ -32,11 +32,11 @@ Deno.test({
 
 // TODO: MAKE IT WORK WHEN COLORED
 Deno.test({
-  name: "[pretty] should padEnd correctly",
+  name: "[formatToAnsiColors] should padEnd correctly",
   ignore: true,
   only: false,
   fn: () => {
-    const prettyPlugin = pretty({});
+    const prettyPlugin = formatToAnsiColors({});
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);
 
@@ -56,11 +56,11 @@ Deno.test({
 });
 
 Deno.test({
-  name: "[pretty] should only use colors if enabled",
+  name: "[formatToAnsiColors] should only use colors if enabled",
   ignore: false,
   only: false,
   fn: () => {
-    const prettyPlugin = pretty({
+    const prettyPlugin = formatToAnsiColors({
       useColor: false,
     });
     const prettify = createLogger();
@@ -81,7 +81,7 @@ Deno.test({
 });
 
 Deno.test({
-  name: "[pretty] should not use color if not tty",
+  name: "[formatToAnsiColors] should not use color if not tty",
   ignore: false,
   only: false,
   fn: () => {
@@ -94,7 +94,7 @@ Deno.test({
       Deno.isatty(Deno.stdout.rid),
       false,
     );
-    const prettyPlugin = pretty({
+    const prettyPlugin = formatToAnsiColors({
       useColor: true,
     });
     const prettify = createLogger();
@@ -117,7 +117,7 @@ Deno.test({
 
 Deno.test({
   // https://no-color.org/
-  name: "[pretty] should not use color if variable NO_COLOR is set",
+  name: "[formatToAnsiColors] should not use color if variable NO_COLOR is set",
   ignore: false,
   only: false,
   fn: () => {
@@ -131,7 +131,7 @@ Deno.test({
       true,
     );
     Deno.env.set("NO_COLOR", "1");
-    const prettyPlugin = pretty({
+    const prettyPlugin = formatToAnsiColors({
       useColor: true,
     });
     const prettify = createLogger();
@@ -153,11 +153,11 @@ Deno.test({
 });
 
 Deno.test({
-  name: "[pretty] should be configured correctly",
+  name: "[formatToAnsiColors] should be configured correctly",
   ignore: false,
   only: false,
   fn: () => {
-    const prettyPlugin = pretty({
+    const prettyPlugin = formatToAnsiColors({
       timestampFormat: "HH:mm:ss",
       useColor: false,
       showMethod: false,
