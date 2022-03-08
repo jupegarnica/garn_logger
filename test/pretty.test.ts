@@ -1,4 +1,4 @@
-import { createLogger, LogRecord, formatToAnsiColors } from "../mod.ts";
+import { createLogger, formatToAnsiColors, LogRecord } from "../mod.ts";
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 

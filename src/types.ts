@@ -22,7 +22,6 @@ export type Middleware = (
   next: MiddlewareNext,
 ) => void;
 
-
 export type LogLevels =
   | "VERBOSE"
   | "DEBUG"

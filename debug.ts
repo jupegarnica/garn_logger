@@ -50,5 +50,5 @@ const methods = [
 ];
 
 for (const method of methods) {
-  logger[method](false,"Hello World", [new Date(), Math.random()]);
+  logger[method](false, "Hello World", [new Date(), Math.random()]);
 }

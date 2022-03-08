@@ -202,5 +202,5 @@ export function transportToEmail(
     }
   }
 
-  return compose([ formatToHtml(), handle]);
+  return compose([formatToHtml(), handle]);
 }

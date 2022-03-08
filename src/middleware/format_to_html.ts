@@ -30,11 +30,12 @@ export function formatToHtml(
     { logRecord, state }: MiddlewareContext,
     next: MiddlewareNext,
   ) {
-    const colorize = useColor ? levelsNameToColors : (x: string) => x
-    const style = `color:${colorize(logRecord.methodName)};` + styleByLevel[logRecord.levelNumber];
+    const colorize = useColor ? levelsNameToColors : (x: string) => x;
+    const style = `color:${colorize(logRecord.methodName)};` +
+      styleByLevel[logRecord.levelNumber];
     let html = "<div class='logRecord'>";
     if (timestampFormat) {
-      html += `<span class="timestamp" style="color:${colorize('timestamp')}">`;
+      html += `<span class="timestamp" style="color:${colorize("timestamp")}">`;
       html += formatDate(
         logRecord.timestamp,
         timestampFormat,
@@ -65,7 +66,6 @@ export function formatToHtml(
     html += "</span></div>";
     logRecord.html = html;
     next();
-
   };
 }
 

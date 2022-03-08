@@ -5,10 +5,9 @@ import { levelsNumbersToMethod } from "../constants.ts";
 import { compose } from "../middleware.ts";
 import { formatToAnsiColors } from "./format_to_ansi_colors.ts";
 
-
 export function transportToConsole(
   _console: Console = globalThis.console,
-): Middleware{
+): Middleware {
   function log({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (!logRecord.muted) {

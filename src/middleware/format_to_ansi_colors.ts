@@ -12,7 +12,6 @@ const getColorByMethod = (
   method: string,
 ): Colorize => (txt) => colors.rgb24(txt, textToHex(levelsNameToColors(method)));
 
-
 export function formatToAnsiColors(
   {
     timestampFormat = "yyyy-MM-dd HH:mm:ss",
