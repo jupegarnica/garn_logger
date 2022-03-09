@@ -78,7 +78,6 @@ export function formatToAnsiColors(
     Deno.env.get("NO_COLOR") === undefined &&
     (Deno.stdout?.rid ? Deno.isatty(Deno.stdout?.rid) : true);
 
-
   useColor = useColor && shouldUseColor;
   colors.setColorEnabled(useColor);
   const colorTimestamp = colors.dim;
