@@ -3,8 +3,6 @@ import type {
   LogLevels,
   LogRecord,
   Middleware,
-  MiddlewareContext,
-  MiddlewareNext,
 } from "./types.ts";
 
 import { levelsNameToNumbers } from "./constants.ts";
@@ -42,7 +40,7 @@ class Logger {
     this.#methods[methodName] ??= (
       ...args: unknown[]
     ) => {
-      const levelNumber = levelsNameToNumbers[methodName] ?? 0;
+      const levelNumber = levelsNameToNumbers(methodName);
       const logRecord: LogRecord = {
         methodName,
         args,

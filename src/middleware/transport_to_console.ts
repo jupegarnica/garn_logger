@@ -7,7 +7,7 @@ import { formatToAnsiColors } from "./format_to_ansi_colors.ts";
 
 export function transportToConsole(
   _console: Console = globalThis.console,
-): Middleware {
+): Middleware & { _console: Console } {
   function log({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (!logRecord.muted) {
@@ -45,7 +45,16 @@ export function transportToConsole(
     }
   }
   // append console instance just for stub during tests
-  // log._console = _console;
+  log._console = _console;
 
-  return compose([formatToAnsiColors(), log]);
+  return log;
+}
+
+export function transportToConsoleWithFormat(
+  {
+    pretty = {},
+    console = globalThis.console,
+  },
+): Middleware {
+  return compose([formatToAnsiColors(pretty), transportToConsole(console)]);
 }

@@ -1,10 +1,10 @@
-import { createLogger, formatToAnsiColors, LogRecord } from "../mod.ts";
-import type { Middleware, MiddlewareContext, MiddlewareNext } from "../mod.ts";
+import { createLogger, formatToAnsiColors } from "../mod.ts";
+import type {  MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
 function returnMsg({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
-  logRecord.willReturn = logRecord.msg || "";
   next();
+  logRecord.willReturn = logRecord.ansiText || "";
 }
 
 const fulltimeRegex = /\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/;
@@ -25,7 +25,7 @@ Deno.test({
       fulltimeRegex,
     );
     assertMatch(msg, /DEBUG/);
-    assertMatch(msg, /"hello"/);
+    assertMatch(msg, /hello/);
     assertMatch(msg, /123/);
   },
 });
@@ -75,7 +75,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG { a: 1 } "message" 123`,
+      ` LOG { a: 1 } message 123`,
     );
   },
 });
@@ -109,7 +109,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG { a: 1 } "message" 123`,
+      ` LOG { a: 1 } message 123`,
     );
     stubbed.restore();
   },
@@ -145,7 +145,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG { a: 1 } "message" 123`,
+      ` LOG { a: 1 } message 123`,
     );
     stubbed.restore();
     Deno.env.delete("NO_COLOR");
@@ -155,7 +155,7 @@ Deno.test({
 Deno.test({
   name: "[formatToAnsiColors] should be configured correctly",
   ignore: false,
-  only: false,
+  // only: true,
   fn: () => {
     const prettyPlugin = formatToAnsiColors({
       timestampFormat: "HH:mm:ss",

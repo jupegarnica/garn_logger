@@ -12,6 +12,16 @@ const getColorByMethod = (
   method: string,
 ): Colorize => (txt) => colors.rgb24(txt, textToHex(levelsNameToColors(method)));
 
+type AnsiColorOptions = {
+  timestampFormat?: string;
+  useColor?: boolean;
+  showMethod?: boolean;
+  showScope?: boolean;
+  multiline?: boolean;
+  depth?: number;
+  iterableLimit?: number;
+};
+
 export function formatToAnsiColors(
   {
     timestampFormat = "yyyy-MM-dd HH:mm:ss",
@@ -21,7 +31,7 @@ export function formatToAnsiColors(
     multiline = false,
     depth = Infinity,
     iterableLimit = 5,
-  } = {},
+  }: AnsiColorOptions = {},
 ): Middleware {
   // https://no-color.org/
   useColor = useColor &&
@@ -105,7 +115,7 @@ function stringify(val: unknown, {
   showProxy = false,
   iterableLimit = Infinity,
 } = {}): string {
-  if (!compact && typeof val === "string") {
+  if (typeof val === "string") {
     return val;
   }
   // if (val instanceof Error) {

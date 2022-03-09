@@ -102,7 +102,7 @@ Deno.test({
   // only: true,
   fn: () => {
     const logger = createLogger();
-    logger.setFilter("error");
+    logger.setFilter("ERROR");
     logger.use(
       function assertFilter({ state }, next) {
         assertEquals(state.filterLevel, 30);
