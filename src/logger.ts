@@ -3,7 +3,7 @@ import type { LoggerState, LogLevels, LogRecord, Middleware } from "./types.ts";
 import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";
 
-type AnyMethodName = Exclude<string, "use">;
+type AnyMethodName = Exclude<string, "use" | "setFilter">;
 
 type Methods = { [key: AnyMethodName]: (...args: any[]) => any };
 

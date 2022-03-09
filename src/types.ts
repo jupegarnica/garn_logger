@@ -7,7 +7,7 @@ export type LogRecord = {
   levelNumber: number;
   willReturn: any;
   muted: boolean;
-  [msg: string]: any;
+  [dataParsed: string]: any;
 };
 
 export type MiddlewareNext = () => void;
@@ -22,10 +22,14 @@ export type Middleware = (
   next: MiddlewareNext,
 ) => void;
 
+
+/**
+ * Any string not in this list will be treated as a debug level.
+ */
 export type LogLevels =
-  | "VERBOSE"
-  | "DEBUG"
-  | "INFO"
-  | "WARNING"
-  | "ERROR"
-  | "CRITICAL";
+|  string
+| "DEBUG"
+| "INFO"
+| "WARNING"
+| "ERROR"
+| "CRITICAL"
