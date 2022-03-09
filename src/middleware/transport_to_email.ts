@@ -4,8 +4,7 @@ import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts"
 import { levelsNameToNumbers } from "../constants.ts";
 import { formatToHtml } from "./format_to_html.ts";
 import { compose } from "../middleware.ts";
-import {colors} from "../../deps.ts"
-
+import { colors } from "../../deps.ts";
 
 export interface EmailOptions {
   hostname: string;
@@ -85,7 +84,11 @@ function layout(content: string) {
         }
         /* methodNames */
 
-        ${Object.entries(colors).map(([name, color]) => `.${name}{ color: ${color.name}}`).join("\n")}
+        ${
+    Object.entries(colors).map(([name, color]) => `.${name}{ color: ${color.name}}`).join(
+      "\n",
+    )
+  }
         .dim {
           opacity: 0.5;
         }

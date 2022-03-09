@@ -11,17 +11,17 @@ logger.use(
     from: "juan@garn.dev",
     to: "juan@garn.dev",
     logLevel: "debug",
-    debounceTime:100,
+    debounceTime: 100,
   }),
 );
 
 for (const method in colors) {
-  if (!['bgRgb24','rgb24', 'rgb8', 'setColorEnabled', 'getColorEnabled'].includes(method)) {
-
+  if (
+    !["bgRgb24", "rgb24", "rgb8", "setColorEnabled", "getColorEnabled"].includes(method)
+  ) {
     // logger[method](`${method}`, {a:1, b: ['1', '2']});
     logger[method](`.${method}{
 }`);
-
   }
 }
 

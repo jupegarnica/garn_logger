@@ -46,13 +46,13 @@ const textToHex = (str: string): number => parseInt(str.replace(/^#/, ""), 16);
 
 const getColorByMethod = (
   method: string,
-): Colorize => (txt) => {
+): Colorize =>
+  (txt) => {
+    return colors.rgb24(txt, textToHex(levelsNameToColors(method)));
+  };
 
-  return colors.rgb24(txt, textToHex(levelsNameToColors(method)))
-};
-
-const getColorArgsByMethod = (method: string) => method in colors ? colors[method] : _ => _;
-
+const getColorArgsByMethod = (method: string) =>
+  method in colors ? colors[method] : (_) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
@@ -98,7 +98,7 @@ export function formatToAnsiColors(
     const color = colorByMethod(
       logRecord.methodName.toLowerCase(),
     );
-   const colorArgs = getColorArgsByMethod(logRecord.methodName);
+    const colorArgs = getColorArgsByMethod(logRecord.methodName);
 
     if (timestamp) {
       ansiText += colorTimestamp(
@@ -109,7 +109,7 @@ export function formatToAnsiColors(
       ) + " ";
     }
     if (showMethod) {
-      ansiText +=  bold(
+      ansiText += bold(
         color(
           logRecord.methodName.toUpperCase().slice(0, methodMaxLength).padEnd(
             methodMaxLength,
@@ -125,14 +125,16 @@ export function formatToAnsiColors(
     const separator = multiline ? "\n" : " ";
     ansiText +=
       // deno-lint-ignore no-explicit-any
-      colorArgs(logRecord.args.map((arg: any) =>
-        stringify(arg, {
-          colors: useColor,
-          compact: !multiline,
-          depth,
-          iterableLimit,
-        })
-      ).join(separator));
+      colorArgs(
+        logRecord.args.map((arg: any) =>
+          stringify(arg, {
+            colors: useColor,
+            compact: !multiline,
+            depth,
+            iterableLimit,
+          })
+        ).join(separator),
+      );
 
     logRecord.ansiText = ansiText;
     next();
