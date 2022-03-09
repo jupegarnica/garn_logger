@@ -17,7 +17,7 @@ function padEnd(str: string, len: number = 10, char: string = " "): string {
 
 export function formatToHtml(
   {
-    timestampFormat = "yyyy-MM-dd HH:mm:ss",
+    timestamp = "yyyy-MM-dd HH:mm:ss",
     useColor = true,
     showMethod = true,
     showScope = true,
@@ -34,11 +34,11 @@ export function formatToHtml(
     const style = `color:${colorize(logRecord.methodName)};` +
       styleByLevel[logRecord.levelNumber];
     let html = "<div class='logRecord'>";
-    if (timestampFormat) {
+    if (timestamp) {
       html += `<span class="timestamp" style="color:${colorize("timestamp")}">`;
       html += formatDate(
         logRecord.timestamp,
-        timestampFormat,
+        timestamp,
       );
       html += " </span>";
     }

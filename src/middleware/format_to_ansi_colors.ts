@@ -6,108 +6,12 @@ type Colorize = (str: string) => string;
 
 const nop = () => (_: string): string => _;
 
-const textToHex = (str: string): number => parseInt(str.replace(/^#/, ""), 16);
-
-const getColorByMethod = (
-  method: string,
-): Colorize => (txt) => colors.rgb24(txt, textToHex(levelsNameToColors(method)));
-
-type AnsiColorOptions = {
-  timestampFormat?: string;
-  useColor?: boolean;
-  showMethod?: boolean;
-  showScope?: boolean;
-  multiline?: boolean;
-  depth?: number;
-  iterableLimit?: number;
-  methodMaxLength?: number;
-};
-
-export function formatToAnsiColors(
-  {
-    timestampFormat = "yyyy-MM-dd HH:mm:ss",
-    useColor = true,
-    showMethod = true,
-    showScope = true,
-    multiline = false,
-    depth = Infinity,
-    iterableLimit = 5,
-    methodMaxLength = 9,
-  }: AnsiColorOptions = {},
-): Middleware {
-  // https://no-color.org/
-  useColor = useColor &&
-    typeof Deno !== "undefined" &&
-    Deno.isatty?.(Deno.stdout?.rid) &&
-    Deno.env.get("NO_COLOR") === undefined;
-
-  const colorTimestamp = useColor ? colors.dim : nop();
-  const colorByMethod = useColor ? getColorByMethod : nop;
-  const bold = useColor ? colors.bold : nop();
-  return function handle(
-    { logRecord, state }: MiddlewareContext,
-    next: MiddlewareNext,
-  ) {
-    let ansiText = "";
-    const color = colorByMethod(
-      logRecord.methodName.toLowerCase(),
-    );
-    if (timestampFormat) {
-      ansiText += colorTimestamp(
-        formatDate(
-          logRecord.timestamp,
-          timestampFormat,
-        ),
-      );
-    }
-    if (showMethod) {
-      ansiText += " " +
-        color(
-          bold(
-            logRecord.methodName.toUpperCase().slice(0, methodMaxLength).padEnd(
-              methodMaxLength,
-              " ",
-            ),
-          ),
-        );
-    }
-    if (showScope && state.scope) {
-      ansiText += ` ${color(`[${state.scope}]`)}`;
-    }
-
-    const separator = multiline ? "\n" : " ";
-    ansiText += " " +
-      // deno-lint-ignore no-explicit-any
-      logRecord.args.map((arg: any) =>
-        stringify(arg, {
-          colors: useColor,
-          compact: !multiline,
-          depth,
-          iterableLimit,
-        })
-      )
-        .join(separator);
-
-    logRecord.ansiText = ansiText;
-    next();
-  };
-}
-
 function formatDate(
   date: number,
   formatter: string,
 ): string {
   return format(new Date(date), formatter);
 }
-
-// function padEnd(str: string, length = 7, char = " "): string {
-//   return str.padEnd(length, char);
-// }
-
-// const stringify = (val: unknown): string => {
-//   if (typeof val === "string") return val;
-//   return Deno.inspect(val);
-// };
 
 function stringify(val: unknown, {
   trailingComma = true,
@@ -137,4 +41,93 @@ function stringify(val: unknown, {
     showProxy,
     iterableLimit,
   });
+}
+const textToHex = (str: string): number => parseInt(str.replace(/^#/, ""), 16);
+
+const getColorByMethod = (
+  method: string,
+): Colorize => (txt) => colors.rgb24(txt, textToHex(levelsNameToColors(method)));
+
+type AnsiColorOptions = {
+  timestamp?: string | false;
+  useColor?: boolean;
+  showMethod?: boolean;
+  showScope?: boolean;
+  multiline?: boolean;
+  depth?: number;
+  iterableLimit?: number;
+  methodMaxLength?: number;
+};
+
+export function formatToAnsiColors(
+  {
+    timestamp = "yyyy-MM-dd HH:mm:ss",
+    useColor = true,
+    showMethod = true,
+    showScope = true,
+    multiline = false,
+    depth = Infinity,
+    iterableLimit = 5,
+    methodMaxLength = 9,
+  }: AnsiColorOptions = {},
+): Middleware {
+  // https://no-color.org/
+
+  // TODO: think in Node Compatibility
+  const shouldUseColor = typeof Deno !== "undefined" &&
+    Deno.env.get("NO_COLOR") === undefined &&
+    (Deno.stdout?.rid ? Deno.isatty(Deno.stdout?.rid) : true);
+
+
+  useColor = useColor && shouldUseColor;
+  colors.setColorEnabled(useColor);
+  const colorTimestamp = colors.dim;
+  const colorByMethod = getColorByMethod;
+  const bold = colors.bold;
+  return function handle(
+    { logRecord, state }: MiddlewareContext,
+    next: MiddlewareNext,
+  ) {
+    let ansiText = "";
+    const color = colorByMethod(
+      logRecord.methodName.toLowerCase(),
+    );
+    if (timestamp) {
+      ansiText += colorTimestamp(
+        formatDate(
+          logRecord.timestamp,
+          timestamp,
+        ),
+      ) + " ";
+    }
+    if (showMethod) {
+      ansiText += color(
+        bold(
+          logRecord.methodName.toUpperCase().slice(0, methodMaxLength).padEnd(
+            methodMaxLength,
+            " ",
+          ),
+        ),
+      ) + " ";
+    }
+    if (showScope && state.scope) {
+      ansiText += `${color(`[${state.scope}]`)} `;
+    }
+
+    const separator = multiline ? "\n" : " ";
+    ansiText +=
+      // deno-lint-ignore no-explicit-any
+      logRecord.args.map((arg: any) =>
+        stringify(arg, {
+          colors: useColor,
+          compact: !multiline,
+          depth,
+          iterableLimit,
+        })
+      )
+        .join(separator);
+
+    logRecord.ansiText = ansiText;
+    next();
+  };
 }

@@ -1,6 +1,6 @@
 import { createLogger, formatToAnsiColors } from "../mod.ts";
 import type { MiddlewareContext, MiddlewareNext } from "../mod.ts";
-import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
+import { assert, assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
 function returnMsg({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
   next();
@@ -30,7 +30,6 @@ Deno.test({
   },
 });
 
-// TODO: MAKE IT WORK WHEN COLORED
 Deno.test({
   name: "[formatToAnsiColors] should padEnd correctly",
   // ignore: true,
@@ -43,6 +42,26 @@ Deno.test({
     const log = prettify.log("--");
     const longestMethod = prettify.longestMethod("--");
     assertEquals(log.length, longestMethod.length);
+  },
+});
+
+Deno.test({
+  name: "[formatToAnsiColors] should use color",
+  // ignore: true,
+  // only: true,
+  fn: () => {
+    const prettyPlugin = formatToAnsiColors({
+      useColor: true,
+      showMethod: true,
+      methodMaxLength: 3,
+      multiline: false,
+      timestamp: false,
+    });
+    const prettify = createLogger();
+    prettify.use(prettyPlugin, returnMsg);
+    const log = prettify.log("--");
+    const noColorOutput = `LOG --`;
+    assert(log.length > noColorOutput.length);
   },
 });
 
@@ -111,37 +130,42 @@ Deno.test({
   // https://no-color.org/
   name: "[formatToAnsiColors] should not use color if variable NO_COLOR is set",
   ignore: false,
-  only: false,
+  // only: true,
   fn: () => {
-    const stubbed = stub(
-      Deno,
-      "isatty",
-      () => true,
-    );
-    assertEquals(
-      Deno.isatty(Deno.stdout.rid),
-      true,
-    );
-    Deno.env.set("NO_COLOR", "1");
-    const prettyPlugin = formatToAnsiColors({
-      useColor: true,
-      methodMaxLength: 3,
-    });
-    const prettify = createLogger();
-    prettify.use(prettyPlugin, returnMsg);
-    const msg = prettify.log(
-      { a: 1 },
-      "message",
-      123,
-    );
-    assertMatch(msg, fulltimeRegex);
-    const rest = msg.replace(fulltimeRegex, "");
-    assertEquals(
-      rest,
-      ` LOG { a: 1 } message 123`,
-    );
-    stubbed.restore();
-    Deno.env.delete("NO_COLOR");
+    try {
+      const stubbed = stub(
+        Deno,
+        "isatty",
+        () => true,
+      );
+      assertEquals(
+        Deno.isatty(Deno.stdout.rid),
+        true,
+      );
+      Deno.env.set("NO_COLOR", "1");
+      const prettyPlugin = formatToAnsiColors({
+        useColor: true,
+        methodMaxLength: 3,
+      });
+      const prettify = createLogger();
+      prettify.use(prettyPlugin, returnMsg);
+      const msg = prettify.log(
+        { a: 1 },
+        "message",
+        123,
+      );
+      assertMatch(msg, fulltimeRegex);
+      const rest = msg.replace(fulltimeRegex, "");
+      assertEquals(
+        rest,
+        ` LOG { a: 1 } message 123`,
+      );
+      stubbed.restore();
+    } catch (error) {
+      throw console.error();
+    } finally {
+      Deno.env.delete("NO_COLOR");
+    }
   },
 });
 
@@ -151,7 +175,7 @@ Deno.test({
   // only: true,
   fn: () => {
     const prettyPlugin = formatToAnsiColors({
-      timestampFormat: "HH:mm:ss",
+      timestamp: "HH:mm:ss",
       useColor: false,
       showMethod: false,
       showScope: false,
