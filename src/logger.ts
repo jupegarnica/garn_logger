@@ -1,9 +1,4 @@
-import type {
-  LoggerState,
-  LogLevels,
-  LogRecord,
-  Middleware,
-} from "./types.ts";
+import type { LoggerState, LogLevels, LogRecord, Middleware } from "./types.ts";
 
 import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";

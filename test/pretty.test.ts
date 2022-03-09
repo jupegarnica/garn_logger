@@ -1,5 +1,5 @@
 import { createLogger, formatToAnsiColors } from "../mod.ts";
-import type {  MiddlewareContext, MiddlewareNext } from "../mod.ts";
+import type { MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assertEquals, assertMatch, stub } from "../dev_deps.ts";
 
 function returnMsg({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
