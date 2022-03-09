@@ -52,7 +52,8 @@ const getColorByMethod = (
   };
 
 const getColorArgsByMethod = (method: string) =>
-  method in colors ? colors[method] : (_) => _;
+  // @ts-ignore
+  method in colors ? colors[method] : (_: any) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
