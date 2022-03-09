@@ -33,7 +33,7 @@ export function formatToHtml(
     const colorize = useColor ? levelsNameToColors : (x: string) => x;
     const style = `color:${colorize(logRecord.methodName)};` +
       styleByLevel[logRecord.levelNumber];
-    let html = "<div class='logRecord'>";
+    let html = `<div class="logRecord">`;
     if (timestamp) {
       html += `<span class="timestamp" style="color:${colorize("timestamp")}">`;
       html += formatDate(
@@ -52,7 +52,7 @@ export function formatToHtml(
     }
 
     const separator = multiline ? "<br>" : " ";
-    html += `<span class="args" style="">` +
+    html += `<span class="args ${logRecord.methodName}" style="">` +
       // deno-lint-ignore no-explicit-any
       logRecord.args.map((arg: any) =>
         stringify(arg, {

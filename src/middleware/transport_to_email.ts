@@ -4,6 +4,8 @@ import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts"
 import { levelsNameToNumbers } from "../constants.ts";
 import { formatToHtml } from "./format_to_html.ts";
 import { compose } from "../middleware.ts";
+import {colors} from "../../deps.ts"
+
 
 export interface EmailOptions {
   hostname: string;
@@ -35,7 +37,7 @@ function layout(content: string) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <style>
         .html, body {
-        font-family: ui-monospace,
+           font-family: ui-monospace,
             Menlo, Monaco,
             "Cascadia Mono", "Segoe UI Mono",
             "Roboto Mono",
@@ -51,20 +53,18 @@ function layout(content: string) {
         }
         main {
             padding: 2em;
-
+        }
+        span {
+          white-space: pre;
         }
         .logRecord {
-            padding-bottom: 1em;
+            padding-bottom: 0.3em;
             color: currentColor;
             display: flex;
             flex-direction: row;
             align-items: flex-start;
             justify-content: flex-start;
             flex-wrap: wrap;
-        }
-
-        span {
-            white-space: pre;
         }
         .timestamp {
             color: grey;
@@ -82,6 +82,157 @@ function layout(content: string) {
             padding-left: 1em;
             white-space: pre-wrap;
             color: #666;
+        }
+        /* methodNames */
+
+        ${Object.entries(colors).map(([name, color]) => `.${name}{ color: ${color.name}}`).join("\n")}
+        .dim {
+          opacity: 0.5;
+        }
+        .bold {
+          font-weight: 800;
+        }
+        .italic {
+          font-style: italic;
+        }
+        .underline {
+          text-decoration: underline;
+        }
+        .strikethrough, .line-through, .lineThrough {
+          text-decoration: line-through;
+        }
+        .blink {
+          text-decoration: blink;
+        }
+        .inverse {
+          color: #fff;
+          background-color: #000;
+        }
+        .hidden {
+          visibility: hidden;
+        }
+        .bgBlack{
+          background-color: #000;
+          color: #fff;
+        }
+        .bgBlue{
+          background-color: #0074d9;
+          color: #fff;
+        }
+        .bgBrightBlack{
+          background-color: #7f7f7f;
+          color: #fff;
+        }
+        .bgBrightBlue{
+          background-color: #013388;
+          color: #fff;
+        }
+        .bgBrightCyan{
+          background-color: #33bbff;
+          color: #000;
+        }
+        .bgBrightGreen{
+          background-color: #33bb33;
+          color: #fff;
+        }
+        .bgBrightMagenta{
+          background-color: #ff00ff;
+          color: #fff;
+        }
+        .bgBrightRed{
+          background-color: #ff3333;
+          color: #fff;
+        }
+        .bgBrightWhite{
+          background-color: #ffffff;
+          color: #000;
+        }
+        .bgBrightYellow{
+          background-color: #ffff33;
+          color: #000;
+        }
+        .bgCyan{
+          background-color: #0088cc;
+          color: #fff;
+        }
+        .bgGreen{
+          background-color: #00bb00;
+          color: #fff;
+        }
+        .bgMagenta{
+          background-color: #bb00bb;
+          color: #fff;
+        }
+        .bgRed{
+          background-color: #bb0000;
+          color: #fff;
+        }
+        .bgWhite{
+          background-color: #bbbbbb;
+          color: #000;
+        }
+        .bgYellow{
+          background-color: #ffcc00;
+          color: #000;
+        }
+        .black{
+          color: #000;
+        }
+        .blue{
+          color: #0074d9;
+        }
+        .brightBlack{
+          color: #7f7f7f;
+        }
+        .brightBlue{
+          color: #013388;
+
+        }
+        .brightCyan{
+          color: #33bbff;
+        }
+        .brightGreen{
+          color: #33bb33;
+        }
+        .brightMagenta{
+          color: #ff00ff;
+        }
+        .brightRed{
+          color: #ff3333;
+        }
+        .brightWhite{
+          color: #ffffff;
+        }
+        .brightYellow{
+          color: #ffff33;
+        }
+        .cyan{
+          color: #0088cc;
+        }
+        .gray{
+          color: #bbbbbb;
+        }
+        .green{
+          color: #00bb00;
+        }
+        .magenta{
+          color: #bb00bb;
+        }
+        .red{
+          color: #bb0000;
+        }
+        .reset{
+          color: inherit;
+          background-color: inherit;
+        }
+        .stripColor{
+          color: inherit;
+        }
+        .white{
+          color: #fff;
+        }
+        .yellow{
+          color: #ffcc00;
         }
         </style>
     </head>
