@@ -33,25 +33,16 @@ Deno.test({
 // TODO: MAKE IT WORK WHEN COLORED
 Deno.test({
   name: "[formatToAnsiColors] should padEnd correctly",
-  ignore: true,
-  only: false,
+  // ignore: true,
+  // only: true,
   fn: () => {
-    const prettyPlugin = formatToAnsiColors({});
+    const prettyPlugin = formatToAnsiColors({ useColor: false, methodMaxLength: 10 });
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);
 
-    console.log("\n\n----\n");
     const log = prettify.log("--");
-    console.log(log.length, log);
-    const warn = prettify.warn("--");
-    console.warn(warn.length, warn);
-    const error = prettify.error("--");
-    console.error(error.length, error);
-    const warning = prettify.warning("--");
-    console.log(warning.length, warning);
-    const critical = prettify.critical("--");
-    console.log(critical.length, critical);
-    assertEquals(log, warning);
+    const longestMethod = prettify.longestMethod("--");
+    assertEquals(log.length, longestMethod.length);
   },
 });
 
@@ -62,6 +53,7 @@ Deno.test({
   fn: () => {
     const prettyPlugin = formatToAnsiColors({
       useColor: false,
+      methodMaxLength: 3,
     });
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);
@@ -109,7 +101,7 @@ Deno.test({
     const rest = msg.replace(fulltimeRegex, "");
     assertEquals(
       rest,
-      ` LOG { a: 1 } message 123`,
+      ` LOG       { a: 1 } message 123`,
     );
     stubbed.restore();
   },
@@ -133,6 +125,7 @@ Deno.test({
     Deno.env.set("NO_COLOR", "1");
     const prettyPlugin = formatToAnsiColors({
       useColor: true,
+      methodMaxLength: 3,
     });
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);

@@ -20,6 +20,7 @@ type AnsiColorOptions = {
   multiline?: boolean;
   depth?: number;
   iterableLimit?: number;
+  methodMaxLength?: number;
 };
 
 export function formatToAnsiColors(
@@ -31,6 +32,7 @@ export function formatToAnsiColors(
     multiline = false,
     depth = Infinity,
     iterableLimit = 5,
+    methodMaxLength = 9,
   }: AnsiColorOptions = {},
 ): Middleware {
   // https://no-color.org/
@@ -62,7 +64,7 @@ export function formatToAnsiColors(
       ansiText += " " +
         color(
           bold(
-            logRecord.methodName.toUpperCase(),
+            logRecord.methodName.toUpperCase().slice(0,methodMaxLength).padEnd(methodMaxLength,' '),
           ),
         );
     }
