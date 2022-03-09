@@ -64,7 +64,10 @@ export function formatToAnsiColors(
       ansiText += " " +
         color(
           bold(
-            logRecord.methodName.toUpperCase().slice(0,methodMaxLength).padEnd(methodMaxLength,' '),
+            logRecord.methodName.toUpperCase().slice(0, methodMaxLength).padEnd(
+              methodMaxLength,
+              " ",
+            ),
           ),
         );
     }
