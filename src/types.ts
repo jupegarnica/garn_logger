@@ -22,14 +22,13 @@ export type Middleware = (
   next: MiddlewareNext,
 ) => void;
 
-
 /**
  * Any string not in this list will be treated as a debug level.
  */
 export type LogLevels =
-|  string
-| "DEBUG"
-| "INFO"
-| "WARNING"
-| "ERROR"
-| "CRITICAL"
+  | string
+  | "DEBUG"
+  | "INFO"
+  | "WARNING"
+  | "ERROR"
+  | "CRITICAL";
