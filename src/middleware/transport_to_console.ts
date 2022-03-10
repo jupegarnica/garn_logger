@@ -36,11 +36,11 @@ export function transportToConsole(
           ]
         ];
 
-        if (mustUseArgs.includes(logRecord.methodName)) {
-          fn(...logRecord.args);
-        } else {
-          const args = logRecord.ansiText ? [logRecord.ansiText] : logRecord.args;
-          fn(...args);
+      if (mustUseArgs.includes(logRecord.methodName)) {
+        fn(...logRecord.args);
+      } else {
+        const args = logRecord.ansiText ? [logRecord.ansiText] : logRecord.args;
+        fn(...args);
       }
     }
   }
