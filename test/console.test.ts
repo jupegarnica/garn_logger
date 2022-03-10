@@ -66,8 +66,6 @@ Deno.test({
       "log",
     );
     logger.log(1);
-    logger.LOG(1);
-    logger.Log(1);
     assertEquals(log.calls.length, 3);
     log.restore();
 
@@ -76,7 +74,6 @@ Deno.test({
       "info",
     );
     logger.info(1);
-    logger.iNfo(1);
     assertEquals(info.calls.length, 2);
     info.restore();
 
@@ -175,11 +172,11 @@ Deno.test({
 Deno.test({
   name: "[console] time and timeEnd should return the time in ms",
   ignore: false,
-  only: true,
+  // only: true,
   fn: async () => {
     const debug = stub(
       consolePlugin._console,
-      "log",
+      "debug",
     );
     const start = logger.time();
     await delay(2);
