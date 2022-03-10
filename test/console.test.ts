@@ -1,4 +1,4 @@
-import { createLogger, transportToConsole } from "../mod.ts";
+import { createLogger, supportForConsoleTimers, transportToConsole } from "../mod.ts";
 import {
   assertEquals,
   delay,
@@ -11,7 +11,7 @@ const consolePlugin = transportToConsole(
   globalThis.console,
 );
 const logger = createLogger();
-logger.use(consolePlugin);
+logger.use(supportForConsoleTimers, consolePlugin);
 
 const consoleMethods = Object.keys(console)
   .filter((method: string) =>
@@ -178,13 +178,13 @@ Deno.test({
   fn: async () => {
     const debug = stub(
       consolePlugin._console,
-      "debug",
+      "log",
     );
-    const start = logger.time("x");
+    const start = logger.time();
     await delay(2);
-    const medium = logger.timeLog("x");
+    const medium = logger.timeLog();
     await delay(2);
-    const end = logger.timeEnd("x");
+    const end = logger.timeEnd();
     assertEquals(debug.calls.length, 3);
     assertEquals(start < medium, true);
     assertEquals(medium < end, true);

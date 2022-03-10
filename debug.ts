@@ -1,29 +1,36 @@
-import logger, { formatToAnsiColors } from "./mod.ts";
+import { createLogger, formatToAnsiColors, transportToConsoleWithFormat } from "./mod.ts";
 import { transportToEmail } from "./src/middleware/transport_to_email.ts";
 import * as colors from "https://deno.land/std@0.128.0/fmt/colors.ts";
-logger.setFilter("debug");
 
+const logger = createLogger();
+logger.setFilter("debug");
 logger.use(
   formatToAnsiColors(),
-  transportToEmail({
-    hostname: "localhost",
-    port: "1025",
-    from: "juan@garn.dev",
-    to: "juan@garn.dev",
-    logLevel: "debug",
-    debounceTime: 100,
-  }),
+  transportToConsoleWithFormat({ pretty: { useColor: false } }),
+  // transportToEmail({
+  //   hostname: "localhost",
+  //   port: "1025",
+  //   from: "juan@garn.dev",
+  //   to: "juan@garn.dev",
+  //   logLevel: "debug",
+  //   debounceTime: 100,
+  // }),
 );
 
-for (const method in colors) {
-  if (
-    !["bgRgb24", "rgb24", "rgb8", "setColorEnabled", "getColorEnabled"].includes(method)
-  ) {
-    // logger[method](`${method}`, {a:1, b: ['1', '2']});
-    logger[method](`.${method}{
-}`);
-  }
-}
+logger.log("hola");
+logger.time();
+logger.timeLog();
+logger.timeEnd();
+
+// for (const method in colors) {
+//   if (
+//     !["bgRgb24", "rgb24", "rgb8", "setColorEnabled", "getColorEnabled"].includes(method)
+//   ) {
+//     // logger[method](`${method}`, {a:1, b: ['1', '2']});
+//     logger[method](`.${method}{
+// }`);
+//   }
+// }
 
 // logger.silly("silly");
 // logger.log("log");

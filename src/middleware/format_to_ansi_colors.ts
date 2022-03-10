@@ -4,8 +4,6 @@ import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts"
 
 type Colorize = (str: string) => string;
 
-const nop = () => (_: string): string => _;
-
 function formatDate(
   date: number,
   formatter: string,
