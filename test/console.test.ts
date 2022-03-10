@@ -4,7 +4,9 @@ import {
   // assertStringIncludes,
   // spy,
   stub,
+  delay,
 } from "../dev_deps.ts";
+
 
 const consolePlugin = transportToConsole(
   globalThis.console,
@@ -167,5 +169,29 @@ Deno.test({
     assertEquals(returned, data);
     assertEquals(log.calls.length, 1);
     log.restore();
+  },
+});
+
+Deno.test({
+  name: "[console] time and timeEnd should return the time in ms",
+  ignore: false,
+  only: true,
+  fn: async () => {
+    const debug = stub(
+      consolePlugin._console,
+      "debug",
+    );
+    const start = logger.time('x');
+    await delay(2);
+    const medium = logger.timeLog('x');
+    await delay(2);
+    const end = logger.timeEnd('x');
+    assertEquals(debug.calls.length, 3);
+    assertEquals( start < medium, true);
+    assertEquals( medium < end, true);
+    assertEquals(typeof start , 'number');
+    assertEquals(typeof medium , 'number');
+    assertEquals(typeof end , 'number');
+    debug.restore();
   },
 });
