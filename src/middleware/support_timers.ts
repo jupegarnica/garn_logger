@@ -8,8 +8,6 @@ export function supportForConsoleTimers(
 ) {
   // Timers
   if (timersMethods.includes(logRecord.methodName)) {
-    // console.log({logRecord});
-
     state.timers ||= {};
     let timerName;
     timerName = typeof logRecord.args[0] === "string"

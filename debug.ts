@@ -7,14 +7,14 @@ logger.setFilter("debug");
 logger.use(
   formatToAnsiColors(),
   transportToConsoleWithFormat({ pretty: { useColor: false } }),
-  // transportToEmail({
-  //   hostname: "localhost",
-  //   port: "1025",
-  //   from: "juan@garn.dev",
-  //   to: "juan@garn.dev",
-  //   logLevel: "debug",
-  //   debounceTime: 100,
-  // }),
+  transportToEmail({
+    hostname: "localhost",
+    port: "1025",
+    from: "juan@garn.dev",
+    to: "juan@garn.dev",
+    logLevel: "debug",
+    debounceTime: 100,
+  }),
 );
 
 logger.log("hola");

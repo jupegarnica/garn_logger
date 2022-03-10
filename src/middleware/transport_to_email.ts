@@ -5,6 +5,7 @@ import { levelsNameToNumbers } from "../constants.ts";
 import { formatToHtml } from "./format_to_html.ts";
 import { compose } from "../middleware.ts";
 import { colors } from "../../deps.ts";
+import { supportForConsoleTimers } from "./support_timers.ts";
 
 export interface EmailOptions {
   hostname: string;
@@ -328,6 +329,11 @@ export async function sendEmail(
   );
 }
 
+const stringify = (val: any) => {
+  if (typeof val === "string") return val;
+  return typeof Deno !== "undefined" ? Deno.inspect : JSON.stringify;
+};
+
 export function transportToEmail(
   emailOptions: EmailOptions,
 ): Middleware {
@@ -338,6 +344,7 @@ export function transportToEmail(
     (options) => flushQueue(options).catch(console.error),
     emailOptions.debounceTime,
   );
+
   function handle({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (
@@ -350,11 +357,15 @@ export function transportToEmail(
         to: emailOptions.to,
         subject: emailOptions.subject,
         content: logRecord.html ||
-          logRecord.args.map((arg) => JSON.stringify(arg)).join(" "),
+          logRecord.args.map((arg) => stringify(arg)).join(" "),
       });
       flushQueueDebounced(emailOptions);
     }
   }
 
-  return compose([formatToHtml(), handle]);
+  return compose([
+    supportForConsoleTimers,
+    formatToHtml(),
+    handle,
+  ]);
 }
