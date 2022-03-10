@@ -1,4 +1,4 @@
-import { createLogger,  transportToConsole } from "../mod.ts";
+import { createLogger, transportToConsole } from "../mod.ts";
 import { supportForConsoleTimers } from "../src/middleware/support_timers.ts";
 import {
   assertEquals,

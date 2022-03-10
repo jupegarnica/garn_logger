@@ -1,4 +1,4 @@
-import type {  MiddlewareContext, MiddlewareNext } from "../types.ts";
+import type { MiddlewareContext, MiddlewareNext } from "../types.ts";
 
 const timersMethods = ["time", "timeLog", "timeEnd"];
 

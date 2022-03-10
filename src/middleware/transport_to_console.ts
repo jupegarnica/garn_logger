@@ -50,7 +50,6 @@ export function transportToConsole(
   return log;
 }
 
-
 export function transportToConsoleWithFormat(
   {
     pretty = {},
