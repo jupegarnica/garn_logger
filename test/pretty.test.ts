@@ -57,7 +57,6 @@ Deno.test({
       multiline: false,
       timestamp: false,
     });
-    delete Deno.stdout.rid;
     const prettify = createLogger();
     prettify.use(prettyPlugin, returnMsg);
     const log = prettify.log("--");
