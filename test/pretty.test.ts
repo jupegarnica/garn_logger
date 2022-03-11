@@ -47,7 +47,7 @@ Deno.test({
 
 Deno.test({
   name: "[formatToAnsiColors] should use color",
-  ignore: Deno.env.get("CI") !== "true",
+  ignore: Deno.env.get("CI") === "true",
   // only: true,
   fn: () => {
     const prettyPlugin = formatToAnsiColors({

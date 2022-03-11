@@ -5,15 +5,15 @@ const client = new SmtpClient();
 const options = ({
   hostname: "smtp.mailersend.net",
   port: Number("587"),
-  username: "",
-  password: "",
+  username: "XXXX",
+  password: "XXXX",
 });
 
 await client.connectTLS(options);
 
 await client.send({
-  from: "juan@garn.dev",
-  to: "jupegarnica@gmail.com",
+  from: "XXX@XXX.dev",
+  to: "XXXX@XXX.com",
   subject: "Mail Title",
   content: "Mail Content",
   html: "<a href='https://github.com'>Github</a>",
