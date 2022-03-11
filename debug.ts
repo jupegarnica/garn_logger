@@ -5,8 +5,8 @@ const client = new SmtpClient();
 const options = ({
   hostname: "smtp.mailersend.net",
   port: Number("587"),
-  username: "MS_VnNl1J@garn.dev",
-  password: "t4ORzDyFvEMBkMnj",
+  username: "",
+  password: "",
 });
 
 await client.connectTLS(options);
