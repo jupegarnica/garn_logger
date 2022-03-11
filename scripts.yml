@@ -17,6 +17,12 @@ scripts:
     cmd: deno test -A
     gitHook: pre-push
 
+  debug:
+    desc: debug
+    env:
+      LOG_LEVEL: DEBUG
+    # cmd: vr test-ci
+    cmd: deno run -A --watch debug.ts
   docs:
     - echo "visit https://doc.deno.land/builtin/stable"
     - google-chrome https://doc.deno.land/builtin/stable || sh $BROWSER https://doc.deno.land/builtin/stable
@@ -28,11 +34,11 @@ scripts:
 
   lint:
     desc: Runs lint
-    cmd: deno lint --ignore=cov_profile
+    cmd: deno lint --ignore=coverage
 
   fmt:
     desc: Runs format
-    cmd: deno fmt --ignore=cov_profile
+    cmd: deno fmt --ignore=coverage
 
   post-commit:
     desc: Commit formatted files
@@ -46,6 +52,8 @@ scripts:
           echo "$FILES" | xargs git add &&
           git commit -m "format: apply auto format"
     gitHook: post-commit
+
+
   pre-commit:
     desc: Lints and formats staged files
     cmd: |

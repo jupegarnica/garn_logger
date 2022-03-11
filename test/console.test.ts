@@ -14,11 +14,28 @@ const consolePlugin = transportToConsole(
 const logger = createLogger();
 logger.use(supportForConsoleTimers, consolePlugin);
 
-const consoleMethods = Object.keys(console)
-  .filter((method: string) =>
-    // @ts-ignore
-    typeof console[method] === "function"
-  );
+const consoleMethods = [
+  "log",
+  "debug",
+  "info",
+  "dir",
+  "dirxml",
+  "warn",
+  "error",
+  "assert",
+  "count",
+  "countReset",
+  "table",
+  // "time",
+  // "timeLog",
+  // "timeEnd",
+  "group",
+  "groupCollapsed",
+  "groupEnd",
+  "clear",
+  "trace",
+];
+
 Deno.test({
   name: "[console] should proxy every method to console",
   ignore: false,
@@ -66,7 +83,7 @@ Deno.test({
       "log",
     );
     logger.log(1);
-    assertEquals(log.calls.length, 3);
+    assertEquals(log.calls.length, 1);
     log.restore();
 
     const info = stub(
@@ -74,7 +91,7 @@ Deno.test({
       "info",
     );
     logger.info(1);
-    assertEquals(info.calls.length, 2);
+    assertEquals(info.calls.length, 1);
     info.restore();
 
     const warn = stub(
@@ -93,7 +110,8 @@ Deno.test({
     logger.error(1);
     logger.critical(1);
     logger.fatal(1);
-    assertEquals(error.calls.length, 3);
+    logger.important(1);
+    assertEquals(error.calls.length, 4);
     error.restore();
   },
 });

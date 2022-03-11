@@ -50,9 +50,9 @@ export function formatToHtml(
     if (showScope && state.scope) {
       html += `<span class="scope> style="${style}">[${state.scope} </span>`;
     }
-
+    const maybeColors = logRecord.methodName.split("_");
     const separator = multiline ? "<br>" : " ";
-    html += `<span class="args ${logRecord.methodName}" style="">` +
+    html += `<span class="args ${logRecord.methodName}" style="${maybeColors.map(txt => `color:${txt}`).join(';')}">` +
       // deno-lint-ignore no-explicit-any
       logRecord.args.map((arg: any) =>
         stringify(arg, {

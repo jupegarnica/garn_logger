@@ -16,6 +16,7 @@ export function supportForConsoleTimers(
     switch (logRecord.methodName) {
       case "time":
         state.timers[timerName] = Date.now();
+        // Capitalize method name in order to send it to debug level
         logRecord.methodName = "Time";
         logRecord.args = [`[${timerName}] started`];
         logRecord.willReturn = 0;

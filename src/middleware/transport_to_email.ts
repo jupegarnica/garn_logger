@@ -1,10 +1,10 @@
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
+import { SmtpClient } from "https://deno.land/x/denomailer@0.9.0/mod.ts";
 import { debounce } from "https://deno.land/std@0.128.0/async/mod.ts";
+
 import type { Middleware, MiddlewareContext, MiddlewareNext } from "../types.ts";
 import { levelsNameToNumbers } from "../constants.ts";
 import { formatToHtml } from "./format_to_html.ts";
 import { compose } from "../middleware.ts";
-import { colors } from "../../deps.ts";
 import { supportForConsoleTimers } from "./support_timers.ts";
 
 export interface EmailOptions {
@@ -25,7 +25,10 @@ export interface Email {
   subject: string;
   content: string;
 }
-const client = new SmtpClient();
+
+const client = new SmtpClient({
+  content_encoding: "quoted-printable", // 7bit, 8bit, base64, binary, quoted-printable
+});
 
 const queue: Email[] = [];
 
@@ -79,17 +82,15 @@ function layout(content: string) {
         }
         .args {
             display: inline-block;
-            padding-left: 1em;
+            padding: 0 0.3em;
+            margin-left: 1ch;
             white-space: pre-wrap;
             color: #666;
         }
-        /* methodNames */
 
-        ${
-    Object.entries(colors).map(([name, color]) => `.${name}{ color: ${color.name}}`).join(
-      "\n",
-    )
-  }
+        </style>
+        <style id="methodNames">
+        /* methodNames */
         .dim {
           opacity: 0.5;
         }
@@ -276,7 +277,8 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
     };
     try {
       await client.connectTLS(connectOptions);
-    } catch {
+    } catch (error) {
+      console.error('error connectTLS',error);
       await client.connect(connectOptions);
     }
     let content = "";
