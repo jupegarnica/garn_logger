@@ -62,7 +62,6 @@ Deno.test({
     const log = prettify.log("--");
     const noColorOutput = `LOG --`;
 
-
     assert(log.length > noColorOutput.length);
   },
 });
