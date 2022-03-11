@@ -3,12 +3,11 @@ import { SmtpClient } from "https://deno.land/x/denomailer/mod.ts";
 const client = new SmtpClient();
 
 const options = ({
-  hostname:  "smtp.mailersend.net",
+  hostname: "smtp.mailersend.net",
   port: Number("587"),
   username: "MS_VnNl1J@garn.dev",
   password: "t4ORzDyFvEMBkMnj",
 });
-
 
 await client.connectTLS(options);
 

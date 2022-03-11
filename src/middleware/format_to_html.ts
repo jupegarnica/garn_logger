@@ -52,7 +52,10 @@ export function formatToHtml(
     }
     const maybeColors = logRecord.methodName.split("_");
     const separator = multiline ? "<br>" : " ";
-    html += `<span class="args ${logRecord.methodName}" style="${maybeColors.map(txt => `color:${txt}`).join(';')}">` +
+    html +=
+      `<span class="args ${logRecord.methodName}" style="${
+        maybeColors.map((txt) => `color:${txt}`).join(";")
+      }">` +
       // deno-lint-ignore no-explicit-any
       logRecord.args.map((arg: any) =>
         stringify(arg, {

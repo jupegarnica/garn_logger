@@ -278,7 +278,7 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
     try {
       await client.connectTLS(connectOptions);
     } catch (error) {
-      console.error('error connectTLS',error);
+      console.error("error connectTLS", error);
       await client.connect(connectOptions);
     }
     let content = "";
