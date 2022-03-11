@@ -77,13 +77,17 @@ export function formatToAnsiColors(
   }: AnsiColorOptions = {},
 ): Middleware {
   // https://no-color.org/
-
   // TODO: think in Node Compatibility
+  const isatty = (
+    Deno.stdout?.rid
+      ? Deno.isatty(Deno.stdout?.rid)
+      : Deno.stderr?.rid
+      ? Deno.isatty(Deno.stderr?.rid)
+      : true
+  );
   const shouldUseColor = typeof Deno !== "undefined" &&
-    Deno.env.get("NO_COLOR") === undefined &&
-    (Deno.stdout?.rid ? Deno.isatty(Deno.stdout?.rid) : true);
+    Deno.env.get("NO_COLOR") === undefined && isatty;
   useColor = useColor && shouldUseColor;
-  console.log({ useColor, shouldUseColor });
 
   colors.setColorEnabled(useColor);
   const colorTimestamp = colors.dim;
