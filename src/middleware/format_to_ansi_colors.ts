@@ -50,8 +50,11 @@ const getColorByMethod = (
   };
 
 const getColorArgsByMethod = (method: string) =>
-  // @ts-ignore
-  method in colors ? colors[method] : (_: any) => _;
+  method in colors
+    // @ts-ignore colors[method] is a function
+    ? colors[method]
+    // deno-lint-ignore no-explicit-any
+    : (_: any) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
@@ -82,8 +85,8 @@ export function formatToAnsiColors(
     Deno.stdout?.rid
       ? Deno.isatty(Deno.stdout?.rid)
       : Deno.stderr?.rid
-      ? Deno.isatty(Deno.stderr?.rid)
-      : true
+        ? Deno.isatty(Deno.stderr?.rid)
+        : true
   );
   const shouldUseColor = typeof Deno !== "undefined" &&
     Deno.env.get("NO_COLOR") === undefined && isatty;
@@ -127,8 +130,8 @@ export function formatToAnsiColors(
 
     const separator = multiline ? "\n" : " ";
     ansiText +=
-      // deno-lint-ignore no-explicit-any
       colorArgs(
+        // deno-lint-ignore no-explicit-any
         logRecord.args.map((arg: any) =>
           stringify(arg, {
             colors: useColor,

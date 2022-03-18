@@ -9,8 +9,7 @@ export function supportForConsoleTimers(
   // Timers
   if (timersMethods.includes(logRecord.methodName)) {
     state.timers ||= {};
-    let timerName;
-    timerName = typeof logRecord.args[0] === "string"
+    const timerName = typeof logRecord.args[0] === "string"
       ? logRecord.args[0] || "default"
       : "default";
     switch (logRecord.methodName) {

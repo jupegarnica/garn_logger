@@ -134,6 +134,7 @@ Deno.test({
   },
 });
 
+// deno-lint-ignore no-explicit-any
 const deep: any = {
   a: {
     b: {
@@ -151,7 +152,7 @@ const deep: any = {
   },
 };
 
-deep.circular = deep;
+deep.circular = deep as typeof deep;
 const data = [
   new Error("ups"),
   "string",

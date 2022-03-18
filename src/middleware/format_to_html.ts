@@ -11,7 +11,7 @@ const styleByLevel: {
   30: "",
   40: "text-decoration: underline #d66;",
 };
-function padEnd(str: string, len: number = 10, char: string = " "): string {
+function padEnd(str: string, len = 10, char = " "): string {
   return str.slice(0, len).padEnd(len, char);
 }
 

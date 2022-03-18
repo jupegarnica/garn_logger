@@ -4,7 +4,7 @@ import { levelsNameToNumbers } from "./constants.ts";
 import { compose } from "./middleware.ts";
 
 type AnyMethodName = Exclude<string, "use" | "setFilter">;
-
+// deno-lint-ignore no-explicit-any
 type Methods = { [key: AnyMethodName]: (...args: any[]) => any };
 
 class Logger {

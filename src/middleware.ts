@@ -1,4 +1,4 @@
-import type { Middleware, MiddlewareContext, MiddlewareNext } from "./types.ts";
+import type { Middleware } from "./types.ts";
 
 export function compose(
   middleware: Middleware[],
@@ -6,6 +6,7 @@ export function compose(
   return function composedMiddleware(
     context,
     next,
+  // deno-lint-ignore no-explicit-any
   ): any {
     let index = -1;
     function dispatch(i: number): void {

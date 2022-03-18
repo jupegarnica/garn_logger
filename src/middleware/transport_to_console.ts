@@ -23,13 +23,12 @@ export function transportToConsole(
   function log({ logRecord }: MiddlewareContext, next: MiddlewareNext): void {
     next();
     if (!logRecord.muted) {
-      // @ts-ignore
-      let fn = _console[logRecord.methodName] ??
-        // @ts-ignore
+      // @ts-ignore is a method
+      const fn = _console[logRecord.methodName] ??
         // _console[
         //   logRecord.methodName.toLowerCase()
         // ] &&
-        // @ts-ignore
+        // @ts-ignore if a method
         _console[
           levelsNumbersToMethod[
             logRecord.levelNumber

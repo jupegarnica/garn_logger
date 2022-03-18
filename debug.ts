@@ -1,6 +1,6 @@
 import { createLogger, formatToAnsiColors, transportToConsoleWithFormat } from "./mod.ts";
 import { transportToEmail } from "./src/middleware/transport_to_email.ts";
-import * as colors from "https://deno.land/std@0.128.0/fmt/colors.ts";
+// import * as colors from "https://deno.land/std@0.128.0/fmt/colors.ts";
 
 const logger = createLogger();
 logger.setFilter("debug");

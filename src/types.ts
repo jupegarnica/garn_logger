@@ -1,3 +1,4 @@
+// deno-lint-ignore no-explicit-any
 export type LoggerState = { [key: string]: any };
 
 export type LogRecord = {
@@ -5,8 +6,10 @@ export type LogRecord = {
   args: unknown[];
   timestamp: number;
   levelNumber: number;
+  // deno-lint-ignore no-explicit-any
   willReturn: any;
   muted: boolean;
+  // deno-lint-ignore no-explicit-any
   [dataParsed: string]: any;
 };
 

@@ -163,7 +163,7 @@ Deno.test({
       );
       stubbed.restore();
     } catch (error) {
-      throw console.error();
+      throw error
     } finally {
       Deno.env.delete("NO_COLOR");
     }

@@ -287,7 +287,7 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
     let subject = "";
 
     for (const email of queue) {
-      const data: any = email;
+      const data: Email = email;
       content += `${data.content}\n`;
       from = email.from;
       to = email.to;
@@ -331,7 +331,7 @@ export async function sendEmail(
   );
 }
 
-const stringify = (val: any) => {
+const stringify = (val: unknown) => {
   if (typeof val === "string") return val;
   return typeof Deno !== "undefined" ? Deno.inspect : JSON.stringify;
 };
