@@ -6,7 +6,7 @@ export function compose(
   return function composedMiddleware(
     context,
     next,
-  // deno-lint-ignore no-explicit-any
+    // deno-lint-ignore no-explicit-any
   ): any {
     let index = -1;
     function dispatch(i: number): void {

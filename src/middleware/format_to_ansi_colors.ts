@@ -53,8 +53,8 @@ const getColorArgsByMethod = (method: string) =>
   method in colors
     // @ts-ignore colors[method] is a function
     ? colors[method]
-    // deno-lint-ignore no-explicit-any
-    : (_: any) => _;
+    : // deno-lint-ignore no-explicit-any
+      (_: any) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
@@ -85,8 +85,8 @@ export function formatToAnsiColors(
     Deno.stdout?.rid
       ? Deno.isatty(Deno.stdout?.rid)
       : Deno.stderr?.rid
-        ? Deno.isatty(Deno.stderr?.rid)
-        : true
+      ? Deno.isatty(Deno.stderr?.rid)
+      : true
   );
   const shouldUseColor = typeof Deno !== "undefined" &&
     Deno.env.get("NO_COLOR") === undefined && isatty;
@@ -129,18 +129,17 @@ export function formatToAnsiColors(
     }
 
     const separator = multiline ? "\n" : " ";
-    ansiText +=
-      colorArgs(
-        // deno-lint-ignore no-explicit-any
-        logRecord.args.map((arg: any) =>
-          stringify(arg, {
-            colors: useColor,
-            compact: !multiline,
-            depth,
-            iterableLimit,
-          })
-        ).join(separator),
-      );
+    ansiText += colorArgs(
+      // deno-lint-ignore no-explicit-any
+      logRecord.args.map((arg: any) =>
+        stringify(arg, {
+          colors: useColor,
+          compact: !multiline,
+          depth,
+          iterableLimit,
+        })
+      ).join(separator),
+    );
 
     logRecord.ansiText = ansiText;
     next();
