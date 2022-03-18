@@ -67,6 +67,5 @@ logger.timeEnd();
 //   }
 // }
 
-
-addEventListener('load', () => logger.load());
-addEventListener('unload', () => logger.unload());
+addEventListener("load", () => logger.load());
+addEventListener("unload", () => logger.unload());
