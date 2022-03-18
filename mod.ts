@@ -7,8 +7,12 @@ import { createLogger } from "./src/logger.ts";
 import { transportToConsole } from "./src/middleware/transport_to_console.ts";
 
 export const logger = createLogger();
+const consolePlugin = transportToConsole(globalThis.console)
+
 logger.use(
-  transportToConsole(globalThis.console),
+  consolePlugin,
 );
 
+
 export default logger;
+export const console =  consolePlugin._console ;

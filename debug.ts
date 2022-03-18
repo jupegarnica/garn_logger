@@ -1,54 +1,36 @@
-import { SmtpClient } from "https://deno.land/x/denomailer/mod.ts";
+import { createLogger, formatToAnsiColors, transportToConsoleWithFormat } from "./mod.ts";
+import { transportToEmail } from "./src/middleware/transport_to_email.ts";
+import * as colors from "https://deno.land/std@0.128.0/fmt/colors.ts";
 
-const client = new SmtpClient();
+const logger = createLogger();
+logger.setFilter("debug");
+logger.use(
+  formatToAnsiColors(),
+  transportToConsoleWithFormat({ pretty: { useColor: false } }),
+  transportToEmail({
+    hostname: Deno.env.get("SMTP_HOST") || "localhost",
+    port: Deno.env.get("SMTP_PORT") || "1025",
+    username: Deno.env.get("SMTP_USER"),
+    password: Deno.env.get("SMTP_PASS"),
+    to: "juan@garn.dev",
+    from: "juan@garn.dev",
+    logLevel: "DEBUG",
+    debounceTime: 10,
+  }),
+);
 
-const options = ({
-  hostname: "smtp.mailersend.net",
-  port: Number("587"),
-  username: "XXXX",
-  password: "XXXX",
-});
+logger.small("small");
+logger.log_tomato("log_tomato");
+logger.error_blue("log_blue");
+logger.log("hola");
+logger.host(Deno.env.get("SMTP_HOST"));
+logger.PORT(Deno.env.get("SMTP_PORT"));
+logger.USER(Deno.env.get("SMTP_USER"));
+logger.PASS(Deno.env.get("SMTP_PASS"));
 
-await client.connectTLS(options);
-
-await client.send({
-  from: "XXX@XXX.dev",
-  to: "XXXX@XXX.com",
-  subject: "Mail Title",
-  content: "Mail Content",
-  html: "<a href='https://github.com'>Github</a>",
-});
-
-await client.close();
-
-// import { createLogger, formatToAnsiColors, transportToConsoleWithFormat } from "./mod.ts";
-// import { transportToEmail } from "./src/middleware/transport_to_email.ts";
-// import * as colors from "https://deno.land/std@0.128.0/fmt/colors.ts";
-
-// const logger = createLogger();
-// logger.setFilter("debug");
-// logger.use(
-//   formatToAnsiColors(),
-//   transportToConsoleWithFormat({ pretty: { useColor: false } }),
-//   transportToEmail({
-//     hostname: Deno.env.get("SMTP_HOST") || "localhost",
-//     port: Deno.env.get("SMTP_PORT") || "1025",
-//     username: Deno.env.get("SMTP_USER"),
-//     password: Deno.env.get("SMTP_PASS"),
-//     to: "juan@garn.dev",
-//     from: "juan@garn.dev",
-//     logLevel: "DEBUG",
-//     debounceTime: 300,
-//   }),
-// );
-
-// logger.small("small");
-// logger.log_tomato("log_tomato");
-// logger.error_blue("log_blue");
-// logger.log("hola");
-// logger.time();
-// logger.timeLog();
-// logger.timeEnd();
+logger.time();
+logger.timeLog();
+logger.timeEnd();
 // logger.silly("silly");
 // logger.log("log");
 // logger.debug(("debug"));
@@ -84,3 +66,7 @@ await client.close();
 // }`);
 //   }
 // }
+
+
+addEventListener('load', () => logger.load());
+addEventListener('unload', () => logger.unload());
