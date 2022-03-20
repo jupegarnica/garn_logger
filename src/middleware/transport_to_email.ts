@@ -275,12 +275,13 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
       username: config.username,
       password: config.password,
     };
-    try {
-      await client.connectTLS(connectOptions);
-    } catch (error) {
-      console.error("error connectTLS", error);
-      await client.connect(connectOptions);
+    let connect = client.connect.bind(client);
+    const tlsPorts = [465, 587];
+    if (tlsPorts.includes(connectOptions.port)) {
+      connect = client.connectTLS.bind(client);
     }
+    await connect(connectOptions);
+
     let content = "";
     let from = "";
     let to = "";
@@ -294,10 +295,6 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
       subject = email.subject;
     }
     if (content) {
-      await client.connect({
-        hostname: connectOptions.hostname,
-        port: connectOptions.port,
-      });
       await sendEmail({
         to,
         from,
@@ -324,7 +321,7 @@ export async function sendEmail(
     from,
     to,
     subject,
-    content: layout(content),
+    html: layout(content),
   });
   console.info(
     `Email with subject ${subject} sent to ${to}`,

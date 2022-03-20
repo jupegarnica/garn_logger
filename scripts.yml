@@ -17,6 +17,14 @@ scripts:
     cmd: deno test -A
     gitHook: pre-push
 
+  test-email:
+    cmd:
+      pll:
+        - timeout 5 docker-compose up || exit 0
+        - TEST_EMAIL=1 deno test --allow-env --allow-net test/email.test.ts
+
+  test-email-watch: TEST_EMAIL=1 deno test --allow-env --allow-net --watch test/email.test.ts
+
   debug:
     desc: debug
     env:
