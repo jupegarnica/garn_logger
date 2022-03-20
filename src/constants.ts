@@ -75,7 +75,6 @@ export const levelsNumbers: {
   510: 30,
   511: 30,
 
-
   critical: 40,
   fatal: 40,
   important: 40,
@@ -115,8 +114,6 @@ const colors: { [level: string]: string } = {
   207: "#44cc11",
   208: "#44cc11",
   226: "#44cc11",
-
-
 
   // "300": "#0099ff",
   // "301": "#0099ff",
@@ -185,7 +182,6 @@ const colors: { [level: string]: string } = {
   508: "#ee0055",
   510: "#ee0055",
   511: "#ee0055",
-
 };
 
 export const levelsNameToColors = (name: string): string => {
