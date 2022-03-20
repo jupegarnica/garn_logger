@@ -28,6 +28,7 @@ class Logger {
   }
 
   #handle(methodName: string) {
+    methodName = String(methodName);
     if (this[methodName]) {
       return this[methodName].bind(this);
     }
