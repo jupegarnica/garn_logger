@@ -70,9 +70,6 @@ Deno.test({
   },
 });
 
-
-
-
 Deno.test({
   name: "[levels] critical level",
   // ignore: true,
@@ -86,7 +83,6 @@ Deno.test({
     error.restore();
   },
 });
-
 
 Deno.test({
   name: "[levels] setFilter should apply filter state and mute logRecord",
@@ -130,25 +126,23 @@ Deno.test({
     logger.setFilter(filter);
     logger.use(
       function assertIsMuted({ logRecord }) {
-
         switch (logRecord.methodName) {
-          case 'error':
-          case 'warn':
-          case 'info':
+          case "error":
+          case "warn":
+          case "info":
             assertEquals(logRecord.muted, false);
             break;
-          case 'log':
-          case 'debug':
+          case "log":
+          case "debug":
             assertEquals(logRecord.muted, true);
-
         }
-        return logRecord
+        return logRecord;
       },
-    )
-    logger.debug('debug')
-    logger.info('info')
-    logger.log('log')
-    logger.warn('warn')
-    logger.error('error')
+    );
+    logger.debug("debug");
+    logger.info("info");
+    logger.log("log");
+    logger.warn("warn");
+    logger.error("error");
   },
 });
