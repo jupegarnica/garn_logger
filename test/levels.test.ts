@@ -1,4 +1,4 @@
-import logger, { console } from "../mod.ts";
+import logger, { console, createLogger } from "../mod.ts";
 // import type { MiddlewareNext } from "../src/types.ts";
 import { assertEquals, stub } from "../dev_deps.ts";
 
@@ -70,16 +70,85 @@ Deno.test({
   },
 });
 
+
+
+
 Deno.test({
   name: "[levels] critical level",
-  ignore: true,
+  // ignore: true,
   // only: true,
   fn: () => {
-    const critical = stub(console, "critical");
+    const error = stub(console, "error");
     logger.critical("critical");
     logger.important("important");
     logger.fatal("fatal");
-    assertEquals(critical.calls.length, 6);
-    critical.restore();
+    assertEquals(error.calls.length, 3);
+    error.restore();
+  },
+});
+
+
+Deno.test({
+  name: "[levels] setFilter should apply filter state and mute logRecord",
+  ignore: false,
+  // only: true,
+  fn: () => {
+    const logger = createLogger();
+    logger.setFilter("ERROR");
+    logger.use(
+      function assertFilter({ state }, next) {
+        assertEquals(state.filterLevel, 30);
+        next();
+      },
+      function assertMute({ logRecord }) {
+        const { methodName, muted } = logRecord;
+        if (methodName === "debug") {
+          assertEquals(
+            muted,
+            true,
+          );
+        } else {
+          assertEquals(
+            muted,
+            false,
+          );
+        }
+      },
+    );
+    logger.debug("debug");
+    logger.error("error");
+  },
+});
+
+Deno.test({
+  name: "[levels] should mute lower levels",
+  ignore: false,
+  only: false,
+  fn: () => {
+    const filter = "info";
+    const logger = createLogger();
+    logger.setFilter(filter);
+    logger.use(
+      function assertIsMuted({ logRecord }) {
+
+        switch (logRecord.methodName) {
+          case 'error':
+          case 'warn':
+          case 'info':
+            assertEquals(logRecord.muted, false);
+            break;
+          case 'log':
+          case 'debug':
+            assertEquals(logRecord.muted, true);
+
+        }
+        return logRecord
+      },
+    )
+    logger.debug('debug')
+    logger.info('info')
+    logger.log('log')
+    logger.warn('warn')
+    logger.error('error')
   },
 });
