@@ -276,7 +276,7 @@ export async function flushQueue(config: EmailOptions): Promise<void> {
       password: config.password,
     };
     let connect = client.connect.bind(client);
-    const tlsPorts = [465, 587];
+    const tlsPorts = [25, 465, 587];
     if (tlsPorts.includes(connectOptions.port)) {
       connect = client.connectTLS.bind(client);
     }

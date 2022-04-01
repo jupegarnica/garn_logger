@@ -14,11 +14,16 @@ class Logger {
   #middleware: Middleware[] = [];
   #state: LoggerState = {
     filterLevel: 0,
+    scope: null,
   };
   #composedMiddleware: Middleware = (_, next) => next();
 
   setFilter(levelName: LogLevels) {
     this.#state.filterLevel = levelsNameToNumbers(levelName.toLowerCase());
+  }
+
+  setScope(scope: string) {
+    this.#state.scope = scope;
   }
 
   use(...plugins: Middleware[]): Logger {
@@ -46,7 +51,7 @@ class Logger {
         muted: levelNumber < this.#state.filterLevel,
       };
       const ctx = { logRecord, state: this.#state };
-      this.#composedMiddleware(ctx, () => {});
+      this.#composedMiddleware(ctx, () => { });
 
       return ctx.logRecord.willReturn;
     };
