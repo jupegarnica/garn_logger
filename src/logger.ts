@@ -51,7 +51,7 @@ class Logger {
         muted: levelNumber < this.#state.filterLevel,
       };
       const ctx = { logRecord, state: this.#state };
-      this.#composedMiddleware(ctx, () => { });
+      this.#composedMiddleware(ctx, () => {});
 
       return ctx.logRecord.willReturn;
     };
