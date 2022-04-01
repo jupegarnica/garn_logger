@@ -43,6 +43,7 @@ Deno.test({
     ]);
     assertEquals(plugin.calls[0].args[0].state, {
       filterLevel: 0,
+      scope: null,
     });
   },
 });
