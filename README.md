@@ -3,5 +3,3 @@
 A fully featured logging library.
 
 # Features
-
-...
