@@ -54,7 +54,7 @@ const getColorArgsByMethod = (method: string) =>
     // @ts-ignore colors[method] is a function
     ? colors[method]
     : // deno-lint-ignore no-explicit-any
-    (_: any) => _;
+      (_: any) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
@@ -90,8 +90,7 @@ export function formatToAnsiColors(
   // );
   // const shouldUseColor = typeof Deno !== "undefined" &&
   //   Deno.env.get("NO_COLOR") === undefined && isatty;
-  const shouldUseColor =
-    Deno.env.get("NO_COLOR") === undefined;
+  const shouldUseColor = Deno.env.get("NO_COLOR") === undefined;
   useColor = useColor && shouldUseColor;
 
   colors.setColorEnabled(useColor);
