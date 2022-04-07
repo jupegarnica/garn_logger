@@ -94,7 +94,7 @@ Deno.test({
 
 Deno.test({
   name: "[formatToAnsiColors] should not use color if not tty",
-  ignore: false,
+  ignore: true,
   only: false,
   fn: () => {
     const stubbed = stub(
