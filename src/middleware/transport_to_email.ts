@@ -322,10 +322,11 @@ export async function sendEmail(
     to,
     subject,
     html: layout(content),
+    content: ""
   });
-  console.info(
-    `Email with subject ${subject} sent to ${to}`,
-  );
+  // console.info(
+  //   `Email with subject ${subject} sent to ${to}`,
+  // );
 }
 
 const stringify = (val: unknown) => {
