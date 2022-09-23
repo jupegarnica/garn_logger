@@ -8,12 +8,12 @@ export function transportToServer(
     host = "http://localhost:8080",
   } = {},
 ): Middleware {
-  async function postDataToServer(
+  function postDataToServer(
     { logRecord }: MiddlewareContext,
     next: MiddlewareNext,
-  ): Promise<void> {
+  ): void {
     next();
-    await fetch(host, {
+    logRecord.willReturn = fetch(host, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -12,7 +12,7 @@ const logger = createLogger();
 logger.use(transportToServer({ host: HOST }));
 
 Deno.test({
-  name: "[transportToServer] should log to console",
+  name: "[transportToServer] should log to console and resturn a promise",
   ignore: false,
   // only: true,
   sanitizeOps: false,
@@ -25,7 +25,7 @@ Deno.test({
     const debug = stub(globalThis.console, methodName);
 
     await logger[methodName](methodName);
-    await delay(10);
+    // await delay(10);
     assertEquals(debug.calls.length, 1);
     debug.restore();
   },
