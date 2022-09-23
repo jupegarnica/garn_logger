@@ -27,29 +27,3 @@ export function compose(
     return dispatch(0);
   };
 }
-
-// const middlewareComposed = compose(
-//   [
-//     function (ctx, next) {
-//       ctx.logRecord.msg = "1";
-//       console.log("1", ctx);
-//       console.log("next1", next());
-//       console.log("3", ctx);
-//       return 1;
-//     },
-//     function (ctx, next) {
-//       ctx.logRecord.msg = "2";
-//       console.log("next2", next());
-//       console.log("2", ctx);
-//       return 2;
-//     },
-//   ],
-// );
-
-// console.log(
-//   "middlewareComposed",
-//   middlewareComposed({
-//     state: { a: 1 },
-//     logRecord: { args: [], timestamp: 0, levelNumber: 0, methodName: "ups" },
-//   }, console.trace),
-// );
