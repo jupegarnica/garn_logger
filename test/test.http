@@ -1,1 +1,8 @@
-GET https://faker.deno.dev/random/words/2
+@host=http://localhost:8080
+###
+POST /
+Content-Type: application/json
+
+{
+    "hola":"mundo"
+}
