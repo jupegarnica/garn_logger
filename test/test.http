@@ -4,5 +4,6 @@ POST /
 Content-Type: application/json
 
 {
-    "hola":"mundo"
+    "methodName":"error",
+    "args":["test"]
 }

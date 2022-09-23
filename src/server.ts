@@ -2,7 +2,7 @@ import type { LogRecord } from "./types.ts";
 import { Application } from "https://deno.land/x/oak@v10.3.0/mod.ts";
 import logger from "../mod.ts";
 
-async function runServer({ port = 8080 } = {}) {
+export async function runServer({ port = 8080 } = {}) {
   const app = new Application();
 
   app.use(async (ctx) => {
@@ -25,8 +25,6 @@ async function runServer({ port = 8080 } = {}) {
       return;
     }
   });
-
+  console.log(`Logger server running on port ${port} - http://localhost:${port}`);
   return await app.listen({ port });
 }
-
-export default runServer;

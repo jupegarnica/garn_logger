@@ -1,6 +1,6 @@
 import { assertEquals, stub } from "../dev_deps.ts";
 
-import runServer from "../src/server.ts";
+import {runServer} from "../src/server.ts";
 
 const HOST = "http://localhost:4567";
 

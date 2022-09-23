@@ -1,3 +1,3 @@
-import runServer from "./src/server.ts";
+import { runServer } from "./src/server.ts";
 
 await runServer();
