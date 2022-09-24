@@ -6,31 +6,54 @@ const logger = createLogger();
 logger.setFilter("debug");
 logger.use(
   formatToAnsiColors(),
-  transportToConsoleWithFormat({ pretty: { useColor: false } }),
-  transportToEmail({
-    hostname: Deno.env.get("SMTP_HOST") || "localhost",
-    port: Deno.env.get("SMTP_PORT") || "1025",
-    username: Deno.env.get("SMTP_USER"),
-    password: Deno.env.get("SMTP_PASS"),
-    to: "juan@garn.dev",
-    from: "juan@garn.dev",
-    logLevel: "DEBUG",
-    debounceTime: 10,
-  }),
+  transportToConsoleWithFormat({ pretty: { useColor: true } }),
+  // transportToEmail({
+  //   hostname: Deno.env.get("SMTP_HOST") || "localhost",
+  //   port: Deno.env.get("SMTP_PORT") || "1025",
+  //   username: Deno.env.get("SMTP_USER"),
+  //   password: Deno.env.get("SMTP_PASS"),
+  //   to: "juan@garn.dev",
+  //   from: "juan@garn.dev",
+  //   logLevel: "DEBUG",
+  //   debounceTime: 10,
+  // }),
 );
 
-logger.small("small");
-logger.log_tomato("log_tomato");
-logger.error_blue("log_blue");
-logger.log("hola");
-logger.host(Deno.env.get("SMTP_HOST"));
-logger.PORT(Deno.env.get("SMTP_PORT"));
-logger.USER(Deno.env.get("SMTP_USER"));
-logger.PASS(Deno.env.get("SMTP_PASS"));
+// logger.small("small");
+// logger.log_tomato("log_tomato");
+// logger.error_blue("log_blue");
+// logger.log("hola");
+// logger.host(Deno.env.get("SMTP_HOST"));
+// logger.PORT(Deno.env.get("SMTP_PORT"));
+// logger.USER(Deno.env.get("SMTP_USER"));
+// logger.PASS(Deno.env.get("SMTP_PASS"));
 
-logger.time();
-logger.timeLog();
-logger.timeEnd();
+// logger.time('a');
+// logger.timeLog('a');
+// logger.timeEnd('a');
+
+logger.group('a')
+
+logger.count("a");
+logger.count("a");
+
+logger.countReset("a");
+logger.count("a");
+
+logger.dir({ a: 1, b: 2 })
+logger.dirxml({ a: 1, b: 2 })
+
+logger.assert(true, 'asd')
+
+logger.table([{ a: 1, b: 2 }, { a: 1, b: 2 }])
+
+
+// logger.time('a')
+// logger.timeLog('a')
+// logger.timeEnd('a')
+// logger.groupCollapsed('a')
+
+
 // logger.silly("silly");
 // logger.log("log");
 // logger.debug(("debug"));
@@ -67,5 +90,5 @@ logger.timeEnd();
 //   }
 // }
 
-addEventListener("load", () => logger.load());
-addEventListener("unload", () => logger.unload());
+// addEventListener("load", () => logger.load());
+// addEventListener("unload", () => logger.unload());

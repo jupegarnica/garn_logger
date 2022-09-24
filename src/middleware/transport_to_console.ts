@@ -14,7 +14,9 @@ const mustUseArgs = [
   "dirxml",
   "assert",
   "count",
+  "countReset",
   "trace",
+  "clear",
 ];
 
 export function transportToConsole(
