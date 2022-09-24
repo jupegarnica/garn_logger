@@ -135,16 +135,16 @@ Deno.test({
   async fn() {
     const middlewareComposed = compose(
       [
-        function (ctx, next) {
+        function (_, next) {
           next();
           return Promise.resolve(6);
         },
-        function (ctx, next) {
+        function (_, next) {
           next();
 
           return 2;
         },
-        function (ctx, next) {
+        function (_, next) {
           next();
           return 2;
         },

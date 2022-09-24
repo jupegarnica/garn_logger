@@ -9,7 +9,7 @@ envFile:
 
 scripts:
   test-server: deno test -A --watch test/server.test.ts
-  server: deno run --allow-net --watch runServer.ts
+  server: deno run --allow-net --allow-env="NO_COLOR" --watch runServer.ts
 
   main:
     desc: Runs main script
