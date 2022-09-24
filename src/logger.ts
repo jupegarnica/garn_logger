@@ -9,7 +9,7 @@ type Methods = { [key: AnyMethodName]: (...args: any[]) => any };
 
 class Logger {
   // deno-lint-ignore no-explicit-any
-  [key: AnyMethodName]: (...args: any[]) => any
+  [key: AnyMethodName]: (...args: any[]) => any;
   #methods: Methods = {};
   #middleware: Middleware[] = [];
   #state: LoggerState = {

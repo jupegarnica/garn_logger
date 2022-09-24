@@ -53,8 +53,8 @@ const getColorArgsByMethod = (method: string) =>
   method in colors
     // @ts-ignore colors[method] is a function
     ? colors[method]
-    : // deno-lint-ignore no-explicit-any
-      (_: any) => _;
+    // deno-lint-ignore no-explicit-any
+    : (_: any) => _;
 
 type AnsiColorOptions = {
   timestamp?: string | false;
