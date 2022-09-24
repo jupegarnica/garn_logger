@@ -1,7 +1,9 @@
 import type { LogRecord } from "./types.ts";
 import { Application } from "https://deno.land/x/oak@v10.3.0/mod.ts";
-import logger from "../mod.ts";
+import logger, {formatToAnsiColors} from "../mod.ts";
 
+// logger.use(formatToAnsiColors({useColor: true, showMethod: true, methodMaxLength: 3, multiline: false, timestamp: false}));
+logger.use(formatToAnsiColors());
 export async function runServer({ port = 8080 } = {}) {
   const app = new Application();
 
@@ -15,7 +17,7 @@ export async function runServer({ port = 8080 } = {}) {
         ctx.response.body = "Bad Request. No methodName provided";
         return;
       }
-
+      logger.setScope(ctx.request.ip)
       logger[logRecord.methodName](...logRecord.args);
       ctx.response.body = logRecord;
     } catch (error) {
@@ -25,6 +27,7 @@ export async function runServer({ port = 8080 } = {}) {
       return;
     }
   });
-  console.log(`Logger server running on port ${port} - http://localhost:${port}`);
+  logger.setScope('SERVER')
+  logger.info(`Logger server running on port ${port} - http://localhost:${port}`);
   return await app.listen({ port });
 }
