@@ -2,9 +2,8 @@ import type { LogRecord } from "./types.ts";
 import { Application } from "https://deno.land/x/oak@v10.3.0/mod.ts";
 import logger, { formatToAnsiColors } from "../mod.ts";
 
-// logger.use(formatToAnsiColors({useColor: true, showMethod: true, methodMaxLength: 3, multiline: false, timestamp: false}));
-logger.use(formatToAnsiColors());
 export async function runServer({ port = 8080 } = {}) {
+  logger.use(formatToAnsiColors());
   const app = new Application();
 
   app.use(async (ctx) => {

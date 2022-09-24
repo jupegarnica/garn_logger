@@ -45,9 +45,9 @@ const textToHex = (str: string): number => parseInt(str.replace(/^#/, ""), 16);
 const getColorByMethod = (
   method: string,
 ): Colorize =>
-  (txt) => {
-    return colors.rgb24(txt, textToHex(levelsNameToColors(method)));
-  };
+(txt) => {
+  return colors.rgb24(txt, textToHex(levelsNameToColors(method)));
+};
 
 const getColorArgsByMethod = (method: string) =>
   method in colors
