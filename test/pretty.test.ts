@@ -1,4 +1,8 @@
-import { createLogger, formatToAnsiColors, transportToConsoleWithFormat } from "../mod.ts";
+import {
+  createLogger,
+  formatToAnsiColors,
+  transportToConsoleWithFormat,
+} from "../mod.ts";
 import type { MiddlewareContext, MiddlewareNext } from "../mod.ts";
 import { assert, assertEquals, assertMatch, stub } from "../dev_deps.ts";
 

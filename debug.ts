@@ -32,7 +32,7 @@ logger.use(
 // logger.timeLog('a');
 // logger.timeEnd('a');
 
-logger.group('a')
+logger.group("a");
 
 logger.count("a");
 logger.count("a");
@@ -40,19 +40,17 @@ logger.count("a");
 logger.countReset("a");
 logger.count("a");
 
-logger.dir({ a: 1, b: 2 })
-logger.dirxml({ a: 1, b: 2 })
+logger.dir({ a: 1, b: 2 });
+logger.dirxml({ a: 1, b: 2 });
 
-logger.assert(true, 'asd')
+logger.assert(true, "asd");
 
-logger.table([{ a: 1, b: 2 }, { a: 1, b: 2 }])
-
+logger.table([{ a: 1, b: 2 }, { a: 1, b: 2 }]);
 
 // logger.time('a')
 // logger.timeLog('a')
 // logger.timeEnd('a')
 // logger.groupCollapsed('a')
-
 
 // logger.silly("silly");
 // logger.log("log");
