@@ -28,16 +28,3 @@ Deno.test({
     debug.restore();
   },
 });
-
-Deno.test({
-  name: "[transportToServer] should log pretty",
-  ignore: true,
-  // only: true,
-  sanitizeOps: false,
-  sanitizeExit: false,
-  sanitizeResources: false,
-
-  fn: async () => {
-    // random string methodname
-  },
-});
