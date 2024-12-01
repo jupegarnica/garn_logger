@@ -93,40 +93,36 @@ export function better(consoleReference: Console = console): Config {
       consoleReference[method as ConsoleMethod] as FunctionLog;
   }
 
+  let currentLevel: ConsoleLevel = "debug";
+  let currentFilter: RegExp | null = null;
+
   const config: Config = {
     setLevel(level: ConsoleLevel) {
-      const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
-      const levelIndex = levels.indexOf(level);
-      if (levelIndex === -1) {
-        throw new Error(
-          "Invalid log level, use one of: " + levels.join(", "),
-        );
-      }
-      consoleMethodsOrder.forEach((method) => {
-        const methodLevel = methodLevels[method];
-        const methodLevelIndex = levels.indexOf(methodLevel);
-        const originalMethod = originalMethodsReferences[method] as FunctionLog;
-        consoleReference[method] = (...args: unknown[]) => {
-          if (methodLevelIndex <= levelIndex) {
-            originalMethod(...args);
-          }
-        };
-      });
+      currentLevel = level;
+      applyConfig();
       return config;
     },
     setFilter(query: string | RegExp) {
-      const filter = (query instanceof RegExp) ? query : new RegExp(query, "i");
-      consoleMethodsOrder.forEach((method) => {
-        const originalMethod = originalMethodsReferences[method] as FunctionLog;
-        consoleReference[method] = (...args: unknown[]) => {
-          if (filter.test(args.join(" "))) {
-            originalMethod(...args);
-          }
-        };
-      });
+      currentFilter = (query instanceof RegExp) ? query : new RegExp(query, "i");
+      applyConfig();
       return config;
     },
   };
+
+  function applyConfig() {
+    const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
+    const levelIndex = levels.indexOf(currentLevel);
+    consoleMethodsOrder.forEach((method) => {
+      const methodLevel = methodLevels[method];
+      const methodLevelIndex = levels.indexOf(methodLevel);
+      const originalMethod = originalMethodsReferences[method] as FunctionLog;
+      consoleReference[method] = (...args: unknown[]) => {
+        if (methodLevelIndex <= levelIndex && (!currentFilter || currentFilter.test(args.join(" ")))) {
+          originalMethod(...args);
+        }
+      };
+    });
+  }
 
   return config;
 }

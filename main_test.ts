@@ -330,3 +330,31 @@ Deno.test("setFilterRegExpTest", function () {
   assertSpyCalls(info, 0);
   assertSpyCalls(debug, 1);
 });
+
+
+Deno.test("config chaining", function () {
+  const error = spy((_) => {});
+  const warn = spy((_) => {});
+  const info = spy((_) => {});
+  const debug = spy((_) => {});
+  const mockConsole = {
+    error,
+    warn,
+    info,
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.setLevel("warn").setFilter("test");
+  mockConsole.error("this is a test");
+  mockConsole.error("not a match");
+  mockConsole.warn("test again");
+  mockConsole.warn("not a match");
+  mockConsole.info("test again");
+  mockConsole.debug("test again");
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 0);
+
+});
