@@ -9,5 +9,8 @@
   "exports": "./main.ts",
   "license": "MIT",
   "nodeModulesDir": "auto",
-  "lock": false
+  "lock": false,
+  "imports": {
+    "@cross/test": "jsr:@cross/test@^0.0.10"
+  }
 }
