@@ -107,6 +107,7 @@ Deno.test('set info do not log any debug methods', function() {
   const config = better(mockConsole as unknown as Console);
   const noop = spy(() => {});
   config.setLevel("info", { noop });
+  mockConsole.assert();
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -121,12 +122,12 @@ Deno.test('set info do not log any debug methods', function() {
   mockConsole.groupCollapsed();
   mockConsole.clear();
   mockConsole.count();
-  mockConsole.assert();
   mockConsole.table();
+  assertSpyCalls(mockConsole.assert, 1);
   assertSpyCalls(mockConsole.error, 1);
   assertSpyCalls(mockConsole.warn, 1);
   assertSpyCalls(mockConsole.info, 1);
-  assertSpyCalls(noop, 13);
+  assertSpyCalls(noop, 12);
 });
 
 Deno.test('set debug do log all debug methods', function() {
@@ -185,4 +186,32 @@ Deno.test('set debug do log all debug methods', function() {
   assertSpyCalls(mockConsole.assert, 1);
   assertSpyCalls(mockConsole.table, 1);
   assertSpyCalls(noop, 0);
-} );
+});
+
+Deno.test('assert always logs', function() {
+  const mockConsole = {
+    error: spy(() => {}),
+    warn: spy(() => {}),
+    info: spy(() => {}),
+    debug: spy(() => {}),
+    log: spy(() => {}),
+    trace: spy(() => {}),
+    dir: spy(() => {}),
+    time: spy(() => {}),
+    timeEnd: spy(() => {}),
+    group: spy(() => {}),
+    groupEnd: spy(() => {}),
+    groupCollapsed: spy(() => {}),
+    clear: spy(() => {}),
+    count: spy(() => {}),
+    assert: spy(() => {}),
+    table: spy(() => {}),
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  const noop = spy(() => {});
+  config.setLevel("debug", { noop });
+  mockConsole.assert();
+  assertSpyCalls(mockConsole.assert, 1);
+  assertSpyCalls(noop, 0);
+});

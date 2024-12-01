@@ -57,7 +57,7 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   groupCollapsed: "debug",
   clear: "debug",
   count: "debug",
-  assert: "debug",
+  assert: "error", // Ensure assert always logs
   table: "debug",
 };
 
