@@ -1,112 +1,141 @@
 import { assertEquals } from "@std/assert";
-import { assertSpyCall, assertSpyCalls, spy } from "@std/testing/mock";
+import { assertSpyCalls, spy } from "@std/testing/mock";
 import { better } from "./main.ts";
 
 Deno.test("setLevelErrorTest", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noopError = spy(() => {});
-  config.setLevel("error", { noop: noopError });
+  config.setLevel("error");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
   mockConsole.debug();
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(noopError, 3);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 0);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 0);
 });
 
 Deno.test("setLevelWarnTest", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noopWarn = spy(() => {});
-  config.setLevel("warn", { noop: noopWarn });
+  config.setLevel("warn");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
   mockConsole.debug();
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(noopWarn, 2);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 0);
 });
 
 Deno.test("setLevelInfoTest", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noopInfo = spy(() => {});
-  config.setLevel("info", { noop: noopInfo });
+  config.setLevel("info");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
   mockConsole.debug();
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 1);
-  assertSpyCalls(noopInfo, 1);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 1);
+  assertSpyCalls(debug, 0);
 });
 
 Deno.test("setLevelDebugTest", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noopDebug = spy(() => {});
-  config.setLevel("debug", { noop: noopDebug });
+  config.setLevel("debug");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
   mockConsole.debug();
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 1);
-  assertSpyCalls(mockConsole.debug, 1);
-  assertSpyCalls(noopDebug, 0);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 1);
+  assertSpyCalls(debug, 1);
 });
 
 Deno.test("set info do not log any debug methods", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
+  const log = spy(() => {});
+  const trace = spy(() => {});
+  const dir = spy(() => {});
+  const time = spy(() => {});
+  const timeEnd = spy(() => {});
+  const group = spy(() => {});
+  const groupEnd = spy(() => {});
+  const groupCollapsed = spy(() => {});
+  const clear = spy(() => {});
+  const count = spy(() => {});
+  const assert = spy(() => {});
+  const table = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
+    log,
+    trace,
+    dir,
+    time,
+    timeEnd,
+    group,
+    groupEnd,
+    groupCollapsed,
+    clear,
+    count,
+    assert,
+    table,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noop = spy(() => {});
-  config.setLevel("info", { noop });
+  config.setLevel("info");
   mockConsole.assert();
   mockConsole.error();
   mockConsole.warn();
@@ -123,36 +152,62 @@ Deno.test("set info do not log any debug methods", function () {
   mockConsole.clear();
   mockConsole.count();
   mockConsole.table();
-  assertSpyCalls(mockConsole.assert, 1);
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 1);
-  assertSpyCalls(noop, 12);
+  assertSpyCalls(assert, 1);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 1);
+  assertSpyCalls(debug, 0);
+  assertSpyCalls(log, 0);
+  assertSpyCalls(trace, 0);
+  assertSpyCalls(dir, 0);
+  assertSpyCalls(time, 0);
+  assertSpyCalls(timeEnd, 0);
+  assertSpyCalls(group, 0);
+  assertSpyCalls(groupEnd, 0);
+  assertSpyCalls(groupCollapsed, 0);
+  assertSpyCalls(clear, 0);
+  assertSpyCalls(count, 0);
+  assertSpyCalls(table, 0);
 });
 
 Deno.test("set debug do log all debug methods", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
+  const log = spy(() => {});
+  const trace = spy(() => {});
+  const dir = spy(() => {});
+  const time = spy(() => {});
+  const timeEnd = spy(() => {});
+  const group = spy(() => {});
+  const groupEnd = spy(() => {});
+  const groupCollapsed = spy(() => {});
+  const clear = spy(() => {});
+  const count = spy(() => {});
+  const assert = spy(() => {});
+  const table = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
+    log,
+    trace,
+    dir,
+    time,
+    timeEnd,
+    group,
+    groupEnd,
+    groupCollapsed,
+    clear,
+    count,
+    assert,
+    table,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noop = spy(() => {});
-  config.setLevel("debug", { noop });
+  config.setLevel("debug");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -169,59 +224,76 @@ Deno.test("set debug do log all debug methods", function () {
   mockConsole.count();
   mockConsole.assert();
   mockConsole.table();
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 1);
-  assertSpyCalls(mockConsole.debug, 1);
-  assertSpyCalls(mockConsole.log, 1);
-  assertSpyCalls(mockConsole.trace, 1);
-  assertSpyCalls(mockConsole.dir, 1);
-  assertSpyCalls(mockConsole.time, 1);
-  assertSpyCalls(mockConsole.timeEnd, 1);
-  assertSpyCalls(mockConsole.group, 1);
-  assertSpyCalls(mockConsole.groupEnd, 1);
-  assertSpyCalls(mockConsole.groupCollapsed, 1);
-  assertSpyCalls(mockConsole.clear, 1);
-  assertSpyCalls(mockConsole.count, 1);
-  assertSpyCalls(mockConsole.assert, 1);
-  assertSpyCalls(mockConsole.table, 1);
-  assertSpyCalls(noop, 0);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 1);
+  assertSpyCalls(debug, 1);
+  assertSpyCalls(log, 1);
+  assertSpyCalls(trace, 1);
+  assertSpyCalls(dir, 1);
+  assertSpyCalls(time, 1);
+  assertSpyCalls(timeEnd, 1);
+  assertSpyCalls(group, 1);
+  assertSpyCalls(groupEnd, 1);
+  assertSpyCalls(groupCollapsed, 1);
+  assertSpyCalls(clear, 1);
+  assertSpyCalls(count, 1);
+  assertSpyCalls(assert, 1);
+  assertSpyCalls(table, 1);
 });
 
 Deno.test("assert always logs", function () {
+  const error = spy(() => {});
+  const warn = spy(() => {});
+  const info = spy(() => {});
+  const debug = spy(() => {});
+  const log = spy(() => {});
+  const trace = spy(() => {});
+  const dir = spy(() => {});
+  const time = spy(() => {});
+  const timeEnd = spy(() => {});
+  const group = spy(() => {});
+  const groupEnd = spy(() => {});
+  const groupCollapsed = spy(() => {});
+  const clear = spy(() => {});
+  const count = spy(() => {});
+  const assert = spy(() => {});
+  const table = spy(() => {});
   const mockConsole = {
-    error: spy(() => {}),
-    warn: spy(() => {}),
-    info: spy(() => {}),
-    debug: spy(() => {}),
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
+    error,
+    warn,
+    info,
+    debug,
+    log,
+    trace,
+    dir,
+    time,
+    timeEnd,
+    group,
+    groupEnd,
+    groupCollapsed,
+    clear,
+    count,
+    assert,
+    table,
   };
 
   const config = better(mockConsole as unknown as Console);
-  const noop = spy(() => {});
-  config.setLevel("debug", { noop });
+  config.setLevel("debug");
   mockConsole.assert();
-  assertSpyCalls(mockConsole.assert, 1);
-  assertSpyCalls(noop, 0);
+  assertSpyCalls(assert, 1);
 });
 
 Deno.test("setFilterStringTest", function () {
+  const error = spy((a: string) => {});
+  const warn = spy((a: string) => {});
+  const info = spy((a: string) => {});
+  const debug = spy((a: string) => {});
   const mockConsole = {
-    error: spy((a: string) => {}),
-    warn: spy((a: string) => {}),
-    info: spy((a: string) => {}),
-    debug: spy((a: string) => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
@@ -230,18 +302,22 @@ Deno.test("setFilterStringTest", function () {
   mockConsole.warn("another test");
   mockConsole.info("not a match");
   mockConsole.debug("test again");
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 0);
-  assertSpyCalls(mockConsole.debug, 1);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 1);
 });
 
 Deno.test("setFilterRegExpTest", function () {
+  const error = spy((a: string) => {});
+  const warn = spy((a: string) => {});
+  const info = spy((a: string) => {});
+  const debug = spy((a: string) => {});
   const mockConsole = {
-    error: spy((a: string) => {}),
-    warn: spy((a: string) => {}),
-    info: spy((a: string) => {}),
-    debug: spy((a: string) => {}),
+    error,
+    warn,
+    info,
+    debug,
   };
 
   const config = better(mockConsole as unknown as Console);
@@ -250,8 +326,8 @@ Deno.test("setFilterRegExpTest", function () {
   mockConsole.warn("another test");
   mockConsole.info("not a match");
   mockConsole.debug("test again");
-  assertSpyCalls(mockConsole.error, 1);
-  assertSpyCalls(mockConsole.warn, 1);
-  assertSpyCalls(mockConsole.info, 0);
-  assertSpyCalls(mockConsole.debug, 1);
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 1);
 });
