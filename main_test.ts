@@ -4,18 +4,6 @@ import { better } from "./main.ts";
 
 Deno.test(function setLevelErrorTest() {
   const mockConsole = {
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
     error: spy(() => {}),
     warn: spy(() => {}),
     info: spy(() => {}),
@@ -35,18 +23,6 @@ Deno.test(function setLevelErrorTest() {
 
 Deno.test(function setLevelWarnTest() {
   const mockConsole = {
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
     error: spy(() => {}),
     warn: spy(() => {}),
     info: spy(() => {}),
@@ -67,18 +43,6 @@ Deno.test(function setLevelWarnTest() {
 
 Deno.test(function setLevelInfoTest() {
   const mockConsole = {
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
     error: spy(() => {}),
     warn: spy(() => {}),
     info: spy(() => {}),
@@ -100,18 +64,6 @@ Deno.test(function setLevelInfoTest() {
 
 Deno.test(function setLevelDebugTest() {
   const mockConsole = {
-    log: spy(() => {}),
-    trace: spy(() => {}),
-    dir: spy(() => {}),
-    time: spy(() => {}),
-    timeEnd: spy(() => {}),
-    group: spy(() => {}),
-    groupEnd: spy(() => {}),
-    groupCollapsed: spy(() => {}),
-    clear: spy(() => {}),
-    count: spy(() => {}),
-    assert: spy(() => {}),
-    table: spy(() => {}),
     error: spy(() => {}),
     warn: spy(() => {}),
     info: spy(() => {}),
