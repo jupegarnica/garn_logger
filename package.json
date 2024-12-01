@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@cross/test": "npm:@jsr/cross__test",
+    "@std/assert": "npm:@jsr/std__assert",
+    "@std/testing": "npm:@jsr/std__testing"
+  }
+}
