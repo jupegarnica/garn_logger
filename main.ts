@@ -18,6 +18,7 @@ export type Config = {
    * @example
    * better(console).setFilter("error");
    * better(console).setFilter(/error/i);
+   * better(console).setFilter(null);
    */
   setFilter: (query: string | RegExp | null) => Config;
 };
