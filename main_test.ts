@@ -1,6 +1,6 @@
 import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
-import { assert } from "@std/testing/asserts";
+// import { assert } from "@std/testing/asserts";
 import { better } from "./main.ts";
 test("setLevelErrorTest", function () {
   const error = spy(() => {});
@@ -308,6 +308,25 @@ test("setFilterStringTest", function () {
   assertSpyCalls(debug, 1);
 });
 
+test("setFilter multiple args", function () {
+  const debug = spy((..._) => {});
+  const mockConsole = {
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.setFilter("yes");
+  mockConsole.debug("no", "yes");
+  assertSpyCalls(debug, 1);
+  config.setFilter("yes");
+  mockConsole.debug("yes", "no");
+  assertSpyCalls(debug, 2);
+  config.setFilter("none");
+  mockConsole.debug("yes", "no");
+  assertSpyCalls(debug, 2);
+});
+
+
 test("setFilterRegExpTest", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
@@ -421,8 +440,8 @@ test("setLevel in two steps", function () {
 //   } as unknown as Console;
 
 //   better(mock)
+//   mock.log('1 TEST This should be logged');
 //   mock.only("1 TEST This should be logged");
-
 //   assert(typeof mock.only === "function");
 
 // });

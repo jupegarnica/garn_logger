@@ -136,10 +136,13 @@ export function better(consoleReference: ConsoleReference = console): Config {
         >
       )[method] as FunctionLog;
       consoleReference[method] = (...args: unknown[]) => {
-        if (
-          methodLevelIndex <= levelIndex &&
-          (!currentFilter || currentFilter.test(args.join(" ")))
-        ) {
+
+        const isLevelAllowed = methodLevelIndex <= levelIndex;
+        const isFilterMatched = !currentFilter || args.some((arg: unknown) =>
+          currentFilter.test(stringify(arg))
+        );
+
+        if (isLevelAllowed && isFilterMatched) {
           originalMethod(...args);
         }
       };
@@ -147,4 +150,18 @@ export function better(consoleReference: ConsoleReference = console): Config {
   }
 
   return config;
+}
+
+
+function stringify(arg: unknown): string {
+  const seen = new WeakSet();
+  return JSON.stringify(arg, (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return "[]";
+      }
+      seen.add(value);
+    }
+    return value;
+  });
 }
