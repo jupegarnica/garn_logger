@@ -5,7 +5,13 @@ Garn Logger is a utility to enhance the default console logging in JavaScript/Ty
 ## Installation
 
 ```sh
-npm install garn-logger
+deno add jsr:@garn/logger
+```
+
+or
+
+```sh
+npx jsr add @garn/logger
 ```
 
 ## Usage
@@ -13,7 +19,7 @@ npm install garn-logger
 ### Importing
 
 ```typescript
-import { better } from "garn-logger";
+import { better } from "@garn/logger";
 ```
 
 ### Setting Log Level
@@ -68,4 +74,3 @@ Enhances the provided console object with additional configuration options.
 - `setFilter(query: string | RegExp): Config`
   - Sets a filter for log messages. Only logs matching the query will be displayed.
   - `query`: `string | RegExp`
-```
