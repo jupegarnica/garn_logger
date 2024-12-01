@@ -1,7 +1,7 @@
+import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
 import { better } from "./main.ts";
-
-Deno.test("setLevelErrorTest", function () {
+test("setLevelErrorTest", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -25,7 +25,7 @@ Deno.test("setLevelErrorTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-Deno.test("setLevelWarnTest", function () {
+test("setLevelWarnTest", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -49,7 +49,7 @@ Deno.test("setLevelWarnTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-Deno.test("setLevelInfoTest", function () {
+test("setLevelInfoTest", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -73,7 +73,7 @@ Deno.test("setLevelInfoTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-Deno.test("setLevelDebugTest", function () {
+test("setLevelDebugTest", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -97,7 +97,7 @@ Deno.test("setLevelDebugTest", function () {
   assertSpyCalls(debug, 1);
 });
 
-Deno.test("set info do not log any debug methods", function () {
+test("set info do not log any debug methods", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -169,7 +169,7 @@ Deno.test("set info do not log any debug methods", function () {
   assertSpyCalls(table, 0);
 });
 
-Deno.test("set debug do log all debug methods", function () {
+test("set debug do log all debug methods", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -241,7 +241,7 @@ Deno.test("set debug do log all debug methods", function () {
   assertSpyCalls(table, 1);
 });
 
-Deno.test("assert always logs", function () {
+test("assert always logs", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -283,7 +283,7 @@ Deno.test("assert always logs", function () {
   assertSpyCalls(assert, 1);
 });
 
-Deno.test("setFilterStringTest", function () {
+test("setFilterStringTest", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -307,7 +307,7 @@ Deno.test("setFilterStringTest", function () {
   assertSpyCalls(debug, 1);
 });
 
-Deno.test("setFilterRegExpTest", function () {
+test("setFilterRegExpTest", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -332,7 +332,7 @@ Deno.test("setFilterRegExpTest", function () {
 });
 
 
-Deno.test("config chaining", function () {
+test("config chaining", function () {
   const error = spy((_) => {});
   const warn = spy((_) => {});
   const info = spy((_) => {});
