@@ -7,7 +7,7 @@ export type Config = {
    * @param level - The logging level to set.
    * @returns The configuration object.
    * @example
-   * config.setLevel("warn");
+   * better(console).setLevel("warn");
    */
   setLevel: (level: ConsoleLevel) => Config;
 
@@ -16,8 +16,8 @@ export type Config = {
    * @param query - The query string or regular expression to filter log messages.
    * @returns The configuration object.
    * @example
-   * config.setFilter("error");
-   * config.setFilter(/error/i);
+   * better(console).setFilter("error");
+   * better(console).setFilter(/error/i);
    */
   setFilter: (query: string | RegExp) => Config;
 };
@@ -83,8 +83,7 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
  * @param consoleReference - The console object to enhance.
  * @returns The configuration object.
  * @example
- * const config = better(console);
- * config.setLevel("info").setFilter("test");
+ * better(console).setLevel("info").setFilter("test");
  */
 export function better(consoleReference: Console = console): Config {
   const originalMethodsReferences: Partial<Record<ConsoleMethod, FunctionLog>> =
