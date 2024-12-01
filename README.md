@@ -1,8 +1,7 @@
 # Garn Logger
 
 Garn Logger is a utility to enhance the default console logging in
-JavaScript/TypeScript. It allows you to set logging levels and filter logs based
-on a query.
+JavaScript/TypeScript. It allows you to set logging levels and filter logs based on a query.
 
 ## Installation
 
