@@ -19,7 +19,7 @@ export type Config = {
    * better(console).setFilter("error");
    * better(console).setFilter(/error/i);
    */
-  setFilter: (query: string | RegExp) => Config;
+  setFilter: (query: string | RegExp | null) => Config;
 };
 
 type FunctionLog = (...args: unknown[]) => void;
@@ -78,6 +78,9 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   table: "debug",
 };
 
+let currentLevel: ConsoleLevel = "debug";
+let currentFilter: RegExp | null = null;
+
 /**
  * Enhances the console object with additional configuration options.
  * @param consoleReference - The console object to enhance.
@@ -89,12 +92,10 @@ export function better(consoleReference: Console = console): Config {
   const originalMethodsReferences: Partial<Record<ConsoleMethod, FunctionLog>> =
     {};
   for (const method in consoleReference) {
-    originalMethodsReferences[method as ConsoleMethod] =
-      consoleReference[method as ConsoleMethod] as FunctionLog;
+    originalMethodsReferences[method as ConsoleMethod] = consoleReference[
+      method as ConsoleMethod
+    ] as FunctionLog;
   }
-
-  let currentLevel: ConsoleLevel = "debug";
-  let currentFilter: RegExp | null = null;
 
   const config: Config = {
     setLevel(level: ConsoleLevel) {
@@ -102,8 +103,13 @@ export function better(consoleReference: Console = console): Config {
       applyConfig();
       return config;
     },
-    setFilter(query: string | RegExp) {
-      currentFilter = (query instanceof RegExp) ? query : new RegExp(query, "i");
+    setFilter(query: string | RegExp | null) {
+      if (query === null) {
+        currentFilter = null;
+      } else {
+        currentFilter =
+          query instanceof RegExp ? query : new RegExp(query, "i");
+      }
       applyConfig();
       return config;
     },
@@ -117,7 +123,10 @@ export function better(consoleReference: Console = console): Config {
       const methodLevelIndex = levels.indexOf(methodLevel);
       const originalMethod = originalMethodsReferences[method] as FunctionLog;
       consoleReference[method] = (...args: unknown[]) => {
-        if (methodLevelIndex <= levelIndex && (!currentFilter || currentFilter.test(args.join(" ")))) {
+        if (
+          methodLevelIndex <= levelIndex &&
+          (!currentFilter || currentFilter.test(args.join(" ")))
+        ) {
           originalMethod(...args);
         }
       };

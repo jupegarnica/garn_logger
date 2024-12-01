@@ -331,6 +331,39 @@ test("setFilterRegExpTest", function () {
   assertSpyCalls(debug, 1);
 });
 
+test("setFilterNullTest", function () {
+  const error = spy((_: string) => {});
+  const warn = spy((_: string) => {});
+  const info = spy((_: string) => {});
+  const debug = spy((_: string) => {});
+  const mockConsole = {
+    error,
+    warn,
+    info,
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.setFilter("test");
+  mockConsole.error("this is a test");
+  mockConsole.warn("another test");
+  mockConsole.info("not a match");
+  mockConsole.debug("test again");
+  assertSpyCalls(error, 1);
+  assertSpyCalls(warn, 1);
+  assertSpyCalls(info, 0);
+  assertSpyCalls(debug, 1);
+
+  config.setFilter(null);
+  mockConsole.error("this is a test");
+  mockConsole.warn("another test");
+  mockConsole.info("not a match");
+  mockConsole.debug("test again");
+  assertSpyCalls(error, 2);
+  assertSpyCalls(warn, 2);
+  assertSpyCalls(info, 1);
+  assertSpyCalls(debug, 2);
+});
 
 test("config chaining", function () {
   const error = spy((_) => {});
