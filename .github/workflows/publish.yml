@@ -15,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: bump patch  version at deno.json
-        run: npx jsr bump patch
+      # - name: bump patch  version at deno.json
+      #   run:
 
       - name: Publish package
         run: npx jsr publish
