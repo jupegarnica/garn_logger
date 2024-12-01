@@ -1,4 +1,3 @@
-import { assertEquals } from "@std/assert";
 import { assertSpyCalls, spy } from "@std/testing/mock";
 import { better } from "./main.ts";
 
