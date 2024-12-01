@@ -8,5 +8,6 @@
   "version": "0.0.4",
   "exports": "./main.ts",
   "license": "MIT",
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": "auto",
+  "lock": false
 }
