@@ -1,5 +1,5 @@
 type Config = {
-  setLevel: (level: ConsoleLevel ) => Config;
+  setLevel: (level: ConsoleLevel) => Config;
   setFilter: (query: string | RegExp) => Config;
 };
 
@@ -89,9 +89,7 @@ export function better(consoleReference: Console = console): Config {
       return config;
     },
     setFilter(query: string | RegExp) {
-      const filter = (query instanceof RegExp)
-        ? query
-        : new RegExp(query, "i");
+      const filter = (query instanceof RegExp) ? query : new RegExp(query, "i");
       consoleMethodsOrder.forEach((method) => {
         const originalMethod = originalMethodsReferences[method] as FunctionLog;
         consoleReference[method] = (...args: unknown[]) => {
@@ -101,7 +99,7 @@ export function better(consoleReference: Console = console): Config {
         };
       });
       return config;
-    }
+    },
   };
 
   return config;
