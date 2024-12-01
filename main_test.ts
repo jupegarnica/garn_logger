@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 import { assertSpyCall, assertSpyCalls, spy } from "@std/testing/mock";
 import { better } from "./main.ts";
 
-Deno.test(function setLevelErrorTest() {
+Deno.test('setLevelErrorTest', function() {
   const mockConsole = {
     error: spy(() => {}),
     warn: spy(() => {}),
@@ -21,7 +21,7 @@ Deno.test(function setLevelErrorTest() {
   assertSpyCalls(noopError, 3);
 });
 
-Deno.test(function setLevelWarnTest() {
+Deno.test('setLevelWarnTest', function() {
   const mockConsole = {
     error: spy(() => {}),
     warn: spy(() => {}),
@@ -41,7 +41,7 @@ Deno.test(function setLevelWarnTest() {
   assertSpyCalls(noopWarn, 2);
 });
 
-Deno.test(function setLevelInfoTest() {
+Deno.test('setLevelInfoTest', function() {
   const mockConsole = {
     error: spy(() => {}),
     warn: spy(() => {}),
@@ -62,7 +62,7 @@ Deno.test(function setLevelInfoTest() {
   assertSpyCalls(noopInfo, 1);
 });
 
-Deno.test(function setLevelDebugTest() {
+Deno.test('setLevelDebugTest', function() {
   const mockConsole = {
     error: spy(() => {}),
     warn: spy(() => {}),
@@ -83,3 +83,106 @@ Deno.test(function setLevelDebugTest() {
   assertSpyCalls(mockConsole.debug, 1);
   assertSpyCalls(noopDebug, 0);
 });
+
+Deno.test('set info do not log any debug methods', function() {
+  const mockConsole = {
+    error: spy(() => {}),
+    warn: spy(() => {}),
+    info: spy(() => {}),
+    debug: spy(() => {}),
+    log: spy(() => {}),
+    trace: spy(() => {}),
+    dir: spy(() => {}),
+    time: spy(() => {}),
+    timeEnd: spy(() => {}),
+    group: spy(() => {}),
+    groupEnd: spy(() => {}),
+    groupCollapsed: spy(() => {}),
+    clear: spy(() => {}),
+    count: spy(() => {}),
+    assert: spy(() => {}),
+    table: spy(() => {}),
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  const noop = spy(() => {});
+  config.setLevel("info", { noop });
+  mockConsole.error();
+  mockConsole.warn();
+  mockConsole.info();
+  mockConsole.debug();
+  mockConsole.log();
+  mockConsole.trace();
+  mockConsole.dir();
+  mockConsole.time();
+  mockConsole.timeEnd();
+  mockConsole.group();
+  mockConsole.groupEnd();
+  mockConsole.groupCollapsed();
+  mockConsole.clear();
+  mockConsole.count();
+  mockConsole.assert();
+  mockConsole.table();
+  assertSpyCalls(mockConsole.error, 1);
+  assertSpyCalls(mockConsole.warn, 1);
+  assertSpyCalls(mockConsole.info, 1);
+  assertSpyCalls(noop, 13);
+});
+
+Deno.test('set debug do log all debug methods', function() {
+  const mockConsole = {
+    error: spy(() => {}),
+    warn: spy(() => {}),
+    info: spy(() => {}),
+    debug: spy(() => {}),
+    log: spy(() => {}),
+    trace: spy(() => {}),
+    dir: spy(() => {}),
+    time: spy(() => {}),
+    timeEnd: spy(() => {}),
+    group: spy(() => {}),
+    groupEnd: spy(() => {}),
+    groupCollapsed: spy(() => {}),
+    clear: spy(() => {}),
+    count: spy(() => {}),
+    assert: spy(() => {}),
+    table: spy(() => {}),
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  const noop = spy(() => {});
+  config.setLevel("debug", { noop });
+  mockConsole.error();
+  mockConsole.warn();
+  mockConsole.info();
+  mockConsole.debug();
+  mockConsole.log();
+  mockConsole.trace();
+  mockConsole.dir();
+  mockConsole.time();
+  mockConsole.timeEnd();
+  mockConsole.group();
+  mockConsole.groupEnd();
+  mockConsole.groupCollapsed();
+  mockConsole.clear();
+  mockConsole.count();
+  mockConsole.assert();
+  mockConsole.table();
+  assertSpyCalls(mockConsole.error, 1);
+  assertSpyCalls(mockConsole.warn, 1);
+  assertSpyCalls(mockConsole.info, 1);
+  assertSpyCalls(mockConsole.debug, 1);
+  assertSpyCalls(mockConsole.log, 1);
+  assertSpyCalls(mockConsole.trace, 1);
+  assertSpyCalls(mockConsole.dir, 1);
+  assertSpyCalls(mockConsole.time, 1);
+  assertSpyCalls(mockConsole.timeEnd, 1);
+  assertSpyCalls(mockConsole.group, 1);
+  assertSpyCalls(mockConsole.groupEnd, 1);
+  assertSpyCalls(mockConsole.groupCollapsed, 1);
+  assertSpyCalls(mockConsole.clear, 1);
+  assertSpyCalls(mockConsole.count, 1);
+  assertSpyCalls(mockConsole.assert, 1);
+  assertSpyCalls(mockConsole.table, 1);
+  assertSpyCalls(noop, 0);
+} );
