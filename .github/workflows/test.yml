@@ -1,18 +1,24 @@
-name: Publish
+name: Test
 on:
   push:
 
 jobs:
-  publish:
+  test-deno:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: denoland/setup-deno@v2
       - run: deno test
 
+  test-tsx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - run: npx tsx --test
 
+  test-bun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - run: bun test
