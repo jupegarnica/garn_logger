@@ -5,7 +5,7 @@
     "publish": "deno publish"
   },
   "name": "@garn/logger",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "exports": "./main.ts",
   "license": "MIT",
   "nodeModulesDir": "auto",
