@@ -284,10 +284,10 @@ Deno.test("assert always logs", function () {
 });
 
 Deno.test("setFilterStringTest", function () {
-  const error = spy((a: string) => {});
-  const warn = spy((a: string) => {});
-  const info = spy((a: string) => {});
-  const debug = spy((a: string) => {});
+  const error = spy((_: string) => {});
+  const warn = spy((_: string) => {});
+  const info = spy((_: string) => {});
+  const debug = spy((_: string) => {});
   const mockConsole = {
     error,
     warn,
@@ -308,10 +308,10 @@ Deno.test("setFilterStringTest", function () {
 });
 
 Deno.test("setFilterRegExpTest", function () {
-  const error = spy((a: string) => {});
-  const warn = spy((a: string) => {});
-  const info = spy((a: string) => {});
-  const debug = spy((a: string) => {});
+  const error = spy((_: string) => {});
+  const warn = spy((_: string) => {});
+  const info = spy((_: string) => {});
+  const debug = spy((_: string) => {});
   const mockConsole = {
     error,
     warn,

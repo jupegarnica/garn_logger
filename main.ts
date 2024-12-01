@@ -3,10 +3,7 @@ type Config = {
   setFilter: (query: string | RegExp) => Config;
 };
 
-type FunctionLog = (...args: any[]) => void;
-type SetLevelOptions = {
-  noop: () => void;
-};
+type FunctionLog = (...args: unknown[]) => void;
 
 type ConsoleLevel = "warn" | "error" | "info" | "debug";
 type ConsoleMethod =
@@ -62,16 +59,12 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   table: "debug",
 };
 
-const setLevelOptionsDefault: SetLevelOptions = {
-  noop: () => {},
-};
-
 export function better(consoleReference: Console = console): Config {
   const originalMethodsReferences: Partial<Record<ConsoleMethod, FunctionLog>> =
     {};
   for (const method in consoleReference) {
     originalMethodsReferences[method as ConsoleMethod] =
-      consoleReference[method as ConsoleMethod];
+      consoleReference[method as ConsoleMethod] as FunctionLog;
   }
 
   const config: Config = {
@@ -87,7 +80,7 @@ export function better(consoleReference: Console = console): Config {
         const methodLevel = methodLevels[method];
         const methodLevelIndex = levels.indexOf(methodLevel);
         const originalMethod = originalMethodsReferences[method] as FunctionLog;
-        consoleReference[method] = (...args: any[]) => {
+        consoleReference[method] = (...args: unknown[]) => {
           if (methodLevelIndex <= levelIndex) {
             originalMethod(...args);
           }
@@ -101,7 +94,7 @@ export function better(consoleReference: Console = console): Config {
         : new RegExp(query, "i");
       consoleMethodsOrder.forEach((method) => {
         const originalMethod = originalMethodsReferences[method] as FunctionLog;
-        consoleReference[method] = (...args: any[]) => {
+        consoleReference[method] = (...args: unknown[]) => {
           if (filter.test(args.join(" "))) {
             originalMethod(...args);
           }
