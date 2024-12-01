@@ -1,5 +1,6 @@
 type Config = {
-  setLevel: (level: ConsoleLevel, options?: SetLevelOptions ) => void;
+  setLevel: (level: ConsoleLevel, options?: SetLevelOptions ) => Config;
+  setFilter: (query: string | RegExp) => Config;
 };
 
 type FunctionLog = (...args: any[]) => void;
@@ -73,8 +74,10 @@ export function better(consoleReference: Console = console): Config {
       consoleReference[method as ConsoleMethod];
   }
 
-  return {
-    setLevel: (level: ConsoleLevel, options?: SetLevelOptions) => {
+
+
+  const config: Config = {
+    setLevel(level: ConsoleLevel, options?: SetLevelOptions) {
       const { noop } = { ...setLevelOptionsDefault, ...options };
 
       const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
@@ -93,6 +96,23 @@ export function better(consoleReference: Console = console): Config {
           consoleReference[method] = originalMethodsReferences[method] as FunctionLog;
         }
       });
+      return config;
     },
+    setFilter(query: string | RegExp) {
+      const filter = (query instanceof RegExp)
+        ? query
+        : new RegExp(query, "i");
+      consoleMethodsOrder.forEach((method) => {
+        const originalMethod = originalMethodsReferences[method] as FunctionLog;
+        consoleReference[method] = (...args: any[]) => {
+          if (filter.test(args.join(" "))) {
+            originalMethod(...args);
+          }
+        };
+      });
+      return config;
+    }
   };
+
+  return config;
 }
