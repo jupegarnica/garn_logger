@@ -1,5 +1,6 @@
 import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
+import { assert } from "@std/testing/asserts";
 import { better } from "./main.ts";
 test("setLevelErrorTest", function () {
   const error = spy(() => {});
@@ -389,7 +390,6 @@ test("config chaining", function () {
   assertSpyCalls(warn, 1);
   assertSpyCalls(info, 0);
   assertSpyCalls(debug, 0);
-
 });
 
 test("setLevel in two steps", function () {
@@ -412,3 +412,17 @@ test("setLevel in two steps", function () {
   assertSpyCalls(error, 2);
   assertSpyCalls(log, 1);
 });
+
+// test("console.only", function () {
+//   const only = spy((_) => {});
+//   const log = spy((_) => {});
+//   const mock = {
+//     log,
+//   } as unknown as Console;
+
+//   better(mock)
+//   mock.only("1 TEST This should be logged");
+
+//   assert(typeof mock.only === "function");
+
+// });
