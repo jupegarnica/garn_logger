@@ -78,8 +78,17 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   table: "debug",
 };
 
-let currentLevel: ConsoleLevel = "debug";
-let currentFilter: RegExp | null = null;
+type ConsoleReference = Console & {
+  [currentFilterSymbol]?: RegExp | null;
+  [currentLevelSymbol]?: ConsoleLevel;
+  [originalMethodsReferencesSymbol]?: Partial<
+    Record<ConsoleMethod, FunctionLog>
+  >;
+};
+
+const currentFilterSymbol = Symbol("currentFilter");
+const currentLevelSymbol = Symbol("currentLevel");
+const originalMethodsReferencesSymbol = Symbol("originalMethodsReferences");
 
 /**
  * Enhances the console object with additional configuration options.
@@ -88,26 +97,24 @@ let currentFilter: RegExp | null = null;
  * @example
  * better(console).setLevel("info").setFilter("test");
  */
-export function better(consoleReference: Console = console): Config {
-  const originalMethodsReferences: Partial<Record<ConsoleMethod, FunctionLog>> =
-    {};
-  for (const method in consoleReference) {
-    originalMethodsReferences[method as ConsoleMethod] = consoleReference[
-      method as ConsoleMethod
-    ] as FunctionLog;
-  }
+export function better(consoleReference: ConsoleReference = console): Config {
+  consoleReference[currentFilterSymbol] ??= null;
+  consoleReference[currentLevelSymbol] ??= "debug";
 
+  consoleReference[originalMethodsReferencesSymbol] ??= Object.fromEntries(
+    Object.entries(consoleReference).map(([key, value]) => [key, value])
+  );
   const config: Config = {
     setLevel(level: ConsoleLevel) {
-      currentLevel = level;
+      consoleReference[currentLevelSymbol] = level;
       applyConfig();
       return config;
     },
     setFilter(query: string | RegExp | null) {
       if (query === null) {
-        currentFilter = null;
+        consoleReference[currentFilterSymbol] = null;
       } else {
-        currentFilter =
+        consoleReference[currentFilterSymbol] =
           query instanceof RegExp ? query : new RegExp(query, "i");
       }
       applyConfig();
@@ -116,12 +123,18 @@ export function better(consoleReference: Console = console): Config {
   };
 
   function applyConfig() {
+    const currentFilter = consoleReference[currentFilterSymbol];
+    const currentLevel = consoleReference[currentLevelSymbol] || "debug";
     const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
     const levelIndex = levels.indexOf(currentLevel);
     consoleMethodsOrder.forEach((method) => {
       const methodLevel = methodLevels[method];
       const methodLevelIndex = levels.indexOf(methodLevel);
-      const originalMethod = originalMethodsReferences[method] as FunctionLog;
+      const originalMethod = (
+        consoleReference[originalMethodsReferencesSymbol] as Partial<
+          Record<ConsoleMethod, FunctionLog>
+        >
+      )[method] as FunctionLog;
       consoleReference[method] = (...args: unknown[]) => {
         if (
           methodLevelIndex <= levelIndex &&

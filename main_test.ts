@@ -391,3 +391,24 @@ test("config chaining", function () {
   assertSpyCalls(debug, 0);
 
 });
+
+test("setLevel in two steps", function () {
+  const error = spy((_) => {});
+  const log = spy((_) => {});
+  const mockConsole = {
+    error,
+    log,
+  } as unknown as Console;
+
+  better(mockConsole).setLevel("error");
+  mockConsole.error("1 TEST This should be logged");
+  mockConsole.log("2 TEST this should not be logged");
+  assertSpyCalls(error, 1);
+  assertSpyCalls(log, 0);
+
+  better(mockConsole).setLevel("debug");
+  mockConsole.error("3 TEST This should be logged");
+  mockConsole.log("4 TEST This should be logged");
+  assertSpyCalls(error, 2);
+  assertSpyCalls(log, 1);
+});
