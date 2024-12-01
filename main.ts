@@ -26,20 +26,7 @@ export type Config = {
 type FunctionLog = (...args: unknown[]) => void;
 
 type ConsoleLevel = "warn" | "error" | "info" | "debug";
-type ConsoleMethod =
-  | ConsoleLevel
-  | "log"
-  | "trace"
-  | "dir"
-  | "time"
-  | "timeEnd"
-  | "group"
-  | "groupEnd"
-  | "groupCollapsed"
-  | "clear"
-  | "count"
-  | "assert"
-  | "table";
+type ConsoleMethod = keyof Console;
 
 const consoleMethodsOrder: ConsoleMethod[] = [
   "error",
@@ -49,15 +36,21 @@ const consoleMethodsOrder: ConsoleMethod[] = [
   "log",
   "trace",
   "dir",
+  "dirxml",
   "time",
   "timeEnd",
+  "timeLog",
   "group",
   "groupEnd",
   "groupCollapsed",
   "clear",
   "count",
+  "countReset",
   "assert",
   "table",
+  "profile",
+  "profileEnd",
+  "timeStamp",
 ];
 
 const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
@@ -68,15 +61,21 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   log: "debug",
   trace: "debug",
   dir: "debug",
+  dirxml: "debug",
   time: "debug",
   timeEnd: "debug",
+  timeLog: "debug",
   group: "debug",
   groupEnd: "debug",
   groupCollapsed: "debug",
-  clear: "debug",
+  clear: "error", // Ensure clear always logs
   count: "debug",
+  countReset: "debug",
   assert: "error", // Ensure assert always logs
   table: "debug",
+  profile: "debug",
+  profileEnd: "debug",
+  timeStamp: "debug",
 };
 
 type ConsoleReference = Console & {

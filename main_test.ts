@@ -151,6 +151,7 @@ test("set info do not log any debug methods", function () {
   mockConsole.clear();
   mockConsole.count();
   mockConsole.table();
+  assertSpyCalls(clear, 1);
   assertSpyCalls(assert, 1);
   assertSpyCalls(error, 1);
   assertSpyCalls(warn, 1);
@@ -164,7 +165,6 @@ test("set info do not log any debug methods", function () {
   assertSpyCalls(group, 0);
   assertSpyCalls(groupEnd, 0);
   assertSpyCalls(groupCollapsed, 0);
-  assertSpyCalls(clear, 0);
   assertSpyCalls(count, 0);
   assertSpyCalls(table, 0);
 });
