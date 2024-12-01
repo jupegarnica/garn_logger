@@ -12,5 +12,6 @@
   "name": "@garn/logger",
   "version": "0.0.4",
   "exports": "./main.ts",
-  "license": "MIT"
+  "license": "MIT",
+  "nodeModulesDir": "auto"
 }
