@@ -326,7 +326,6 @@ test("set filter multiple args", function () {
   assertSpyCalls(debug, 2);
 });
 
-
 test("set filter RegExp", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
@@ -383,6 +382,19 @@ test("set filter null", function () {
   assertSpyCalls(warn, 2);
   assertSpyCalls(info, 1);
   assertSpyCalls(debug, 2);
+});
+
+test("set filter objects", function () {
+  const debug = spy((_) => {});
+  const mockConsole = {
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.setFilter("test");
+  mockConsole.debug({ test: 1 });
+  mockConsole.debug({ a: 1 });
+  assertSpyCalls(debug, 1);
 });
 
 test("config chaining", function () {
