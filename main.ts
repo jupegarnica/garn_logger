@@ -28,7 +28,7 @@ type FunctionLog = (...args: unknown[]) => void;
 type ConsoleLevel = "warn" | "error" | "info" | "debug";
 type ConsoleMethod = keyof Console;
 
-const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
+const METHODS_LEVELS: Record<ConsoleMethod, ConsoleLevel> = {
   error: "error",
   warn: "warn",
   info: "info",
@@ -109,7 +109,7 @@ function applyConfig(
 ) {
   for (const _method in consoleReference) {
     const method = _method as ConsoleMethod;
-    const methodLevel = methodLevels[method] || "debug";
+    const methodLevel = METHODS_LEVELS[method] || "debug";
     const methodLevelIndex = levels.indexOf(methodLevel);
     const originalMethod = (
       consoleReference[originalMethodsReferencesSymbol] as Partial<
