@@ -77,6 +77,7 @@ const METHODS_LEVELS_VALUES: Record<ConsoleMethod, number> = {
 };
 
 type ConsoleReference = Console & {
+  only?: FunctionLog;
   [currentFilterSymbol]?: RegExp [];
   [currentLevelSymbol]?: ConsoleLevel;
   [originalMethodsReferencesSymbol]?: Partial<
@@ -102,6 +103,14 @@ export function better(consoleReference: ConsoleReference = console): Config {
   consoleReference[originalMethodsReferencesSymbol] ??= Object.fromEntries(
     Object.entries(consoleReference).map(([key, value]) => [key, value])
   );
+
+  if (!consoleReference.only) {
+    consoleReference.only = (...args: unknown[]) => {
+      const filter = new RegExp(args.map(stringify).join("|"), "i");
+      consoleReference[currentFilterSymbol] = [filter];
+      consoleReference.log(...args);
+    };
+  }
 
   const config: Config = {
     setLevel(level: ConsoleLevel) {

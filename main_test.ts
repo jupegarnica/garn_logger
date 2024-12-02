@@ -489,10 +489,8 @@ test("set level in two steps", function () {
 
 test("console.only filters every other log", function () {
   const log = spy((_) => {});
-  const only = spy((_) => {});
   const mock = {
-    log,
-    only,
+    log
   } as unknown as Console;
 
   better(mock);
@@ -500,9 +498,13 @@ test("console.only filters every other log", function () {
   assertSpyCalls(log, 1);
   // @ts-ignore
   mock.only("2");
-  assertSpyCalls(only, 1);
-  mock.log("2");
-  assertSpyCalls(log, 1);
+  assertSpyCalls(log, 2);
+  mock.log("3");
+  assertSpyCalls(log, 2);
+
+  // mock.log("2");
+  // assertSpyCalls(log, 2);
+
 });
 
 test("console.only exists", function () {
