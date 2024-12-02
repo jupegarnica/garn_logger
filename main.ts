@@ -52,11 +52,11 @@ const levelValues: Record<ConsoleLevel, number> = {
 
 // Update METHODS_LEVELS to use numeric levels
 const METHODS_LEVELS_VALUES: Record<string, number> = {
-  error: levelValues["error"],
-  warn: levelValues["warn"],
-  info: levelValues["info"],
-  clear: levelValues["error"], // Ensure clear always logs
-  assert: levelValues["error"], // Ensure assert always logs
+  error: levelValues.error,
+  warn: levelValues.warn,
+  info: levelValues.info,
+  clear: levelValues.error, // Ensure clear always logs
+  assert: levelValues.error, // Ensure assert always logs
 } as const;
 
 type ConsoleReference = Console & {
@@ -137,7 +137,7 @@ function applyConfig(consoleReference: ConsoleReference) {
 
     const method = methodName as ConsoleMethod;
     const methodLevelValue =
-      METHODS_LEVELS_VALUES[method] ?? levelValues["debug"];
+      METHODS_LEVELS_VALUES[method] ?? levelValues.debug;
     const originalMethod = originalMethods[method]!;
 
     consoleReference[method] = (...args: unknown[]) => {
