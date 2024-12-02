@@ -350,7 +350,7 @@ test("set filter RegExp", function () {
   assertSpyCalls(debug, 1);
 });
 
-test("set filter null", function () {
+test("set reset filter", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -373,7 +373,7 @@ test("set filter null", function () {
   assertSpyCalls(info, 0);
   assertSpyCalls(debug, 1);
 
-  config.setFilter(null);
+  config.resetFilter();
   mockConsole.error("this is a test");
   mockConsole.warn("another test");
   mockConsole.info("not a match");

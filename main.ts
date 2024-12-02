@@ -18,9 +18,16 @@ export type Config = {
    * @example
    * better(console).setFilter("error");
    * better(console).setFilter(/error/i);
-   * better(console).setFilter(null);
    */
-  setFilter: (query: string | RegExp | null) => Config;
+  setFilter: (query: string | RegExp) => Config;
+
+  /**
+   * Resets the filter for log messages.
+   * @returns The configuration object.
+   * @example
+   * better(console).resetFilter();
+   */
+  resetFilter: () => Config;
 };
 
 type FunctionLog = (...args: unknown[]) => void;
@@ -96,13 +103,13 @@ export function better(consoleReference: ConsoleReference = console): Config {
       consoleReference[currentLevelSymbol] = level;
       return config;
     },
-    setFilter(query: string | RegExp | null) {
-      if (query === null) {
-        consoleReference[currentFilterSymbol] = null;
-      } else {
-        consoleReference[currentFilterSymbol] =
-          query instanceof RegExp ? query : new RegExp(query, "i");
-      }
+    setFilter(query: string | RegExp) {
+      consoleReference[currentFilterSymbol] =
+        query instanceof RegExp ? query : new RegExp(query, "i");
+      return config;
+    },
+    resetFilter() {
+      consoleReference[currentFilterSymbol] = null;
       return config;
     },
   };
