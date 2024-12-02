@@ -297,7 +297,7 @@ test("set filter string", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter("test");
+  config.filter("test");
   mockConsole.error("this is a test");
   mockConsole.warn("another test");
   mockConsole.info("not a match");
@@ -315,13 +315,13 @@ test("set filter multiple args", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter("yes");
+  config.filter("yes");
   mockConsole.debug("no", "yes");
   assertSpyCalls(debug, 1);
-  config.setFilter("yes");
+  config.filter("yes");
   mockConsole.debug("yes", "no");
   assertSpyCalls(debug, 2);
-  config.setFilter("none");
+  config.filter("none");
   mockConsole.debug("yes", "no");
   assertSpyCalls(debug, 2);
 });
@@ -339,7 +339,7 @@ test("set filter RegExp", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter(/test/i);
+  config.filter(/test/i);
   mockConsole.error("this is a test");
   mockConsole.warn("another test");
   mockConsole.info("not a match");
@@ -363,7 +363,7 @@ test("set reset filter", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter("test");
+  config.filter("test");
   mockConsole.error("this is a test");
   mockConsole.warn("another test");
   mockConsole.info("not a match");
@@ -391,7 +391,7 @@ test("set filter objects", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter("test");
+  config.filter("test");
   mockConsole.debug({ test: 1 });
   mockConsole.debug({ a: 1 });
   assertSpyCalls(debug, 1);
@@ -404,7 +404,7 @@ test("set filter circular objects", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setFilter("loop");
+  config.filter("loop");
   const obj = { a: 1, loop: {} };
   obj.loop = obj;
   mockConsole.debug(obj);
@@ -425,7 +425,7 @@ test("config chaining", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("warn").setFilter("test");
+  config.setLevel("warn").filter("test");
   mockConsole.error("this is a test");
   mockConsole.error("not a match");
   mockConsole.warn("test again");
