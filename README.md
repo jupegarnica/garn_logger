@@ -60,3 +60,30 @@ console.warn("another test"); // Will log
 console.info("not a match"); // Will not log
 console.debug("test again"); // Will log
 ```
+
+Using mutliple filters acts as an OR operation:
+
+```typescript
+better(console).filter("test","another");
+
+console.error("this is a test"); // Will log
+console.warn("another"); // Will log
+console.info("not a match"); // Will not log
+```
+
+Or use addFilter to add multiple filters:
+
+```typescript
+better(console).addFilter("test").addFilter("another");
+console.error("this is a test"); // Will log
+console.warn("another"); // Will log
+console.info("not a match"); // Will not log
+```
+
+Reset filter with `.resetFilter()`:
+
+```typescript
+better(console).filter("XXX");
+better(console).resetFilter();
+console.error("this is a test"); // Will log
+```
