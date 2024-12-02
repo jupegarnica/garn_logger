@@ -15,7 +15,7 @@ test("set level error", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("error");
+  config.level("error");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -39,7 +39,7 @@ test("set level warn", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("warn");
+  config.level("warn");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -63,7 +63,7 @@ test("set level info", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("info");
+  config.level("info");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -87,7 +87,7 @@ test("set level debug", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("debug");
+  config.level("debug");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -135,7 +135,7 @@ test("set info do not log any debug methods", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("info");
+  config.level("info");
   mockConsole.assert();
   mockConsole.error();
   mockConsole.warn();
@@ -207,7 +207,7 @@ test("set debug do log all debug methods", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("debug");
+  config.level("debug");
   mockConsole.error();
   mockConsole.warn();
   mockConsole.info();
@@ -279,7 +279,7 @@ test("assert always logs", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("debug");
+  config.level("debug");
   mockConsole.assert();
   assertSpyCalls(assert, 1);
 });
@@ -453,7 +453,7 @@ test("config chaining", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.setLevel("warn").filter("test");
+  config.level("warn").filter("test");
   mockConsole.error("this is a test");
   mockConsole.error("not a match");
   mockConsole.warn("test again");
@@ -474,13 +474,13 @@ test("set level in two steps", function () {
     log,
   } as unknown as Console;
 
-  better(mockConsole).setLevel("error");
+  better(mockConsole).level("error");
   mockConsole.error("1 TEST This should be logged");
   mockConsole.log("2 TEST this should not be logged");
   assertSpyCalls(error, 1);
   assertSpyCalls(log, 0);
 
-  better(mockConsole).setLevel("debug");
+  better(mockConsole).level("debug");
   mockConsole.error("3 TEST This should be logged");
   mockConsole.log("4 TEST This should be logged");
   assertSpyCalls(error, 2);
@@ -493,10 +493,10 @@ test("console.only filters every other log", function () {
     debug
   } as unknown as Console;
 
-  better(mock).setLevel("debug");
+  better(mock).level("debug");
   mock.debug("1");
   assertSpyCalls(debug, 1);
-  better(mock).setLevel("error");
+  better(mock).level("error");
   // @ts-ignore
   mock.only("2");
   assertSpyCalls(debug, 2);

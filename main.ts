@@ -7,9 +7,9 @@ export type Config = {
    * @param level - The logging level to set.
    * @returns The configuration object.
    * @example
-   * better(console).setLevel("warn");
+   * better(console).level("warn");
    */
-  setLevel: (level: ConsoleLevel) => Config;
+  level: (level: ConsoleLevel) => Config;
 
   /**
    * Sets the filter for log messages.
@@ -114,7 +114,7 @@ export function better(consoleReference: ConsoleReference = console): Config {
   }
 
   const config: Config = {
-    setLevel(level: ConsoleLevel) {
+    level(level: ConsoleLevel) {
       if (levelValues[level] === undefined) {
         throw new Error(`Invalid level: ${level}`);
       }
