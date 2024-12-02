@@ -517,3 +517,18 @@ test("console.only exists", function () {
     "only method should be defined has a function"
   );
 });
+
+test("multiple console.only works", function () {
+  const debug = spy((_) => {});
+  const mock = {
+    debug
+  } as unknown as Console;
+
+  better(mock).level("debug");
+  // @ts-ignore
+  mock.only("1");
+  assertSpyCalls(debug, 1);
+  // @ts-ignore
+  mock.only("2");
+  assertSpyCalls(debug, 2);
+});
