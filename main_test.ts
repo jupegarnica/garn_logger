@@ -315,10 +315,9 @@ test("set filter multiple args", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.filter("yes");
+  config.filter("yes", "no");
   mockConsole.debug("no", "yes");
   assertSpyCalls(debug, 1);
-  config.filter("yes");
   mockConsole.debug("yes", "no");
   assertSpyCalls(debug, 2);
   config.filter("none");

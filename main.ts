@@ -13,13 +13,12 @@ export type Config = {
 
   /**
    * Sets the filter for log messages.
-   * @param query - The query string or regular expression to filter log messages.
+   * @param query - The query strings or regular expressions to filter log messages.
    * @returns The configuration object.
    * @example
-   * better(console).filter("error");
-   * better(console).filter(/error/i);
+   * better(console).filter("error", /test/i);
    */
-  filter: (query: string | RegExp) => Config;
+  filter: (...query: (string | RegExp)[]) => Config;
 
   /**
    * Resets the filter for log messages.
@@ -69,7 +68,7 @@ const METHODS_LEVELS_VALUES: Record<ConsoleMethod, number> = {
 };
 
 type ConsoleReference = Console & {
-  [currentFilterSymbol]?: RegExp | null;
+  [currentFilterSymbol]?: RegExp [];
   [currentLevelSymbol]?: ConsoleLevel;
   [originalMethodsReferencesSymbol]?: Partial<
     Record<ConsoleMethod, FunctionLog>
@@ -88,7 +87,7 @@ const originalMethodsReferencesSymbol = Symbol("originalMethodsReferences");
  * better(console).setLevel("info").setFilter("test");
  */
 export function better(consoleReference: ConsoleReference = console): Config {
-  consoleReference[currentFilterSymbol] ??= null;
+  consoleReference[currentFilterSymbol] ??= [];
   consoleReference[currentLevelSymbol] ??= "debug";
 
   consoleReference[originalMethodsReferencesSymbol] ??= Object.fromEntries(
@@ -103,13 +102,14 @@ export function better(consoleReference: ConsoleReference = console): Config {
       consoleReference[currentLevelSymbol] = level;
       return config;
     },
-    filter(query: string | RegExp) {
-      consoleReference[currentFilterSymbol] =
-        query instanceof RegExp ? query : new RegExp(query, "i");
+    filter(...queries: (string | RegExp)[]) {
+      consoleReference[currentFilterSymbol] = queries.map(
+        q => (q instanceof RegExp ? q : new RegExp(q, "i"))
+      );
       return config;
     },
     resetFilter() {
-      consoleReference[currentFilterSymbol] = null;
+      consoleReference[currentFilterSymbol] = [];
       return config;
     },
   };
@@ -135,12 +135,14 @@ function applyConfig(consoleReference: ConsoleReference) {
     consoleReference[method] = (...args: unknown[]) => {
       const currentLevelValue =
         levelValues[consoleReference[currentLevelSymbol] ?? "debug"];
-      const currentFilter = consoleReference[currentFilterSymbol] ?? null;
+      const currentFilters = consoleReference[currentFilterSymbol] ?? [];
 
       if (methodLevelValue <= currentLevelValue) {
         if (
-          !currentFilter ||
-          args.some((arg) => currentFilter!.test(stringify(arg)))
+          currentFilters.length === 0 ||
+          args.some((arg) =>
+            currentFilters.some((filter) => filter.test(stringify(arg)))
+          )
         ) {
           originalMethod(...args);
         }
