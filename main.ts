@@ -134,7 +134,7 @@ export function better(consoleReference: ConsoleReference = console): Config {
         consoleReference[originalMethodsReferencesSymbol] as Partial<
           Record<ConsoleMethod, FunctionLog>
         >
-      )[method] as FunctionLog;
+      )[method];
       consoleReference[method] = (...args: unknown[]) => {
 
         const isLevelAllowed = methodLevelIndex <= levelIndex;
@@ -143,7 +143,7 @@ export function better(consoleReference: ConsoleReference = console): Config {
         );
 
         if (isLevelAllowed && isFilterMatched) {
-          originalMethod(...args);
+          originalMethod?.(...args);
         }
       };
     });
