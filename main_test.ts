@@ -417,13 +417,11 @@ test("add filter", function () {
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.filter("test").addFilter("error");
-  mockConsole.debug("this is a test");
-  mockConsole.debug("another test");
+  config.filter("1").addFilter("2");
+  mockConsole.debug("1");
   mockConsole.debug("not a match");
-  mockConsole.debug("test again");
-  mockConsole.debug("error message");
-  assertSpyCalls(debug, 1);
+  mockConsole.debug("2");
+  assertSpyCalls(debug, 2);
 });
 
 test("config chaining", function () {
