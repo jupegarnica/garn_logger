@@ -2,7 +2,7 @@ import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
 // import { assert } from "@std/testing/asserts";
 import { better } from "./main.ts";
-test("setLevelErrorTest", function () {
+test("set level error", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -26,7 +26,7 @@ test("setLevelErrorTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-test("setLevelWarnTest", function () {
+test("set level warn", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -50,7 +50,7 @@ test("setLevelWarnTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-test("setLevelInfoTest", function () {
+test("set level info", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -74,7 +74,7 @@ test("setLevelInfoTest", function () {
   assertSpyCalls(debug, 0);
 });
 
-test("setLevelDebugTest", function () {
+test("set level debug", function () {
   const error = spy(() => {});
   const warn = spy(() => {});
   const info = spy(() => {});
@@ -284,7 +284,7 @@ test("assert always logs", function () {
   assertSpyCalls(assert, 1);
 });
 
-test("setFilterStringTest", function () {
+test("set filter string", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -308,7 +308,7 @@ test("setFilterStringTest", function () {
   assertSpyCalls(debug, 1);
 });
 
-test("setFilter multiple args", function () {
+test("set filter multiple args", function () {
   const debug = spy((..._) => {});
   const mockConsole = {
     debug,
@@ -327,7 +327,7 @@ test("setFilter multiple args", function () {
 });
 
 
-test("setFilterRegExpTest", function () {
+test("set filter RegExp", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -351,7 +351,7 @@ test("setFilterRegExpTest", function () {
   assertSpyCalls(debug, 1);
 });
 
-test("setFilterNullTest", function () {
+test("set filter null", function () {
   const error = spy((_: string) => {});
   const warn = spy((_: string) => {});
   const info = spy((_: string) => {});
@@ -411,7 +411,7 @@ test("config chaining", function () {
   assertSpyCalls(debug, 0);
 });
 
-test("setLevel in two steps", function () {
+test("set level in two steps", function () {
   const error = spy((_) => {});
   const log = spy((_) => {});
   const mockConsole = {
