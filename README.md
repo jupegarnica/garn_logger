@@ -29,7 +29,7 @@ You can set the log level to control which logs are displayed. The available
 levels are `error`, `warn`, `info`, and `debug`.
 
 ```typescript
-better(console).setLevel("warn");
+better(console).level("warn");
 
 console.error("This is an error"); // Will log
 console.warn("This is a warning"); // Will log
@@ -42,7 +42,7 @@ console.debug("This is a debug"); // Will not log
 You can filter logs based on a string or regular expression.
 
 ```typescript
-better(console).setFilter("test");
+better(console).filter("test");
 
 console.error("this is a test"); // Will log
 console.warn("another test"); // Will log
@@ -53,27 +53,10 @@ console.debug("test again"); // Will log
 Using a regular expression:
 
 ```typescript
-better(console).setFilter(/test/i);
+better(console).filter(/test/i);
 
 console.error("this is a test"); // Will log
 console.warn("another test"); // Will log
 console.info("not a match"); // Will not log
 console.debug("test again"); // Will log
 ```
-
-## API
-
-### `better(console: Console): Config`
-
-Enhances the provided console object with additional configuration options.
-
-#### `Config`
-
-- `setLevel(level: ConsoleLevel): Config`
-  - Sets the log level. Only logs at or above this level will be displayed.
-  - `level`: `"error" | "warn" | "info" | "debug"`
-
-- `setFilter(query: string | RegExp): Config`
-  - Sets a filter for log messages. Only logs matching the query will be
-    displayed.
-  - `query`: `string | RegExp`
