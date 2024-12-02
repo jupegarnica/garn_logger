@@ -51,30 +51,13 @@ const levelValues: Record<ConsoleLevel, number> = {
 };
 
 // Update METHODS_LEVELS to use numeric levels
-const METHODS_LEVELS_VALUES: Record<ConsoleMethod, number> = {
+const METHODS_LEVELS_VALUES: Record<string, number> = {
   error: levelValues["error"],
   warn: levelValues["warn"],
   info: levelValues["info"],
-  debug: levelValues["debug"],
-  log: levelValues["debug"],
-  trace: levelValues["debug"],
-  dir: levelValues["debug"],
-  dirxml: levelValues["debug"],
-  time: levelValues["debug"],
-  timeEnd: levelValues["debug"],
-  timeLog: levelValues["debug"],
-  group: levelValues["debug"],
-  groupEnd: levelValues["debug"],
-  groupCollapsed: levelValues["debug"],
   clear: levelValues["error"], // Ensure clear always logs
-  count: levelValues["debug"],
-  countReset: levelValues["debug"],
   assert: levelValues["error"], // Ensure assert always logs
-  table: levelValues["debug"],
-  profile: levelValues["debug"],
-  profileEnd: levelValues["debug"],
-  timeStamp: levelValues["debug"],
-};
+} as const;
 
 type ConsoleReference = Console & {
   only?: FunctionLog;
