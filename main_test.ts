@@ -1,6 +1,6 @@
 import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
-// import { assert } from "@std/testing/asserts";
+import { assert } from "jsr:@std/assert";
 import { better } from "./main.ts";
 test("set level error", function () {
   const error = spy(() => {});
@@ -339,9 +339,7 @@ test("set filter multiple filters", function () {
   assertSpyCalls(debug, 2);
   mockConsole.debug("--");
   assertSpyCalls(debug, 2);
-
 });
-
 
 test("set filter RegExp", function () {
   const error = spy((_: string) => {});
@@ -489,16 +487,30 @@ test("set level in two steps", function () {
   assertSpyCalls(log, 1);
 });
 
-// test("console.only", function () {
-//   const only = spy((_) => {});
-//   const log = spy((_) => {});
-//   const mock = {
-//     log,
-//   } as unknown as Console;
+test("console.only filters every other log", function () {
+  const log = spy((_) => {});
+  const only = spy((_) => {});
+  const mock = {
+    log,
+    only,
+  } as unknown as Console;
 
-//   better(mock)
-//   mock.log('1 TEST This should be logged');
-//   mock.only("1 TEST This should be logged");
-//   assert(typeof mock.only === "function");
+  better(mock);
+  mock.log("1");
+  assertSpyCalls(log, 1);
+  // @ts-ignore
+  mock.only("2");
+  assertSpyCalls(only, 1);
+  mock.log("2");
+  assertSpyCalls(log, 1);
+});
 
-// });
+test("console.only exists", function () {
+  const mock = {} as unknown as Console;
+  better(mock);
+  assert(
+    // @ts-ignore
+    typeof mock.only === "function",
+    "only method should be defined has a function"
+  );
+});
