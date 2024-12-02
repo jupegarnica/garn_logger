@@ -28,31 +28,6 @@ type FunctionLog = (...args: unknown[]) => void;
 type ConsoleLevel = "warn" | "error" | "info" | "debug";
 type ConsoleMethod = keyof Console;
 
-// const consoleMethodsOrder: ConsoleMethod[] = [
-//   "error",
-//   "warn",
-//   "info",
-//   "debug",
-//   "log",
-//   "trace",
-//   "dir",
-//   "dirxml",
-//   "time",
-//   "timeEnd",
-//   "timeLog",
-//   "group",
-//   "groupEnd",
-//   "groupCollapsed",
-//   "clear",
-//   "count",
-//   "countReset",
-//   "assert",
-//   "table",
-//   "profile",
-//   "profileEnd",
-//   "timeStamp",
-// ];
-
 const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   error: "error",
   warn: "warn",
@@ -77,7 +52,6 @@ const methodLevels: Record<ConsoleMethod, ConsoleLevel> = {
   profileEnd: "debug",
   timeStamp: "debug",
 };
-
 const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
 
 
