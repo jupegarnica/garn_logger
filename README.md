@@ -90,14 +90,14 @@ console.error("this is a test"); // Will log
 
 ### Use console.only
 
-You can use `console.only` to log only this log and filter every it log ahead.
+You can use `console.only` to log only this log and filter every log ahead.
 
 ```typescript
 
 better(console)
 
 console.only("logs this"); // Will log
-console.error("this is filtered out"); // Will log
+console.error("this is filtered out"); // Will not log
 ```
 
 It's a shortcut for:
