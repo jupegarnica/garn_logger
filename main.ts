@@ -13,12 +13,21 @@ export type Config = {
 
   /**
    * Sets the filter for log messages.
-   * @param query - The query strings or regular expressions to filter log messages.
+   * @param queries - The queries strings or regular expressions to filter log messages.
    * @returns The configuration object.
    * @example
    * better(console).filter("error", /test/i);
    */
-  filter: (...query: (string | RegExp)[]) => Config;
+  filter: (...queries: (string | RegExp)[]) => Config;
+
+  /**
+   * Adds additional filters for log messages.
+   * @param queries - The queries strings or regular expressions to add to the filter.
+   * @returns The configuration object.
+   * @example
+   * better(console).addFilter("error", /test/i);
+   */
+  addFilter: (...queries: (string | RegExp)[]) => Config;
 
   /**
    * Resets the filter for log messages.
@@ -105,6 +114,12 @@ export function better(consoleReference: ConsoleReference = console): Config {
     filter(...queries: (string | RegExp)[]) {
       consoleReference[currentFilterSymbol] = queries.map(
         q => (q instanceof RegExp ? q : new RegExp(q, "i"))
+      );
+      return config;
+    },
+    addFilter(...queries: (string | RegExp)[]) {
+      consoleReference[currentFilterSymbol]?.push(
+        ...queries.map(q => (q instanceof RegExp ? q : new RegExp(q, "i")))
       );
       return config;
     },
