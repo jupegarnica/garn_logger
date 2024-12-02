@@ -1,6 +1,6 @@
 import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
-import { assert } from "jsr:@std/assert";
+import { assert } from "@std/assert";
 import { better } from "./main.ts";
 test("set level error", function () {
   const error = spy(() => {});
