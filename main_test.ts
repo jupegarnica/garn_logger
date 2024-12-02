@@ -397,6 +397,21 @@ test("set filter objects", function () {
   assertSpyCalls(debug, 1);
 });
 
+test("set filter circular objects", function () {
+  const debug = spy((_) => {});
+  const mockConsole = {
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.setFilter("loop");
+  const obj = { a: 1, loop: {} };
+  obj.loop = obj;
+  mockConsole.debug(obj);
+  assertSpyCalls(debug, 1);
+});
+
+
 test("config chaining", function () {
   const error = spy((_) => {});
   const warn = spy((_) => {});
