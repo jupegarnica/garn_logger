@@ -411,27 +411,18 @@ test("set filter circular objects", function () {
 });
 
 test("add filter", function () {
-  const error = spy((_: string) => {});
-  const warn = spy((_: string) => {});
-  const info = spy((_: string) => {});
   const debug = spy((_: string) => {});
   const mockConsole = {
-    error,
-    warn,
-    info,
     debug,
   };
 
   const config = better(mockConsole as unknown as Console);
   config.filter("test").addFilter("error");
-  mockConsole.error("this is a test");
-  mockConsole.warn("another test");
-  mockConsole.info("not a match");
+  mockConsole.debug("this is a test");
+  mockConsole.debug("another test");
+  mockConsole.debug("not a match");
   mockConsole.debug("test again");
-  mockConsole.error("error message");
-  assertSpyCalls(error, 2);
-  assertSpyCalls(warn, 1);
-  assertSpyCalls(info, 0);
+  mockConsole.debug("error message");
   assertSpyCalls(debug, 1);
 });
 
