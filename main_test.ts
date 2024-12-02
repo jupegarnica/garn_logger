@@ -308,14 +308,14 @@ test("set filter string", function () {
   assertSpyCalls(debug, 1);
 });
 
-test("set filter multiple args", function () {
+test("set filter multiple methods args", function () {
   const debug = spy((..._) => {});
   const mockConsole = {
     debug,
   };
 
   const config = better(mockConsole as unknown as Console);
-  config.filter("yes", "no");
+  config.filter("yes");
   mockConsole.debug("no", "yes");
   assertSpyCalls(debug, 1);
   mockConsole.debug("yes", "no");
@@ -324,6 +324,24 @@ test("set filter multiple args", function () {
   mockConsole.debug("yes", "no");
   assertSpyCalls(debug, 2);
 });
+
+test("set filter multiple filters", function () {
+  const debug = spy((_: string) => {});
+  const mockConsole = {
+    debug,
+  };
+
+  const config = better(mockConsole as unknown as Console);
+  config.filter("yes", "no");
+  mockConsole.debug("no");
+  assertSpyCalls(debug, 1);
+  mockConsole.debug("yes");
+  assertSpyCalls(debug, 2);
+  mockConsole.debug("--");
+  assertSpyCalls(debug, 2);
+
+});
+
 
 test("set filter RegExp", function () {
   const error = spy((_: string) => {});
