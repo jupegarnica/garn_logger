@@ -518,7 +518,7 @@ test("console.only exists", function () {
   );
 });
 
-test("multiple console.only works", function () {
+test("when multiples console.only all works", function () {
   const debug = spy((_) => {});
   const mock = {
     debug
