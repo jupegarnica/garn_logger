@@ -488,22 +488,23 @@ test("set level in two steps", function () {
 });
 
 test("console.only filters every other log", function () {
-  const log = spy((_) => {});
+  const debug = spy((_) => {});
   const mock = {
-    log
+    debug
   } as unknown as Console;
 
-  better(mock);
-  mock.log("1");
-  assertSpyCalls(log, 1);
+  better(mock).setLevel("debug");
+  mock.debug("1");
+  assertSpyCalls(debug, 1);
+  better(mock).setLevel("error");
   // @ts-ignore
   mock.only("2");
-  assertSpyCalls(log, 2);
-  mock.log("3");
-  assertSpyCalls(log, 2);
+  assertSpyCalls(debug, 2);
+  mock.debug("3");
+  assertSpyCalls(debug, 2);
 
-  // mock.log("2");
-  // assertSpyCalls(log, 2);
+  // mock.debug("2");
+  // assertSpyCalls(debug, 2);
 
 });
 

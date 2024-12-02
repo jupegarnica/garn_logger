@@ -108,7 +108,8 @@ export function better(consoleReference: ConsoleReference = console): Config {
     consoleReference.only = (...args: unknown[]) => {
       const filter = new RegExp(args.map(stringify).join("|"), "i");
       consoleReference[currentFilterSymbol] = [filter];
-      consoleReference.log(...args);
+      consoleReference[currentLevelSymbol] = "debug";
+      consoleReference.debug(...args);
     };
   }
 
