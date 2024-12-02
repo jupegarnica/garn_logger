@@ -28,32 +28,38 @@ type FunctionLog = (...args: unknown[]) => void;
 type ConsoleLevel = "warn" | "error" | "info" | "debug";
 type ConsoleMethod = keyof Console;
 
-const METHODS_LEVELS: Record<ConsoleMethod, ConsoleLevel> = {
-  error: "error",
-  warn: "warn",
-  info: "info",
-  debug: "debug",
-  log: "debug",
-  trace: "debug",
-  dir: "debug",
-  dirxml: "debug",
-  time: "debug",
-  timeEnd: "debug",
-  timeLog: "debug",
-  group: "debug",
-  groupEnd: "debug",
-  groupCollapsed: "debug",
-  clear: "error", // Ensure clear always logs
-  count: "debug",
-  countReset: "debug",
-  assert: "error", // Ensure assert always logs
-  table: "debug",
-  profile: "debug",
-  profileEnd: "debug",
-  timeStamp: "debug",
+const levelValues: Record<ConsoleLevel, number> = {
+  error: 0,
+  warn: 1,
+  info: 2,
+  debug: 3,
 };
-const levels: ConsoleLevel[] = ["error", "warn", "info", "debug"];
 
+// Update METHODS_LEVELS to use numeric levels
+const METHODS_LEVELS_VALUES: Record<ConsoleMethod, number> = {
+  error: levelValues["error"],
+  warn: levelValues["warn"],
+  info: levelValues["info"],
+  debug: levelValues["debug"],
+  log: levelValues["debug"],
+  trace: levelValues["debug"],
+  dir: levelValues["debug"],
+  dirxml: levelValues["debug"],
+  time: levelValues["debug"],
+  timeEnd: levelValues["debug"],
+  timeLog: levelValues["debug"],
+  group: levelValues["debug"],
+  groupEnd: levelValues["debug"],
+  groupCollapsed: levelValues["debug"],
+  clear: levelValues["error"], // Ensure clear always logs
+  count: levelValues["debug"],
+  countReset: levelValues["debug"],
+  assert: levelValues["error"], // Ensure assert always logs
+  table: levelValues["debug"],
+  profile: levelValues["debug"],
+  profileEnd: levelValues["debug"],
+  timeStamp: levelValues["debug"],
+};
 
 type ConsoleReference = Console & {
   [currentFilterSymbol]?: RegExp | null;
@@ -81,8 +87,12 @@ export function better(consoleReference: ConsoleReference = console): Config {
   consoleReference[originalMethodsReferencesSymbol] ??= Object.fromEntries(
     Object.entries(consoleReference).map(([key, value]) => [key, value])
   );
+
   const config: Config = {
     setLevel(level: ConsoleLevel) {
+      if (levelValues[level] === undefined) {
+        throw new Error(`Invalid level: ${level}`);
+      }
       consoleReference[currentLevelSymbol] = level;
       return config;
     },
@@ -93,40 +103,40 @@ export function better(consoleReference: ConsoleReference = console): Config {
         consoleReference[currentFilterSymbol] =
           query instanceof RegExp ? query : new RegExp(query, "i");
       }
-
       return config;
     },
   };
+  applyConfig(consoleReference);
 
-  applyConfig(
-    consoleReference,
-  );
   return config;
 }
 
-function applyConfig(
-  consoleReference: ConsoleReference,
-) {
-  for (const _method in consoleReference) {
-    const method = _method as ConsoleMethod;
-    const methodLevel = METHODS_LEVELS[method] || "debug";
-    const methodLevelIndex = levels.indexOf(methodLevel);
-    const originalMethod = (
-      consoleReference[originalMethodsReferencesSymbol] as Partial<
-        Record<ConsoleMethod, FunctionLog>
-      >
-    )[method];
+function applyConfig(consoleReference: ConsoleReference) {
+  const originalMethods = consoleReference[
+    originalMethodsReferencesSymbol
+  ] as Partial<Record<ConsoleMethod, FunctionLog>>;
+
+  // Wrap console methods only once
+  for (const methodName in originalMethods) {
+    // console.log({methodName});
+
+    const method = methodName as ConsoleMethod;
+    const methodLevelValue =
+      METHODS_LEVELS_VALUES[method] ?? levelValues["debug"];
+    const originalMethod = originalMethods[method]!;
+
     consoleReference[method] = (...args: unknown[]) => {
+      const currentLevelValue =
+        levelValues[consoleReference[currentLevelSymbol] ?? "debug"];
+      const currentFilter = consoleReference[currentFilterSymbol] ?? null;
 
-      const levelIndex = levels.indexOf(consoleReference[currentLevelSymbol] || "debug");
-      const currentFilter = consoleReference[currentFilterSymbol];
-      const isLevelAllowed = methodLevelIndex <= levelIndex;
-      const isFilterMatched = !currentFilter || args.some((arg: unknown) =>
-        currentFilter.test(stringify(arg))
-      );
-
-      if (isLevelAllowed && isFilterMatched) {
-        originalMethod?.(...args);
+      if (methodLevelValue <= currentLevelValue) {
+        if (
+          !currentFilter ||
+          args.some((arg) => currentFilter!.test(stringify(arg)))
+        ) {
+          originalMethod(...args);
+        }
       }
     };
   }
