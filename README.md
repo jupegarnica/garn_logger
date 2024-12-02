@@ -87,3 +87,21 @@ better(console).filter("XXX");
 better(console).resetFilter();
 console.error("this is a test"); // Will log
 ```
+
+### Use console.only
+
+You can use `console.only` to log only this log and filter every it log ahead.
+
+```typescript
+
+better(console)
+
+console.only("logs this"); // Will log
+console.error("this is filtered out"); // Will log
+```
+
+It's a shortcut for:
+```typescript
+better(console).filter("logs this");
+console.debug("logs this");
+```
