@@ -18,9 +18,10 @@ console.warn("10 TEST This should be logged");
 console.info("11 TEST This should be logged");
 console.log("12 TEST NOT this should be logged");
 
-
 better(console).level("debug");
 console.error("13 TEST This should be logged");
 console.warn("14 TEST This should be logged");
 console.info("15 TEST This should be logged");
 console.log("16 TEST This should be logged");
+
+console.error({ a: 1, b: 2, c: { list: [1, 2, 3] } });

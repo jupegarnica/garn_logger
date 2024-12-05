@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno test --watch main.ts",
+    "dev": "deno test --watch",
     "test": "deno test",
     "publish": "deno publish"
   },

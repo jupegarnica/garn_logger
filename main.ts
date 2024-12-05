@@ -59,9 +59,16 @@ const METHODS_LEVELS_VALUES: Record<string, number> = {
   assert: levelValues.error, // Ensure assert always logs
 } as const;
 
+const colorMap: Record<number, string> = {
+  0: "\x1b[31m", // red
+  1: "\x1b[33m", // yellow
+  2: "\x1b[34m", // blue
+  3: "\x1b[32m", // green
+};
+
 type ConsoleReference = Console & {
   only?: FunctionLog;
-  [currentFilterSymbol]?: RegExp [];
+  [currentFilterSymbol]?: RegExp[];
   [currentLevelSymbol]?: ConsoleLevel;
   [originalMethodsReferencesSymbol]?: Partial<
     Record<ConsoleMethod, FunctionLog>
@@ -105,14 +112,14 @@ export function better(consoleReference: ConsoleReference = console): Config {
       return config;
     },
     filter(...queries: (string | RegExp)[]) {
-      consoleReference[currentFilterSymbol] = queries.map(
-        q => (q instanceof RegExp ? q : new RegExp(q, "i"))
+      consoleReference[currentFilterSymbol] = queries.map((q) =>
+        q instanceof RegExp ? q : new RegExp(q, "i")
       );
       return config;
     },
     addFilter(...queries: (string | RegExp)[]) {
       consoleReference[currentFilterSymbol]?.push(
-        ...queries.map(q => (q instanceof RegExp ? q : new RegExp(q, "i")))
+        ...queries.map((q) => (q instanceof RegExp ? q : new RegExp(q, "i")))
       );
       return config;
     },
@@ -136,8 +143,7 @@ function applyConfig(consoleReference: ConsoleReference) {
     // console.log({methodName});
 
     const method = methodName as ConsoleMethod;
-    const methodLevelValue =
-      METHODS_LEVELS_VALUES[method] ?? levelValues.debug;
+    const methodLevelValue = METHODS_LEVELS_VALUES[method] ?? levelValues.debug;
     const originalMethod = originalMethods[method]!;
 
     consoleReference[method] = (...args: unknown[]) => {
@@ -152,7 +158,16 @@ function applyConfig(consoleReference: ConsoleReference) {
             currentFilters.some((filter) => filter.test(stringify(arg)))
           )
         ) {
-          originalMethod(...args);
+          if (methodLevelValue < levelValues.debug) {
+            const color = colorMap[methodLevelValue];
+            originalMethod(
+              ...args.map((arg) =>
+                typeof arg === "string" ? `${color}${arg}\x1b[0m` : arg
+              )
+            );
+          } else {
+            originalMethod(...args);
+          }
         }
       }
     };
@@ -161,13 +176,17 @@ function applyConfig(consoleReference: ConsoleReference) {
 
 function stringify(arg: unknown): string {
   const seen = new WeakSet();
-  return JSON.stringify(arg, (key, value) => {
-    if (typeof value === "object" && value !== null) {
-      if (seen.has(value)) {
-        return "[]";
+  return JSON.stringify(
+    arg,
+    (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return "[circular]";
+        }
+        seen.add(value);
       }
-      seen.add(value);
-    }
-    return value;
-  });
+      return value;
+    },
+    2
+  );
 }

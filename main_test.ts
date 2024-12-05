@@ -1,6 +1,6 @@
 import { test } from "@cross/test";
 import { assertSpyCalls, spy } from "@std/testing/mock";
-import { assert } from "@std/assert";
+import { assert, assertEquals } from "@std/assert";
 import { better } from "./main.ts";
 test("set level error", function () {
   const error = spy(() => {});
@@ -531,4 +531,77 @@ test("when multiples console.only all works", function () {
   // @ts-ignore
   mock.only("2");
   assertSpyCalls(debug, 2);
+});
+
+
+
+test("error logs must be red", function () {
+
+  const error = spy((_) => {});
+  const mock = {
+    error
+  } as unknown as Console;
+
+  better(mock)
+  mock.error("UPS");
+  assertSpyCalls(error, 1);
+  assert(String(error.calls[0].args[0]).includes("\x1b[31m"), "error logs must be red");
+});
+
+test("warn logs must be yellow", function () {
+
+  const warn = spy((_) => {});
+  const mock = {
+    warn
+  } as unknown as Console;
+
+  better(mock)
+  mock.warn("UPS");
+  assertSpyCalls(warn, 1);
+  assert(String(warn.calls[0].args[0]).includes("\x1b[33m"), "warn logs must be yellow");
+});
+
+test("info logs must be blue", function () {
+
+  const info = spy((_) => {});
+  const mock = {
+    info
+  } as unknown as Console;
+
+  better(mock)
+  mock.info("UPS");
+  assertSpyCalls(info, 1);
+  assert(String(info.calls[0].args[0]).includes("\x1b[34m"), "info logs must be blue");
+});
+
+test("debug logs args must be untouched", function () {
+
+  const debug = spy((_) => {});
+  const mock = {
+    debug
+  } as unknown as Console;
+
+  better(mock)
+  const arg = 'hola';
+  mock.debug(arg);
+  assertSpyCalls(debug, 1);
+  assertEquals(debug.calls[0].args[0], arg);
+  assert(debug.calls[0].args[0] === arg, "debug logs args must be untouched");
+
+});
+
+test("args not string must be untouched", function () {
+
+  const error = spy((..._) => {});
+  const mock = {
+    error
+  } as unknown as Console;
+
+  better(mock)
+  const obj = { a: 1 };
+  mock.error(obj, 'hola');
+  assertSpyCalls(error, 1);
+  assertEquals(error.calls[0].args[0], obj);
+  assert(error.calls[0].args[0] === obj, "args not string must be untouched");
+  assert(String(error.calls[0].args[1]).includes("\x1b[31m"), "error logs must be red");
 });
